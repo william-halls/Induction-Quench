@@ -62,7 +62,7 @@ Linear actuator-based sample positioning system using an offset shaft to raise/l
 
 ## Visual & CAD
 
-![[../../media/mechanisms/bottom-lift-design.png]]
+![[bottom-lift-design.png]]
 
 **CAD Model**: https://cad.onshape.com/documents/c9bb59bfc991b1182ce6c971/w/cfd3d1ecd4a4ee8129c4b7d7/e/0f8909e75a921dc5d7804835?renderMode=0&uiState=6a74d4385d9455abadcda866
 

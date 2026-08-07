@@ -39,7 +39,7 @@ OnShape parametric model for the repurposed vacuum chamber and custom lid design
 
 ## Visual Overview
 
-![[../../media/vacuum-chamber/chamber-cad-overview.png]]
+![[chamber-cad-overview.png]]
 
 ## Related Documentation
 

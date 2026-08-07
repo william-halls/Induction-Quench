@@ -88,7 +88,7 @@ Simple two-part sample holder using a threaded boron nitride cylinder and stainl
 
 ## Visual Reference & CAD
 
-![[../../media/plumbing/ceramic-mount-rendering.png]]
+![[ceramic-mount-rendering.png]]
 
 **CAD Model**: https://cad.onshape.com/documents/c9bb59bfc991b1182ce6c971/w/cfd3d1ecd4a4ee8129c4b7d7/e/a16968b7dbf6956bf30b9506?renderMode=0&uiState=6a74d7825d9455abadcdb775
 

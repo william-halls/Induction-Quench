@@ -125,15 +125,15 @@ For the quartz glass chamber concept, the sample mounting had to fit inside the 
 ## Visual References & CAD
 
 **Claw V1:**
-![[../../media/mechanisms/titanium-claw-v1.png]]
+![[titanium-claw-v1.png]]
 Model: https://cad.onshape.com/documents/c9bb59bfc991b1182ce6c971/w/cfd3d1ecd4a4ee8129c4b7d7/e/734c1f49de98495526b388ae?renderMode=0&uiState=6a74ce6e5d9455abadcd888f
 
 **Claw V2:**
-![[../../media/mechanisms/titanium-claw-v2.png]]
+![[titanium-claw-v2.png]]
 Model: https://cad.onshape.com/documents/c9bb59bfc991b1182ce6c971/w/cfd3d1ecd4a4ee8129c4b7d7/e/31b32c13307e270c7606af4c?renderMode=0&uiState=6a74cfef5d9455abadcd8fa7
 
 **Claw V3 (Final):**
-![[../../media/mechanisms/titanium-claw-v3-final.png]]
+![[titanium-claw-v3-final.png]]
 Model: https://cad.onshape.com/documents/c9bb59bfc991b1182ce6c971/w/cfd3d1ecd4a4ee8129c4b7d7/e/e6b95b592806d4d918246f5d?renderMode=0&uiState=6a74d1ec5d9455abadcd9e99
 
 ## Related Mechanisms

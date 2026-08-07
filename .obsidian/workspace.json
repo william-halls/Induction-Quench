@@ -11,12 +11,14 @@
             "id": "a5775ea495076968",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "media/vacuum-chamber/main-assembly.png"
+                "file": "Claude/PUSHING_TO_GITHUB.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-image",
-              "title": "main-assembly"
+              "icon": "lucide-file",
+              "title": "PUSHING_TO_GITHUB"
             }
           }
         ]
@@ -197,23 +199,28 @@
       "realclaudian:Open Claudian": false
     }
   },
-  "active": "b89c008671656c67",
+  "active": "a5775ea495076968",
   "lastOpenFiles": [
+    "Claude/PUSH_LOG.md",
+    "Claude/PUSHING_TO_GITHUB.md",
+    "PUSH_LOG.md.tmp.8116.f8585132259f",
+    "Media/vacuum-chamber/main-assembly.png",
+    "Claude",
+    "PUSHING_TO_GITHUB.md.tmp.8116.dc736a650996",
     "Design/SUBSYSTEMS.md",
     "Design/Mechanisms/Titanium Claw.md",
     "Design/Mechanisms/INDEX.md",
     "Design/Mechanisms/Control System.md",
     "Design/Mechanisms/Ceramic Mount.md",
-    "media/vacuum-chamber/main-assembly.png",
-    "media/vacuum-chamber/chamber-assembly.png",
-    "media/vacuum-chamber/chamber-cad-overview.png",
-    "media/plumbing/coil-lead-passthrough-1.png",
-    "media/plumbing/charpy-standard-sample.png",
-    "media/plumbing/charpy-modified-sample.png",
-    "media/plumbing/charpy-standard-reference.png",
-    "media/plumbing/ceramic-mount-rendering.png",
-    "media/plumbing/ceramic-mount-detail.png",
-    "media/plumbing/air-control-assembly.png",
+    "Media/vacuum-chamber/chamber-assembly.png",
+    "Media/vacuum-chamber/chamber-cad-overview.png",
+    "Media/plumbing/coil-lead-passthrough-1.png",
+    "Media/plumbing/charpy-standard-sample.png",
+    "Media/plumbing/charpy-modified-sample.png",
+    "Media/plumbing/charpy-standard-reference.png",
+    "Media/plumbing/ceramic-mount-rendering.png",
+    "Media/plumbing/ceramic-mount-detail.png",
+    "Media/plumbing/air-control-assembly.png",
     "Design/Archive/Design History.md",
     "Design/Vacuum Chamber/INDEX.md",
     "Design/Sample Quenching/INDEX.md",
@@ -224,26 +231,21 @@
     "Design/Sample Quenching/Charpy.md",
     "README.md",
     "Induction Quench Research Instrument.md",
-    "media/INDEX.md",
+    "Media/INDEX.md",
     "Design/Mechanisms/Bottom Lift.md.tmp.27652.ef12d31a04b0",
-    "media/plumbing",
-    "media/mechanisms",
-    "media/vacuum-chamber",
-    "media/coil",
-    "media",
+    "Media/plumbing",
+    "Media/mechanisms",
+    "Media/vacuum-chamber",
+    "Media/coil",
+    "Media",
     "Design/Coil Geometry/Round Coil.md",
     "Design/Wiring/INDEX.md",
     "Design/Plumbing/INDEX.md",
     "Design/Mechanisms/INDEX.md.tmp.27652.9f5ef4bddccf",
     "Design/Coil Geometry/Induction Coil.md",
-    "Design/Mechanisms/Titanium Claw.md.tmp.27652.17c12d1196f8",
-    "Design/Archive/Design History.md.tmp.27652.8d885066e54f",
     "Design/Coil Geometry/Coil Feature Script.md",
     "Design/Plumbing/Coil Lead Pass-Throughs.md",
     "Design/Plumbing/Thermal Couple Pass-through.md",
-    "Design/Plumbing/Random Holes.md",
-    "Design/Mechanisms/Bottom Lift.md",
-    "Design/Mechanisms/Trapdoor.md",
-    "Design/Vacuum Chamber/Used Vacuum Chamber.md.tmp.27652.2b3a86a72553"
+    "Design/Plumbing/Random Holes.md"
   ]
 }

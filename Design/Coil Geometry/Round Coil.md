@@ -40,4 +40,4 @@ Water-cooled through the copper tubing to allow high-frequency operation without
 
 Based on research of charpy geometry (unmodified):
 
-![[../../media/coil/round-coil-geometry.png]]
+![[round-coil-geometry.png]]
