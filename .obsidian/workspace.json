@@ -1,0 +1,249 @@
+{
+  "main": {
+    "id": "dedc2e3c90f38219",
+    "type": "split",
+    "children": [
+      {
+        "id": "181ef83cb3d24cbb",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a5775ea495076968",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "media/vacuum-chamber/main-assembly.png"
+              },
+              "icon": "lucide-image",
+              "title": "main-assembly"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "dc29b6166cce984f",
+    "type": "split",
+    "children": [
+      {
+        "id": "5294adee8fb17e67",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b89c008671656c67",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "1cd4baf38f113eb8",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "e66f991e15274d85",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 297.5
+  },
+  "right": {
+    "id": "b2c2fb513d2167a5",
+    "type": "split",
+    "children": [
+      {
+        "id": "39265307cf756863",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1a431f9d453877d4",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Induction Quench/Design/Mechanisms/Ceramic Mount.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "97d90b598ba70eab",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Induction Quench/Design/Mechanisms/Ceramic Mount.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "99e983c748a01e44",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "08fe098e24e43785",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "a8f2aae6a9b26dd5",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Induction Quench/Design/Mechanisms/Ceramic Mount.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          },
+          {
+            "id": "107ece3b5c9caf3e",
+            "type": "leaf",
+            "state": {
+              "type": "claudian-view",
+              "state": {},
+              "icon": "bot",
+              "title": "Claudian"
+            }
+          }
+        ],
+        "currentTab": 5
+      }
+    ],
+    "direction": "horizontal",
+    "width": 427.5
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false,
+      "realclaudian:Open Claudian": false
+    }
+  },
+  "active": "b89c008671656c67",
+  "lastOpenFiles": [
+    "Design/SUBSYSTEMS.md",
+    "Design/Mechanisms/Titanium Claw.md",
+    "Design/Mechanisms/INDEX.md",
+    "Design/Mechanisms/Control System.md",
+    "Design/Mechanisms/Ceramic Mount.md",
+    "media/vacuum-chamber/main-assembly.png",
+    "media/vacuum-chamber/chamber-assembly.png",
+    "media/vacuum-chamber/chamber-cad-overview.png",
+    "media/plumbing/coil-lead-passthrough-1.png",
+    "media/plumbing/charpy-standard-sample.png",
+    "media/plumbing/charpy-modified-sample.png",
+    "media/plumbing/charpy-standard-reference.png",
+    "media/plumbing/ceramic-mount-rendering.png",
+    "media/plumbing/ceramic-mount-detail.png",
+    "media/plumbing/air-control-assembly.png",
+    "Design/Archive/Design History.md",
+    "Design/Vacuum Chamber/INDEX.md",
+    "Design/Sample Quenching/INDEX.md",
+    "Design/Coil Geometry/INDEX.md",
+    "Design/Archive/INDEX.md",
+    "Design/Sample Quenching/Modified Charpy.md",
+    "Design/Sample Quenching/Quenching Methods.md",
+    "Design/Sample Quenching/Charpy.md",
+    "README.md",
+    "Induction Quench Research Instrument.md",
+    "media/INDEX.md",
+    "Design/Mechanisms/Bottom Lift.md.tmp.27652.ef12d31a04b0",
+    "media/plumbing",
+    "media/mechanisms",
+    "media/vacuum-chamber",
+    "media/coil",
+    "media",
+    "Design/Coil Geometry/Round Coil.md",
+    "Design/Wiring/INDEX.md",
+    "Design/Plumbing/INDEX.md",
+    "Design/Mechanisms/INDEX.md.tmp.27652.9f5ef4bddccf",
+    "Design/Coil Geometry/Induction Coil.md",
+    "Design/Mechanisms/Titanium Claw.md.tmp.27652.17c12d1196f8",
+    "Design/Archive/Design History.md.tmp.27652.8d885066e54f",
+    "Design/Coil Geometry/Coil Feature Script.md",
+    "Design/Plumbing/Coil Lead Pass-Throughs.md",
+    "Design/Plumbing/Thermal Couple Pass-through.md",
+    "Design/Plumbing/Random Holes.md",
+    "Design/Mechanisms/Bottom Lift.md",
+    "Design/Mechanisms/Trapdoor.md",
+    "Design/Vacuum Chamber/Used Vacuum Chamber.md.tmp.27652.2b3a86a72553"
+  ]
+}
