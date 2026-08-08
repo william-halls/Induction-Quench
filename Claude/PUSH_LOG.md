@@ -4,6 +4,15 @@ Record of what changed with each push to GitHub.
 
 <!-- Newest entries at the top -->
 
+## 2026-08-07 - Add NI-DAQ control architecture and polish vault navigation/media
+**Commit**: `3fb56e7`
+- Added Design/Wiring/NI-DAQ Control Architecture.md, cross-linked from 7 subsystem notes
+- Linked the orphaned Design/SUBSYSTEMS.md map into the main hub and README
+- Moved loose pasted screenshots into media/mechanisms/ with descriptive names
+- Fixed README file-structure tree, stale file count, and Media/INDEX embed guidance
+- Added missing Ball Screw.md entry to Mechanisms INDEX
+- 31 files changed
+
 ## 2026-08-07 - Update Obsidian workspace config and Design documentation
 **Commit**: `43213f2`
 - Updated Obsidian workspace layout and plugin configuration
