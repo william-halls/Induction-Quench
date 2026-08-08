@@ -35,6 +35,10 @@ The instrument design is organized into **interconnected subsystems**:
 ### Reference  
 - **[[Design/Archive/Design History|Design Archive]]** — Historical designs and rejected concepts
 
+---
+
+📊 **[[Design/SUBSYSTEMS|Subsystems Interconnection Map]]** — Full architecture diagram, information flow, and cross-subsystem dependencies
+
 ## Status & Notes
 
 ---

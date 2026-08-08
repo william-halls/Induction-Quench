@@ -10,7 +10,8 @@ Power delivery, control circuits, and instrumentation for induction heating and 
 
 | File | Purpose | Status |
 |------|---------|--------|
-| **[[Electrical System\|Electrical System.md]]** | Power delivery & instrumentation overview | 🔵 Hub |
+| **[[Design/Wiring/Electrical System|Electrical System.md]]** | Power delivery & instrumentation overview | 🔵 Hub |
+| **[[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture.md]]** | Automated control via NI-9219 + NI-9263 on legacy laptop | 🟢 Active |
 
 ---
 

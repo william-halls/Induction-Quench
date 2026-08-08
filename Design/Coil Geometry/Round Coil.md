@@ -1,5 +1,5 @@
 ---
-tags: [coil-design, round, manufactured, current]
+tags: [coil-design, round, manufactured, current, induction-heating, power-delivery]
 ---
 
 # Round Coil Design
@@ -7,6 +7,13 @@ tags: [coil-design, round, manufactured, current]
 ## Concept
 
 Cylindrical coil geometry wound concentrically around the sample. This approach is **easier to manufacture** compared to square/rectangular profiles, making it the primary candidate for initial testing.
+
+## Power Control Integration
+
+See [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] for automated power delivery:
+- Induction power supply receives 0-10V command signal from NI-9263 (DAC)
+- PID loop maintains target sample temperature (1000°C) via thermocouple feedback from NI-9219 (ADC)
+- Coil power is ramped and controlled automatically during heating phase
 
 ## Manufacturing Approach
 

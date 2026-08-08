@@ -10,11 +10,12 @@ Mechanical systems, actuation, control logic, and safety interlocks for repeatab
 
 | File | Purpose | Status |
 |------|---------|--------|
-| **[[Control System\|Control System.md]]** | Overview & integration points | 🔵 Hub |
-| **[[Ceramic Mount\|Ceramic Mount.md]]** | Active sample holder (2-part design) | 🟢 Active |
-| **[[Bottom Lift\|Bottom Lift.md]]** | Linear actuator approach (deferred) | 🟡 Deferred |
-| **[[Titanium Claw\|Titanium Claw.md]]** | Gripper mechanism (abandoned - heat sink) | 🔴 Abandoned |
-| **[[Trapdoor\|Trapdoor.md]]** | Rotating release mechanism (deferred) | 🟡 Deferred |
+| **[[Design/Mechanisms/Control System|Control System.md]]** | Overview & integration points | 🔵 Hub |
+| **[[Design/Mechanisms/Ceramic Mount|Ceramic Mount.md]]** | Active sample holder (2-part design) | 🟢 Active |
+| **[[Design/Mechanisms/Ball Screw|Ball Screw.md]]** | Stepper-driven vertical shaft actuation | 🟢 Active |
+| **[[Design/Mechanisms/Bottom Lift|Bottom Lift.md]]** | Linear actuator approach (deferred) | 🟡 Deferred |
+| **[[Design/Mechanisms/Titanium Claw|Titanium Claw.md]]** | Gripper mechanism (abandoned - heat sink) | 🔴 Abandoned |
+| **[[Design/Mechanisms/Trapdoor|Trapdoor.md]]** | Rotating release mechanism (deferred) | 🟡 Deferred |
 
 ---
 
@@ -31,6 +32,8 @@ Mechanical systems, actuation, control logic, and safety interlocks for repeatab
 ### ⚡ Control Signals
 - **[[Design/Wiring/Electrical System\|Wiring & Electrical]]** — Valve/pump actuation signals, emergency stop
   - *Connection*: E-stop wiring; solenoid valve control; thermocouple/pressure sensor inputs
+- **[[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Control Architecture]]** — Automated ball screw & valve control
+  - *Connection*: [[Design/Mechanisms/Ball Screw|Ball screw]] motor control via NI-9263; quench valve automation; safety monitoring via NI-9219
 
 ### 💧 Fluid Control
 - **[[Design/Plumbing/Fluid Systems\|Plumbing & Fluid Systems]]** — Quench valve, pump relay, pressure relief

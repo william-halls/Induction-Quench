@@ -1,11 +1,21 @@
 ---
-tags: [design, plumbing, coil-connections, electrical]
+tags: [design, plumbing, coil-connections, electrical, power-delivery]
 ---
 
 # Coil Lead Pass-Throughs
 
 These pass-throughs are comprised of a bronze tube with a flared fitting nut on both ends. The brass tube is threaded. Next to the flared fitting nuts there is a flanged nut that threads onto the brass pipe, then an O-ring, then the acrylic lid. The configuration allows the nut to be tightened and squeezed onto the lid, making a seal and allowing the flared fittings to move independent of the flanged nuts, allowing for ease of swapping and installing coils and coil extensions in and out of the chamber.
+
 **Concern:** We are pumping hundreds of amps through brass, as copper pipe in the required size was unavailable. Copper might be too soft for this application anyway.
+
+## Electrical Integration
+
+**High-Frequency Power Delivery:**
+- Connections: [[Design/Coil Geometry/Induction Coil|Induction Coil]] to external power supply
+- Power frequency: ~1 MHz (high-frequency AC)
+- Current: Hundreds of amps (requires robust conductor)
+- See [[Design/Wiring/Electrical System|Wiring & Electrical System]] for power system specifications
+- See [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] for PID control of power level
 
 Picture: 
 ![[coil-lead-passthrough-1.png]]

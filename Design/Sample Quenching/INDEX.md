@@ -10,9 +10,9 @@ Sample geometries, rapid cooling strategies, and quenching methods for achieving
 
 | File | Purpose | Status |
 |------|---------|--------|
-| **[[Quenching Methods\|Quenching Methods.md]]** | Cooling strategy overview & candidate methods | 🔵 Hub |
-| **[[Charpy\|Charpy.md]]** | Standard Charpy sample geometry (10×10×55 mm) | 🔵 Reference |
-| **[[Modified Charpy\|Modified Charpy.md]]** | Test variant with button head (61 mm total) | 🔵 Reference |
+| **[[Design/Sample Quenching/Quenching Methods|Quenching Methods.md]]** | Cooling strategy overview & candidate methods | 🔵 Hub |
+| **[[Design/Sample Quenching/Charpy|Charpy.md]]** | Standard Charpy sample geometry (10×10×55 mm) | 🔵 Reference |
+| **[[Design/Sample Quenching/Modified Charpy|Modified Charpy.md]]** | Test variant with button head (61 mm total) | 🔵 Reference |
 
 ---
 
@@ -36,6 +36,8 @@ Sample geometries, rapid cooling strategies, and quenching methods for achieving
 ### ⚡ Control Timing
 - **[[Design/Wiring/Electrical System\|Wiring & Electrical]]** — Quench trigger signals, solenoid valve activation
   - *Connection*: Timer-based or manual trigger; feedback from sensors (temp, pressure) may inform quench decision
+- **[[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Control Architecture]]** — Automated quench triggering via NI-9263
+  - *Connection*: Software triggers quench valve; temperature/time-based logic; data logging of quench event and pressure spike
 
 ---
 

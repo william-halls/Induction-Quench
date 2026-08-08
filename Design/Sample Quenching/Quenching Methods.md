@@ -48,4 +48,5 @@ Rapid cooling strategy after heating to 1000°C. Critical for achieving desired 
 - [[Design/Plumbing/Fluid Systems|Plumbing & Fluid Systems]] — Medium delivery and circulation
 - [[Design/Mechanisms/Control System|Mechanisms & Automation]] — Quench triggering and timing
 - [[Design/Wiring/Electrical System|Wiring & Electrical]] — Quench initiation signals
+- [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] — Automated quench triggering via NI-9263; pressure spike monitoring via NI-9219
 - [[Design/Archive/Design History|Design Archive]] — Previous quench methods and results

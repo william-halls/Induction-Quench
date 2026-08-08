@@ -37,6 +37,9 @@ media/
 | **Ceramic Mount Assembly** | `ceramic-mount-assembly.png` | [[Design/Mechanisms/Ceramic Mount\|Ceramic Mount.md]] |
 | **Ceramic Mount Detail** | `ceramic-mount-detail.png` | [[Design/Mechanisms/Ceramic Mount\|Ceramic Mount.md]] |
 | **Ceramic Mount Rendering** | `ceramic-mount-rendering.png` | [[Design/Mechanisms/Ceramic Mount\|Ceramic Mount.md]] |
+| **Ball Screw Stepper Assembly** | `ball-screw-stepper-assembly.png` | [[Design/Mechanisms/Ball Screw\|Ball Screw.md]] |
+| **Shaft Clamp Mount** | `shaft-clamp-mount.png` | [[Design/Mechanisms/Ball Screw\|Ball Screw.md]] |
+| **Ball Screw Full Assembly** | `ball-screw-full-assembly.png` | [[Design/Mechanisms/Ball Screw\|Ball Screw.md]] |
 
 ---
 
@@ -84,7 +87,7 @@ All images follow a descriptive naming pattern:
 1. **Determine category** — coil, mechanisms, vacuum-chamber, or plumbing
 2. **Rename descriptively** — e.g., `new-feature-diagram.png`
 3. **Place in appropriate folder** — e.g., `media/mechanisms/new-feature-diagram.png`
-4. **Update markdown** — Reference as `![[../../media/category/image-name.png]]`
+4. **Update markdown** — Reference as `![[image-name.png]]`
 5. **Update this INDEX** — Add entry in appropriate table
 
 ---
@@ -94,10 +97,10 @@ All images follow a descriptive naming pattern:
 **Example:** From a file in `Design/Mechanisms/Example.md`:
 
 ```markdown
-![[../../media/mechanisms/ceramic-mount-assembly.png]]
+![[ceramic-mount-assembly.png]]
 ```
 
-The `../../media/` path works from any markdown file in the vault.
+Obsidian resolves embeds by filename (unique across the vault), so a bare filename works from any markdown file — no relative path needed.
 
 ---
 

@@ -23,6 +23,7 @@ Inert atmosphere enclosure for controlled heating and quenching without oxidatio
 - **Sample Port**: Central 1/2" OD shaft for ceramic sample holder
 - **Thermocouple**: Dedicated feedthrough port (planned)
 - **Gas/Vacuum Lines**: Via air control manifold
+- **Existing Ports**: See [[Design/Plumbing/Random Holes|Random Holes]] for evaluation/sealing
 - **Support**: Scissor lift base for maintenance access
 
 **See** [[Design/Vacuum Chamber/Used Vacuum Chamber|Used Vacuum Chamber]] **for detailed specifications.**
@@ -49,4 +50,5 @@ Inert atmosphere enclosure for controlled heating and quenching without oxidatio
 - [[Design/Coil Geometry/Induction Coil|Coil Geometry]] — Houses the induction coil
 - [[Design/Plumbing/Fluid Systems|Plumbing & Fluid Systems]] — Vacuum pump, inert gas, quench medium lines
 - [[Design/Mechanisms/Control System|Mechanisms & Automation]] — Access door, pressure relief, scissor lift
+- [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] — Pressure monitoring via NI-9219; thermocouple feedthrough for temperature feedback
 - [[Design/Archive/Design History|Design Archive]] — Previous chamber designs and material trials

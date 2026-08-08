@@ -14,7 +14,7 @@ This vault contains the complete design, engineering notes, and development hist
 
 Start here: **[[Induction Quench Research Instrument|Project Overview]]**
 
-This central hub links to all major subsystems and provides a complete project map.
+This central hub links to all major subsystems and provides a complete project map. For the full cross-subsystem architecture diagram and dependency map, see **[[Design/SUBSYSTEMS|Subsystems Interconnection Map]]**.
 
 ---
 
@@ -58,44 +58,52 @@ Induction Quench Vault/
 ├── README.md (this file)
 ├── Induction Quench Research Instrument.md (main project hub)
 │
-└── Design/
-    ├── Coil Geometry/
-    │   ├── Induction Coil.md (overview & integration)
-    │   ├── Round Coil.md (active design)
-    │   ├── Square Coil.md (archived)
-    │   └── Coil Feature Script.md (parametric tools)
-    │
-    ├── Vacuum Chamber/
-    │   ├── Vacuum Enclosure.md (overview)
-    │   ├── Used Vacuum Chamber.md (current design)
-    │   ├── Vacuum Chamber CAD.md (OnShape model)
-    │   └── Quartz Glass Tube.md (archived)
-    │
-    ├── Mechanisms/
-    │   ├── Control System.md (overview & integration)
-    │   ├── Ceramic Mount.md (active design)
-    │   ├── Bottom Lift.md (rejected)
-    │   ├── Titanium Claw.md (rejected)
-    │   └── Trapdoor.md (deferred)
-    │
-    ├── Plumbing/
-    │   ├── Fluid Systems.md (overview)
-    │   ├── Vacuum Lid Systems.md (overview & planning)
-    │   ├── Air System Control Assembly.md
-    │   ├── Coil Lead Pass-Throughs.md
-    │   ├── Thermal Couple Pass-through.md
-    │   └── Vertical Sliding Shaft Seal.md
-    │
-    ├── Sample Quenching/
-    │   ├── Quenching Methods.md (overview)
-    │   ├── Standard Charpy.md (reference geometry)
-    │   └── Modified Charpy.md (test variant)
-    │
-    ├── Wiring/
-    │   └── Electrical System.md (power & instrumentation)
-    │
-    └── Archive/
-        └── Design History.md (project evolution)
+├── Design/
+│   ├── SUBSYSTEMS.md (interconnection map & architecture diagram)
+│   │
+│   ├── Coil Geometry/ (+ INDEX.md)
+│   │   ├── Induction Coil.md (overview & integration)
+│   │   ├── Round Coil.md (active design)
+│   │   ├── Square Coil.md (archived)
+│   │   └── Coil Feature Script.md (parametric tools)
+│   │
+│   ├── Vacuum Chamber/ (+ INDEX.md)
+│   │   ├── Vacuum Enclosure.md (overview)
+│   │   ├── Used Vacuum Chamber.md (current design)
+│   │   ├── Vacuum Chamber CAD.md (OnShape model)
+│   │   └── Quartz Glass Tube.md (archived)
+│   │
+│   ├── Mechanisms/ (+ INDEX.md)
+│   │   ├── Control System.md (overview & integration)
+│   │   ├── Ceramic Mount.md (active design)
+│   │   ├── Ball Screw.md (vertical actuation)
+│   │   ├── Bottom Lift.md (rejected)
+│   │   ├── Titanium Claw.md (rejected)
+│   │   └── Trapdoor.md (deferred)
+│   │
+│   ├── Plumbing/ (+ INDEX.md)
+│   │   ├── Fluid Systems.md (overview)
+│   │   ├── Vacuum Lid Systems.md (overview & planning)
+│   │   ├── Air System Control Assembly.md
+│   │   ├── Coil Lead Pass-Throughs.md
+│   │   ├── Thermal Couple Pass-through.md
+│   │   ├── Vertical Sliding Shaft Seal.md
+│   │   └── Random Holes.md
+│   │
+│   ├── Sample Quenching/ (+ INDEX.md)
+│   │   ├── Quenching Methods.md (overview)
+│   │   ├── Charpy.md (standard reference geometry)
+│   │   └── Modified Charpy.md (test variant)
+│   │
+│   ├── Wiring/ (+ INDEX.md)
+│   │   ├── Electrical System.md (power & instrumentation overview)
+│   │   └── NI-DAQ Control Architecture.md (automated control system)
+│   │
+│   └── Archive/ (+ INDEX.md)
+│       └── Design History.md (project evolution)
+│
+└── Media/
+    └── INDEX.md (image asset catalog; coil/, mechanisms/, vacuum-chamber/, plumbing/)
 ```
 
 ---
@@ -168,16 +176,18 @@ Use tags to organize and filter your vault queries.
 
 ## ✅ Vault Maintenance
 
-This vault was last **polished on 2026-08-06** with:
+This vault was last **polished on 2026-08-07** with:
 
 ✓ Flattened nested folder structure  
 ✓ Added frontmatter to all files  
 ✓ Standardized wikilinks to root-relative format  
 ✓ Fixed naming inconsistencies (Seel → Seal)  
-✓ Enhanced content organization and clarity  
+✓ Linked the orphaned Subsystems Interconnection Map into the main hub & README  
+✓ Moved loose pasted screenshots into `Media/mechanisms/` with descriptive names  
+✓ Corrected file-structure references (e.g. `Charpy.md`) and stale file counts  
 
 ---
 
-**Last Updated:** 2026-08-06  
+**Last Updated:** 2026-08-07  
 **Status:** 🟢 Organized & Ready  
-**Files:** 26 total (1 root, 25 under Design/)
+**Files:** 38 total (2 root, 35 under Design/, 1 under Media/)

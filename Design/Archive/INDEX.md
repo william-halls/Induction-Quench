@@ -10,7 +10,7 @@ Historical designs, rejected concepts, and engineering decisions from previous i
 
 | File | Purpose | Status |
 |------|---------|--------|
-| **[[Design History\|Design History.md]]** | Consolidated archive of rejected designs & lessons | 🔵 Reference |
+| **[[Design/Archive/Design History\|Design History.md]]** | Consolidated archive of rejected designs & lessons | 🔵 Reference |
 
 ---
 
@@ -179,6 +179,7 @@ Rejected Designs Archive
 
 **Current Control:**
 - [[Design/Mechanisms/Control System\|Manual Operation (Prototype)]]
+- [[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Automated Control (In Development)]]
 
 ---
 

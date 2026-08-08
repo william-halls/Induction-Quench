@@ -36,6 +36,7 @@ Induction heating coil design and optimization for uniform, efficient heating of
 
 - [[Design/Vacuum Chamber/Vacuum Enclosure|Vacuum Chamber]] — Must fit within chamber envelope
 - [[Design/Wiring/Electrical System|Wiring & Electrical]] — Coil connections and power feed
+- [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] — PID loop power control (0-10V command to power supply)
 - [[Design/Archive/Design History|Design Archive]] — Previous coil designs and lessons learned
 
 

@@ -10,10 +10,10 @@ Inert atmosphere enclosure for controlled heating and quenching without oxidatio
 
 | File | Purpose | Status |
 |------|---------|--------|
-| **[[Vacuum Enclosure\|Vacuum Enclosure.md]]** | Overview & integration points | 🔵 Hub |
-| **[[Used Vacuum Chamber\|Used Vacuum Chamber.md]]** | Current design (repurposed bucket) | 🟢 Active |
-| **[[Vacuum Chamber CAD\|Vacuum Chamber CAD.md]]** | OnShape model & CAD assembly | 🔵 Reference |
-| **[[Quartz Glass Tube\|Quartz Glass Tube.md]]** | Archived compact chamber design | 🔴 Abandoned |
+| **[[Design/Vacuum Chamber/Vacuum Enclosure|Vacuum Enclosure.md]]** | Overview & integration points | 🔵 Hub |
+| **[[Design/Vacuum Chamber/Used Vacuum Chamber|Used Vacuum Chamber.md]]** | Current design (repurposed bucket) | 🟢 Active |
+| **[[Design/Vacuum Chamber/Vacuum Chamber CAD|Vacuum Chamber CAD.md]]** | OnShape model & CAD assembly | 🔵 Reference |
+| **[[Design/Vacuum Chamber/Quartz Glass Tube|Quartz Glass Tube.md]]** | Archived compact chamber design | 🔴 Abandoned |
 
 ---
 
@@ -26,6 +26,8 @@ Inert atmosphere enclosure for controlled heating and quenching without oxidatio
 ### ⚡ Power Delivery
 - **[[Design/Wiring/Electrical System\|Wiring & Electrical]]** — Coil power leads via feedthroughs
   - *Connection*: High-frequency power passes through chamber wall; lead pass-throughs in lid; grounding/shielding required
+- **[[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Control Architecture]]** — Instrumentation & automated monitoring
+  - *Connection*: Thermocouple feedthrough; pressure transducer monitoring vacuum; safety interlock signals
 
 ### 🔧 Sample Handling
 - **[[Design/Mechanisms/Control System\|Mechanisms & Automation]]** — Sample positioning & access

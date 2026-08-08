@@ -10,13 +10,13 @@ Gas delivery, vacuum evacuation, and quenching medium circulation systems for ch
 
 | File | Purpose | Status |
 |------|---------|--------|
-| **[[Fluid Systems\|Fluid Systems.md]]** | Overview of gas/vacuum/quench systems | 🔵 Hub |
-| **[[Vacuum Lid Systems\|Vacuum Lid Systems.md]]** | Plumbing in chamber lid | 🔵 Reference |
-| **[[Air System Control Assembly\|Air System Control Assembly.md]]** | Vacuum/argon manifold (3-way valve) | 🟢 Active |
-| **[[Coil Lead Pass-Throughs\|Coil Lead Pass-Throughs.md]]** | Bronze tube + flared fittings for coil power | 🟢 Active |
-| **[[Vertical Sliding Shaft Seal\|Vertical Sliding Shaft Seal.md]]** | 1/2" shaft seal for sample port | 🟢 Active |
-| **[[Thermal Couple Pass-through\|Thermal Couple Pass-through.md]]** | Thermocouple quick-connect interface | 🟡 Planned |
-| **[[Random Holes\|Random Holes.md]]** | Existing chamber ports (evaluate/seal) | 🔵 Reference |
+| **[[Design/Plumbing/Fluid Systems|Fluid Systems.md]]** | Overview of gas/vacuum/quench systems | 🔵 Hub |
+| **[[Design/Plumbing/Vacuum Lid Systems|Vacuum Lid Systems.md]]** | Plumbing in chamber lid | 🔵 Reference |
+| **[[Design/Plumbing/Air System Control Assembly|Air System Control Assembly.md]]** | Vacuum/argon manifold (3-way valve) | 🟢 Active |
+| **[[Design/Plumbing/Coil Lead Pass-Throughs|Coil Lead Pass-Throughs.md]]** | Bronze tube + flared fittings for coil power | 🟢 Active |
+| **[[Design/Plumbing/Vertical Sliding Shaft Seal|Vertical Sliding Shaft Seal.md]]** | 1/2" shaft seal for sample port | 🟢 Active |
+| **[[Design/Plumbing/Thermal Couple Pass-through|Thermal Couple Pass-through.md]]** | Thermocouple quick-connect interface | 🟡 Planned |
+| **[[Design/Plumbing/Random Holes|Random Holes.md]]** | Existing chamber ports (evaluate/seal) | 🔵 Reference |
 
 ---
 
@@ -41,6 +41,8 @@ Gas delivery, vacuum evacuation, and quenching medium circulation systems for ch
 ### ⚡ Power & Instrumentation
 - **[[Design/Wiring/Electrical System\|Wiring & Electrical]]** — Pump power, solenoid valve control, sensor signals
   - *Connection*: Pump 24V supply; thermocouple amplifier signals; pressure gauge instrumentation
+- **[[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Control Architecture]]** — Automated pump/valve control via NI-9263
+  - *Connection*: Water filling system automation; solenoid actuation via 0-10V command signals
 
 ---
 

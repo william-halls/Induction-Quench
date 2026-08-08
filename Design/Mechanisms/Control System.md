@@ -27,11 +27,17 @@ Mechanical systems, actuation, control logic, and safety interlocks for repeatab
 - **Safety Interlocks**: Vacuum pressure monitoring required before heating; emergency vent available
 
 ### Planned Automation
-Future iterations may include:
-- Automated temperature ramp profiling
+
+**Now in Development:** NI-DAQ based PID control system
+- See [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]]
+- PID loop for induction coil power (target: 1000°C)
+- Automatic ball screw control (NEMA 23 stepper motor)
+- Automatic water filling system
+- Future: Automatic air purging + argon backfill
+
+**Previous Concept:**
 - Timer-based quench triggering
-- Data logging system integration
-- Vacuum-dependent safety interlocks
+- Manual heating ramp control
 
 ## Safety Systems
 
@@ -61,6 +67,8 @@ Future iterations may include:
 ## Integration Points
 
 - [[Design/Wiring/Electrical System|Wiring & Electrical]] — Control signals, sensor inputs, actuator power
+- [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] — Automated control system (active development)
+- [[Design/Mechanisms/Ball Screw|Ball Screw]] — Linear actuation via NEMA 23 stepper motor
 - [[Design/Plumbing/Fluid Systems|Plumbing & Fluid Systems]] — Quench valve control, pump relay
 - [[Design/Sample Quenching/Quenching Methods|Sample Quenching Routes]] — Quench triggering mechanism
 - [[Design/Vacuum Chamber/Vacuum Enclosure|Vacuum Chamber]] — Door/access interlocks

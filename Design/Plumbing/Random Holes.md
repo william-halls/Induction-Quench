@@ -13,3 +13,9 @@ tags: [design, plumbing, vacuum-chamber, notes]
 - Old pressure gauge contained black fluid (likely age-related degradation)
 
 **Action:** Evaluate which holes can be repurposed or sealed for the new system.
+
+## Related Documentation
+
+- [[Design/Vacuum Chamber/Used Vacuum Chamber|Used Vacuum Chamber]] — Chamber lid specifications
+- [[Design/Vacuum Chamber/Vacuum Enclosure|Vacuum Enclosure]] — Overview of feedthrough design
+- [[Design/Plumbing/INDEX|Plumbing Subsystem]] — All fluid system components

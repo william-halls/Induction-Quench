@@ -36,4 +36,5 @@ Power delivery, control circuits, and instrumentation for induction heating and 
 - [[Design/Coil Geometry/Induction Coil|Coil Geometry]] — Coil load impedance and connections
 - [[Design/Mechanisms/Control System|Mechanisms & Automation]] — Control signals and feedback loops
 - [[Design/Plumbing/Fluid Systems|Plumbing & Fluid Systems]] — Pump/valve control circuits
+- [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] — Detailed automated control system implementation
 - [[Design/Archive/Design History|Design Archive]] — Previous power supply configurations

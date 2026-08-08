@@ -39,8 +39,7 @@ Each folder contains an INDEX.md with detailed connections:
     ┌──────────────────────┼──────────────────────┐
     ↓                      ↓                      ↓
   🔥 HEATING          📦 CHAMBER          💧 COOLING
-  [[Design/Coil       [[Design/Vacuum     [[Design/Plumbing
-   Geometry/INDEX]]    Chamber/INDEX]]     /INDEX]]
+  [[Design/Coil Geometry/INDEX]] [[Design/Vacuum Chamber/INDEX]] [[Design/Plumbing/INDEX]]
   
   (Induction Coil)    (Bucket Vessel)     (Gas/Vacuum)
   (Water-Cooled)      (Stainless Steel)   (Argon Backfill)
@@ -49,9 +48,7 @@ Each folder contains an INDEX.md with detailed connections:
                     ┌───────┼───────┐
                     ↓       ↓       ↓
                🔧 SAMPLE   ❄️ QUENCH  ⚙️ CONTROL
-               [[Design/    [[Design/   [[Design/
-                Mechanisms   Sample Q.   Mechanisms
-                /INDEX]]     /INDEX]]    /INDEX]]
+               [[Design/Mechanisms/INDEX]] [[Design/Sample Quenching/INDEX]] [[Design/Mechanisms/INDEX]]
                 
               (Ceramic      (Oil/Water/  (Manual
                Mount)       Gas)         Trigger)
@@ -62,9 +59,9 @@ Each folder contains an INDEX.md with detailed connections:
                     ┌───────────────┐
                     ↓               ↓
                 📊 DATA          📜 HISTORY
-                (Thermocouple)   [[Design/Archive
-                (Pressure)        /INDEX]]
-                (Timing)          (Lessons Learned)
+                (Thermocouple)   [[Design/Archive/INDEX]]
+                (Pressure)        (Lessons Learned)
+                (Timing)
 ```
 
 ---
@@ -72,23 +69,23 @@ Each folder contains an INDEX.md with detailed connections:
 ## Information Flow During Test
 
 ### Pre-Test Setup
-1. **Sample Prep** → [[Design/Sample Quenching\|Quenching]] (charpy geometry)
+1. **Sample Prep** → [[Design/Sample Quenching/INDEX|Quenching]] (charpy geometry)
 2. **Mount Install** → [[Design/Mechanisms/Ceramic Mount\|Ceramic Mount]]
-3. **Chamber Prep** → [[Design/Vacuum Chamber\|Vacuum Chamber]] + [[Design/Plumbing\|Plumbing]]
-4. **System Check** → [[Design/Wiring\|Electrical]] interlocks verified
+3. **Chamber Prep** → [[Design/Vacuum Chamber/INDEX|Vacuum Chamber]] + [[Design/Plumbing/INDEX|Plumbing]]
+4. **System Check** → [[Design/Wiring/INDEX|Electrical]] interlocks verified
 
 ### During Heating
 1. **Power On** → [[Design/Wiring/INDEX\|Wiring]] activates supply
 2. **Coil Energize** → [[Design/Coil Geometry/Round Coil\|Round Coil]] heats sample
-3. **Temperature Rise** → [[Design/Vacuum Chamber\|Chamber]] maintains inert atmosphere
+3. **Temperature Rise** → [[Design/Vacuum Chamber/INDEX|Chamber]] maintains inert atmosphere
 4. **Cooling Flow** → [[Design/Plumbing/Fluid Systems\|Cooling water]] circulates through coil
-5. **Monitoring** → [[Design/Wiring\|Thermocouple]] records thermal profile
+5. **Monitoring** → [[Design/Wiring/INDEX|Thermocouple]] records thermal profile
 
 ### During Quench (Critical Phase)
 1. **Trigger Event** → [[Design/Mechanisms/Control System\|Manual valve activation]]
 2. **Medium Release** → [[Design/Plumbing/Fluid Systems\|Quench system]] delivers cooling medium
 3. **Rapid Cool** → [[Design/Sample Quenching/Quenching Methods\|Sample cools]] to room temp
-4. **Data Capture** → [[Design/Wiring\|Pressure spike]] recorded; timing logged
+4. **Data Capture** → [[Design/Wiring/INDEX|Pressure spike]] recorded; timing logged
 
 ### Post-Test
 1. **Extraction** → [[Design/Mechanisms/Ceramic Mount\|Manual extraction]] of sample
@@ -106,9 +103,9 @@ Each folder contains an INDEX.md with detailed connections:
 - Critical: Water-cooled coil must handle high-frequency losses
 
 **Subsystems Involved:**
-- [[Design/Coil Geometry\|Heating]]
-- [[Design/Vacuum Chamber\|Containment]]
-- [[Design/Plumbing\|Cooling loops]]
+- [[Design/Coil Geometry/INDEX|Heating]]
+- [[Design/Vacuum Chamber/INDEX|Containment]]
+- [[Design/Plumbing/INDEX|Cooling loops]]
 
 ### Vacuum Path
 **Pump → Air Control Assembly → Chamber → Vent**
@@ -117,9 +114,9 @@ Each folder contains an INDEX.md with detailed connections:
 - Critical: Leak-tight throughout
 
 **Subsystems Involved:**
-- [[Design/Plumbing\|Air systems]]
-- [[Design/Vacuum Chamber\|Chamber integrity]]
-- [[Design/Wiring\|Pressure monitoring]]
+- [[Design/Plumbing/INDEX|Air systems]]
+- [[Design/Vacuum Chamber/INDEX|Chamber integrity]]
+- [[Design/Wiring/INDEX|Pressure monitoring]]
 
 ### Control Path
 **User Input → Solenoid Valve → Quench Medium → Sample**
@@ -129,8 +126,8 @@ Each folder contains an INDEX.md with detailed connections:
 
 **Subsystems Involved:**
 - [[Design/Mechanisms/Control System\|Manual/automated control]]
-- [[Design/Wiring\|Electrical signals]]
-- [[Design/Plumbing\|Valve actuation]]
+- [[Design/Wiring/INDEX|Electrical signals]]
+- [[Design/Plumbing/INDEX|Valve actuation]]
 
 ### Data Path
 **Thermocouple → Feedthrough → Amplifier → Logger**
@@ -139,46 +136,46 @@ Each folder contains an INDEX.md with detailed connections:
 - Critical: Cold-junction compensation accurate
 
 **Subsystems Involved:**
-- [[Design/Sample Quenching\|Sample measurement]]
+- [[Design/Sample Quenching/INDEX|Sample measurement]]
 - [[Design/Plumbing/Thermal Couple Pass-through\|Feedthrough]]
-- [[Design/Wiring\|Instrumentation]]
+- [[Design/Wiring/INDEX|Instrumentation]]
 
 ---
 
 ## Design Decisions by Subsystem
 
-### [[Design/Coil Geometry\|Coil Geometry]]
+### [[Design/Coil Geometry/INDEX|Coil Geometry]]
 - ✅ **Active**: Round coil (simple manufacturing, proven heating)
 - ⏸️ **Deferred**: Square coil (complex cooling at corners)
 - 🔗 **Connects To**: Coil lead pass-throughs, vacuum chamber volume, water cooling
 
-### [[Design/Vacuum Chamber\|Vacuum Chamber]]
+### [[Design/Vacuum Chamber/INDEX|Vacuum Chamber]]
 - ✅ **Active**: Repurposed stainless steel bucket (proven, fast)
 - ❌ **Abandoned**: Quartz glass tube (sealing too complex)
 - 🔗 **Connects To**: All subsystems via lid feedthroughs
 
-### [[Design/Mechanisms\|Mechanisms]]
+### [[Design/Mechanisms/INDEX|Mechanisms]]
 - ✅ **Active**: Ceramic mount (simple, no heat sink effect)
 - ⏸️ **Deferred**: Bottom lift, trapdoor (incompatible with scanning)
 - ❌ **Abandoned**: Titanium claw (heat sink effect discovered in FEA)
 - 🔗 **Connects To**: Sample geometry, coil positioning, manual control
 
-### [[Design/Plumbing\|Plumbing]]
+### [[Design/Plumbing/INDEX|Plumbing]]
 - ✅ **Active**: Air control assembly, coil lead pass-throughs, shaft seal
 - ⏳ **Pending**: Thermocouple feedthrough design, quench medium selection
 - 🔗 **Connects To**: Vacuum pump, argon supply, cooling water, quench valve
 
-### [[Design/Sample Quenching\|Sample Quenching]]
+### [[Design/Sample Quenching/INDEX|Sample Quenching]]
 - ✅ **Reference**: Charpy geometries (standard + modified)
 - ⏳ **Pending**: Quench medium selection (oil/water/gas evaluation)
 - 🔗 **Connects To**: Cooling rate targets, thermal stress analysis
 
-### [[Design/Wiring\|Wiring & Electrical]]
+### [[Design/Wiring/INDEX|Wiring & Electrical]]
 - ✅ **Defined**: Power frequency (~1 MHz), safety interlocks, emergency stop
 - ⏳ **Pending**: Power supply selection, thermocouple amplifier, data logger
 - 🔗 **Connects To**: All subsystems (power, control, instrumentation)
 
-### [[Design/Archive\|Archive & History]]
+### [[Design/Archive/INDEX|Archive & History]]
 - 📜 **Reference**: Why each design was chosen/rejected
 - 🎓 **Lessons**: Simplicity wins, simulation catches flaws, material matters
 - 🔗 **Informs**: Future design iterations and decisions
@@ -209,13 +206,13 @@ Each folder contains an INDEX.md with detailed connections:
 
 **Pre-Test Verification** — All subsystems ready?
 
-- [x] **Coil** — Round coil assembled, water cooling connected (see [[Design/Coil Geometry\|Coil]])
-- [ ] **Chamber** — Vacuum verified, lid tight, all feedthroughs sealed (see [[Design/Vacuum Chamber\|Chamber]])
-- [ ] **Sample Mount** — Ceramic mount clean, sample prepared (see [[Design/Mechanisms\|Mechanisms]])
-- [ ] **Plumbing** — Vacuum pump running, argon pressure set, quench medium ready (see [[Design/Plumbing\|Plumbing]])
-- [ ] **Power** — Power supply set to target frequency, emergency stop tested (see [[Design/Wiring\|Wiring]])
-- [ ] **Thermocouple** — Sensor seated, feedthrough connected, amplifier powered (see [[Design/Wiring\|Wiring]])
-- [ ] **Safety** — Interlock verified (no heating without vacuum), E-stop accessible (see [[Design/Archive\|Safety Notes]])
+- [x] **Coil** — Round coil assembled, water cooling connected (see [[Design/Coil Geometry/INDEX|Coil]])
+- [ ] **Chamber** — Vacuum verified, lid tight, all feedthroughs sealed (see [[Design/Vacuum Chamber/INDEX|Chamber]])
+- [ ] **Sample Mount** — Ceramic mount clean, sample prepared (see [[Design/Mechanisms/INDEX|Mechanisms]])
+- [ ] **Plumbing** — Vacuum pump running, argon pressure set, quench medium ready (see [[Design/Plumbing/INDEX|Plumbing]])
+- [ ] **Power** — Power supply set to target frequency, emergency stop tested (see [[Design/Wiring/INDEX|Wiring]])
+- [ ] **Thermocouple** — Sensor seated, feedthrough connected, amplifier powered (see [[Design/Wiring/INDEX|Wiring]])
+- [ ] **Safety** — Interlock verified (no heating without vacuum), E-stop accessible (see [[Design/Archive/INDEX|Safety Notes]])
 
 ---
 

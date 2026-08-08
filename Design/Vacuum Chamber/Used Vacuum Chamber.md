@@ -18,7 +18,7 @@ tags: [vacuum-chamber, current-design, upcycled, active]
 ### Original Lid (Pre-Modification)
 - **Material** — Acrylic (12.5" diameter × 0.7" thick)
 - **Current State** — Requires replacement
-- **Original Ports**:
+- **Original Ports** (see [[Design/Plumbing/Random Holes|Random Holes]] for details):
   - 1 large hole with rubber stopper (unusable)
   - 1 un-threaded hole with expired pressure gauge (non-functional)
 
@@ -67,3 +67,4 @@ To support bucket load with ~4L water and pressure:
 - [[Design/Vacuum Chamber/Vacuum Chamber CAD|Vacuum Chamber CAD]] — 3D model and design specifications
 - [[Design/Coil Geometry/Round Coil|Round Coil]] — Must fit within chamber envelope
 - [[Design/Plumbing/Fluid Systems|Plumbing Systems]] — Gas/vacuum line connections
+- [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] — Pressure & temperature monitoring via feedthrough ports

@@ -10,10 +10,10 @@ Design and optimization of the induction heating coil for uniform, efficient hea
 
 | File | Purpose | Status |
 |------|---------|--------|
-| **[[Induction Coil\|Induction Coil.md]]** | Overview & integration points | 🔵 Hub |
-| **[[Round Coil\|Round Coil.md]]** | Active cylindrical coil design | 🟢 Active |
-| **[[Square Coil\|Square Coil.md]]** | Rectangular coil (deferred) | 🟡 Deferred |
-| **[[Coil Feature Script\|Coil Feature Script.md]]** | Parametric CAD automation | 🔵 Tool |
+| **[[Design/Coil Geometry/Induction Coil|Induction Coil.md]]** | Overview & integration points | 🔵 Hub |
+| **[[Design/Coil Geometry/Round Coil|Round Coil.md]]** | Active cylindrical coil design | 🟢 Active |
+| **[[Design/Coil Geometry/Square Coil|Square Coil.md]]** | Rectangular coil (deferred) | 🟡 Deferred |
+| **[[Design/Coil Geometry/Coil Feature Script|Coil Feature Script.md]]** | Parametric CAD automation | 🔵 Tool |
 
 ---
 
@@ -22,6 +22,8 @@ Design and optimization of the induction heating coil for uniform, efficient hea
 ### 🔥 Thermal & Power
 - **[[Design/Wiring/Electrical System\|Wiring & Electrical]]** — Power delivery, impedance matching, high-frequency leads
   - *Connection*: Coil load impedance must match supply; connections via pass-throughs
+- **[[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Control Architecture]]** — PID-based power control
+  - *Connection*: Thermocouple feedback → NI-9219 → PID loop → NI-9263 (0-10V power command)
 
 ### 📦 Containment
 - **[[Design/Vacuum Chamber/Vacuum Enclosure\|Vacuum Chamber]]** — Must fit within chamber envelope
