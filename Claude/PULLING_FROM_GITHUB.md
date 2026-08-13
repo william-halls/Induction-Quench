@@ -1,14 +1,14 @@
 # Pulling This Vault on Another PC/Laptop
 
 This vault is a git repo connected to:
-`https://github.com/william-halls/Induction-Quench-`
+`https://github.com/william-halls/Induction-Quench`
 
 ## First time on a new PC/laptop
 
 1. Install [Git](https://git-scm.com/downloads) if it isn't already.
 2. Open a terminal in your `Obsidian Vault` folder (or wherever you keep vaults) and run:
    ```
-   git clone https://github.com/william-halls/Induction-Quench-.git "Induction Quench"
+   git clone https://github.com/william-halls/Induction-Quench.git "Induction Quench"
    ```
 3. Open the resulting `Induction Quench` folder as a vault in Obsidian.
 4. Install the **Claudian** community plugin in Obsidian (Settings → Community plugins) if it isn't bundled — the plugin files live in `.obsidian/plugins/claudian` and should already be there from the clone, but you may need to enable it under Community Plugins.

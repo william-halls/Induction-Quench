@@ -1,14 +1,14 @@
 # Pushing This Vault to GitHub
 
 This vault is a git repo connected to:
-`https://github.com/william-halls/Induction-Quench-`
+`https://github.com/william-halls/Induction-Quench`
 
 ## One-time setup (already done)
 
 - `git init` — made this folder a git repo
 - `git config user.name` / `user.email` — set to identify commits
 - `.gitignore` — excludes `.claude/`, `.claudian/` (local app state/session data, not vault content)
-- `git remote add origin https://github.com/william-halls/Induction-Quench-.git` — linked to GitHub
+- `git remote add origin https://github.com/william-halls/Induction-Quench.git` — linked to GitHub
 
 ## Every time you want to push new changes
 
