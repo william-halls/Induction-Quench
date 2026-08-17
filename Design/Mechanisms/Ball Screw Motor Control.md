@@ -521,7 +521,326 @@ See [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] fo
 
 ---
 
-## Troubleshooting & Commissioning
+## Homing Strategy: Limit Switch Method
+
+**Recommendation:** Use a mechanical limit switch for reliable, automated home positioning. The ST-PMC1's 6 optical inputs are perfectly suited for this.
+
+### Why Limit Switch Homing?
+
+| Method | Sensorless | Limit Switch | Encoder |
+|--------|-----------|--------------|---------|
+| **Hardware Required** | None (current) | Switch + bracket | Switch + encoder |
+| **ST-PMC1 Compatible** | ❌ No | ✅ Yes | ❌ No (needs upgrade) |
+| **Reliability** | ❌ Not possible | ✅ Failsafe | ✅ Best |
+| **Cost** | $0 | ~$10 | ~$50 |
+| **Implementation Time** | N/A | 2–4 hours | 1–2 days |
+
+**The Constraint:** ST-PMC1 is open-loop (pulse+direction only). It cannot detect motor stall without external feedback. Sensorless homing requires either stall detection (closed-loop driver) or encoder feedback—neither is available with current hardware.
+
+**The Solution:** Add a mechanical limit switch that the ST-PMC1 can sense via one of its 6 optical inputs.
+
+---
+
+### Mechanical Installation
+
+**Limit Switch Placement:**
+
+```
+Ball Screw Assembly (Vertical View)
+═══════════════════════════════════
+
+    [ST-PMC1 Controller]
+           ▲
+           │ CP, CW signals
+           │
+    [TB6600 Driver]
+           ▲
+           │ Coil current
+           │
+    [NEMA Stepper Motor]
+           │
+           ▼ Rotation
+    ╔═══════════════╗
+    ║ Ball Screw   ║
+    ║ Shaft        ║
+    ║              ║
+    ║  [Coupler]   ║
+    ║      │       ║
+    ║      ▼       ║ ← Moving up/down
+    ║   [Nut]      ║
+    ║      │       ║
+    ║      ▼       ║
+    ║              ║
+    ╚═══════════════╝
+           │
+           ▼ Linear motion
+    
+    ┌──────────────────┐
+    │  Ceramic Mount   │
+    │  + Sample        │
+    │                  │
+    │  [Moving up]     │
+    │  [down]          │
+    │                  │
+    └──────────────────┘
+           │
+           ▼ Travels ~100mm range
+    
+    ┌──────────────────┐
+    │ HOME POSITION    │
+    │ (lowest)         │
+    │                  │
+    │ ┌──────────────┐ │
+    │ │ Limit Switch │ ◄─── Mechanically actuated
+    │ │  (N.O.)      │ │     when mount reaches bottom
+    │ └──────────────┘ │
+    └──────────────────┘
+```
+
+**Physical Implementation:**
+1. Install a **normally-open (N.O.) limit switch** at the lowest point of travel
+2. Mount switch on fixed frame (not on moving part)
+3. Add mechanical actuator arm to sample mount
+4. When mount descends, arm presses switch → circuit closes → ST-PMC1 detects
+
+**Example Switch:** Omron V-155-1C25 or equivalent (~$8–15)
+- 1 N.O. contact
+- Optical isolation ready
+- 24V DC rated
+
+---
+
+### Wiring: Limit Switch to ST-PMC1
+
+```
+╔════════════════════════════════════════════════════════════╗
+║  LIMIT SWITCH INPUT WIRING (ST-PMC1 Input #1)             ║
+╚════════════════════════════════════════════════════════════╝
+
+Limit Switch (N.O. contact)           ST-PMC1 Controller
+┌──────────────────┐                  ┌──────────────────┐
+│ Common (COM)  ───┼──────────────────┤ Input #1 GND     │
+│                  │                  │                  │
+│ Normally Open ───┼──[+24V pulled]   │ Input #1 Signal  │
+│ (N.O.) Contact   │    (10kΩ resistor)                 │
+└──────────────────┘                  └──────────────────┘
+                │                            │
+                │                            │
+            ┌───┴────────────────────────────┴────┐
+            │  +24V Power Rail (SDN supply)       │
+            │  (via 10kΩ pull-up resistor)        │
+            └────────────────────────────────────┘
+
+Signal Behavior:
+─────────────────────────────────────────────────────────
+Mount descending, NOT at limit:
+  Switch contact OPEN → Input line pulled HIGH (+24V) → ST-PMC1 reads "1"
+
+Mount hits limit:
+  Switch contact CLOSES → Input line pulled to GND → ST-PMC1 reads "0"
+  
+Program detects this state change → triggers "home found" action
+```
+
+**Wiring Requirements:**
+- Use **shielded twisted pair** (STP) cable for signal line (~10 ft max)
+- Ground shield at power supply end only (prevents ground loops)
+- Pull-up resistor: 10 kΩ (built into most ST-PMC1 variants, check manual)
+- Wire gauge: #22 AWG minimum
+
+---
+
+### ST-PMC1 Homing Program
+
+**Program: "Auto Home & Move to Working Height"**
+
+```
+╔═══════════════════════════════════════════════════════════════╗
+║  ST-PMC1 PROGRAM: Home & Position                            ║
+║  (99 lines max, typical 8-10 lines for homing)               ║
+╚═══════════════════════════════════════════════════════════════╝
+
+Line  Instruction          Param1    Param2    Param3     Effect
+────  ───────────────────  ────────  ────────  ─────────  ──────────────
+  1   MOVE                 500 steps CCW       5 kHz      Descend slowly
+                                                           toward limit
+
+  2   CHECK INPUT #1       CLOSED    JUMP→5    JUMP→3     If limit closed,
+                                                           skip to line 5
+                                                           (home found!)
+
+  3   CHECK STEPS          500       JUMP→1    -          If moved <500
+                                                           steps, retry
+                                                           (line 1)
+
+  4   HALT & ERROR         "Home     -         -          Failed to find
+                           not found"                       home after
+                                                           500 steps
+
+  5   MOVE                 0 steps   CW        -          Stop motor
+                                                           (hold position)
+
+  6   WAIT                 2 sec     -         -          Mechanical settle
+                                                           time
+
+  7   MOVE                 300 steps CW        5 kHz      Raise sample
+                                                           to working
+                                                           height (~15mm)
+
+  8   HOLD POSITION        -         -         -          Coils locked,
+                                                           ready for heating
+
+  9   WAIT FOR TRIGGER     -         -         -          Operator button
+                                                           or external cmd
+
+ 10   [Next sequence...]   -         -         -          Raise, trigger
+                                                           quench, lower
+
+Program Flow Diagram:
+═════════════════════════════════════════════════════════
+
+                          ┌─────────────────────┐
+                          │  START: Home Routine│
+                          └──────────┬──────────┘
+                                     │
+                                     ▼
+                          ┌─────────────────────┐
+                          │ MOVE 500 steps down │
+                          │ at 5 kHz (slow)     │
+                          └──────────┬──────────┘
+                                     │
+                                     ▼
+                          ┌─────────────────────┐
+                          │ Limit Switch Closed?│
+                          └──┬────────────────┬─┘
+                           Yes               No
+                             │                 │
+                             ▼                 │
+                    ┌──────────────────┐      │
+                    │ HOME FOUND ✓     │      │
+                    │ Jump to Line 5   │      │
+                    └──────────────────┘      │
+                                              ▼
+                                    ┌──────────────────┐
+                                    │ Moved 500 steps? │
+                                    └──┬────────────┬──┘
+                                     No             Yes
+                                      │              │
+                                      ▼              ▼
+                                  [Retry]    [Error: Not Found]
+                                   Line 1         HALT
+
+[Continue from home...]
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │ Stop motor       │
+                    │ (hold in place)  │
+                    └──────────────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │ Wait 2 seconds   │
+                    │ (settle time)    │
+                    └──────────────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │ Raise 300 steps  │
+                    │ to work height   │
+                    │ (~15mm up)       │
+                    └──────────────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │ READY FOR TEST   │
+                    │ Wait for trigger │
+                    └──────────────────┘
+```
+
+**Key Program Features:**
+- ✅ **Automatic retry** (line 3) if limit not found on first descent
+- ✅ **Timeout protection** (line 4) prevents endless loop
+- ✅ **Settling time** (line 6) allows mechanical vibration to dampen
+- ✅ **Controlled ascent** (line 7) at same slow speed for smooth motion
+- ✅ **Position hold** (line 8) with coils energized (failsafe)
+
+---
+
+### Commissioning Procedure
+
+#### **Step 1: Mechanical Setup** (Before powering on)
+- [ ] Mount limit switch at lowest point of travel
+- [ ] Mount actuator arm on sample mount to press switch
+- [ ] Verify switch actuates when mount reaches bottom
+- [ ] Test switch manually: press arm → verify switch closes → arm release → switch opens
+
+#### **Step 2: Electrical Wiring**
+- [ ] Connect limit switch common (COM) to ST-PMC1 Input #1 GND
+- [ ] Connect limit switch N.O. contact to ST-PMC1 Input #1 signal (+24V pull-up)
+- [ ] Use shielded twisted pair cable, ground shield at power supply only
+- [ ] Verify continuity: multimeter between GND and Input #1 signal
+  - Switch open: should read ~24V
+  - Switch closed: should read 0V
+
+#### **Step 3: Power On & Test Limit Switch Input**
+- [ ] Power on ST-PMC1 (verify LCD lights up)
+- [ ] Manually press switch actuator arm
+- [ ] Check ST-PMC1 input indicator (LCD shows Input #1 status)
+- [ ] Verify LED toggles between "open" and "closed" states
+
+#### **Step 4: Program Homing Sequence**
+- [ ] Enter programming mode on ST-PMC1 (see manual)
+- [ ] Input the 10-line homing program above
+- [ ] Verify each line programmed correctly (LCD display confirmation)
+- [ ] Save program to memory
+
+#### **Step 5: Dry Run (No Load)**
+- [ ] Remove sample mount or secure it to prevent falling
+- [ ] Power on system
+- [ ] Press START button to run homing program
+- [ ] Observe motor descent: should slow down, stop when limit switch closes
+- [ ] Verify motor rises to working height (line 7)
+- [ ] Check motor holds position after halt (coils energized)
+
+#### **Step 6: Loaded Run (With Sample)**
+- [ ] Install sample mount with sample
+- [ ] Run homing program again
+- [ ] Verify descent speed is adequate (motor not stalling)
+- [ ] Verify rise to working height is smooth
+- [ ] Measure actual height from home position (should be ~15mm per 300 steps)
+- [ ] Calculate ball screw lead if needed: (height in mm) ÷ (steps/200) × 200
+
+#### **Step 7: Integration Check**
+- [ ] Homing program completes successfully ✅
+- [ ] Sample positioned correctly in coil ✅
+- [ ] Ready to proceed with heating/quenching integration ✅
+
+---
+
+### Troubleshooting Homing
+
+| Symptom | Likely Cause | Fix |
+|---------|--------------|-----|
+| **Motor descends continuously; doesn't stop** | Limit switch not closing OR not wired to Input #1 | Check switch continuity; verify wiring to correct input |
+| **Motor descends then immediately rises** | Limit switch always closed (stuck or inverted) | Test switch manually; check for mechanical binding |
+| **Motor descends partway, then error** | Retry limit (line 3) triggered; switch not detected in 500 steps | Lower descent speed (reduce frequency in line 1); verify switch placement |
+| **Motor moves but LCD shows no input status** | Pull-up resistor missing or failed | Check ST-PMC1 manual for pull-up; may need external 10kΩ resistor |
+| **Inconsistent homing position** | Mechanical backlash in ball screw | Add mechanical stop (rigid pin) at home position; reduces reliance on switch precision |
+
+---
+
+### Performance After Homing
+
+Once homed, the ball screw system achieves:
+- **Repeatability:** ±0.05mm (limited by mechanical backlash, not controller)
+- **Settling time:** ~2 seconds (coil damping + mechanical inertia)
+- **Hold force:** Stepper coils energized → shaft cannot drift (failsafe)
+- **Next cycle:** Operator can repeat homing or move directly to working height
+
+---
+
+
 
 ### Motor Not Stepping
 
