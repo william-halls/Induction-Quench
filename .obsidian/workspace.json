@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "181ef83cb3d24cbb",
+        "id": "2ed808d9c13f93c1",
         "type": "tabs",
         "children": [
           {
-            "id": "6be50165b9ca2c1a",
+            "id": "d518b2d8f79b6c8a",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "Design/Mechanisms/Ball Screw.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Ball Screw"
             }
           }
         ]
@@ -195,16 +199,16 @@
       "realclaudian:Open Claudian": false
     }
   },
-  "active": "107ece3b5c9caf3e",
+  "active": "d518b2d8f79b6c8a",
   "lastOpenFiles": [
+    "Design/Mechanisms/Ball Screw Motor Control.md",
+    "Design/Mechanisms/Control System.md",
     "COLOR_SCHEME.md",
     "COLOR_SCHEME.md.tmp.9440.4524698d75f2",
-    "Design/Mechanisms/Control System.md",
     "Design/Mechanisms/Trapdoor.md",
     "Design/Mechanisms/Titanium Claw.md",
     "Design/Mechanisms/INDEX.md",
     "Design/Mechanisms/Ball Screw.md",
-    "Design/Mechanisms/Ball Screw Motor Control.md",
     "Design/Wiring/NI-DAQ Control Architecture.md",
     "Design/Wiring/NI-DAQ Control Architecture.md.tmp.27240.ab53b543f84d",
     "Design/Wiring/NI-DAQ Control Architecture.md.tmp.27240.197428b71ec9",
