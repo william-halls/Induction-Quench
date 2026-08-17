@@ -11,7 +11,7 @@ Automated control system using National Instruments data acquisition hardware (N
 **Control Platform**: Legacy laptop running LabVIEW or Python DAQ software
 **Data Acquisition**: NI-9219 (analog input module)
 **Signal Control**: NI-9263 (analog output module)
-**Motor Control**: NEMA 23 2-phase stepper motor + external controller (TBD identification)
+**Motor Control**: [[Design/Mechanisms/Ball Screw Motor Control|Ball screw stepper system]] (SN: 161104226 motor, ST-PMC1 controller SN: 170120011)
 
 ### Control Goals
 
@@ -90,29 +90,44 @@ Thermocouple (sample)
 
 ### Ball Screw Control
 
-**Current Status**: Stepper motor + external controller (model unknown)
+**Status**: 🟢 **IDENTIFIED** — See [[Design/Mechanisms/Ball Screw Motor Control|complete motor control documentation]]
 
-**Options Pending Controller Identification:**
+**System Components:**
+- **Motion Controller**: ST-PMC1 (SN: 170120011) — Programmable stepper sequencer
+  - Power: 24V DC from [[Design/Mechanisms/Ball Screw Motor Control#Component Details|SDN 10-24-100P power supply]]
+  - Outputs: CP (pulse) + CW (direction) signals to stepper driver
+  - Frequency: 1–40 kHz (1 Hz resolution)
+  - Capability: Up to 99 programmed sequences
+- **Stepper Driver**: TB6600 (SN: 170120011) — Coil amplifier
+  - Inputs: Pulse + direction from ST-PMC1
+  - Output: 5–10A per coil phase @ 24V
+  - Microstepping: Full, 1/2, 1/4, 1/8, 1/16 step options
+- **Motor**: NEMA 23/34 stepper with integrated ball screw (SN: 161104226)
+  - 200 steps/revolution (1.8° per step)
+  - Positioning: ~0.025mm per full step
 
-**Option A: Pulse/Direction Input** (Most Common)
-- Stepper controller expects digital step + direction pulses
-- Solution: Use NI-9425 (digital output module) instead of NI-9263
-- NI-9425 can generate up to 100+ kHz pulse rates
-- Direction control via separate digital line
+**Integration with NI-DAQ:**
 
-**Option B: Analog 0-10V Speed Control**
-- Stepper controller accepts 0-10V analog input for speed
-- Solution: NI-9263 Channel 2 directly drives controller
-- Direction control: Separate digital signal (or reversed voltage)
-- Simpler integration, no additional modules needed
+**Option A: ST-PMC1 Standalone Mode** (Recommended for simplicity)
+- ST-PMC1 operates independently with programmed sequences
+- NI-DAQ monitors system state but does not command motor directly
+- Trigger: External trigger signal (NI-9263 relay output) can start pre-programmed sequence
+- Advantage: Decouples motor control from laptop; failsafe operation if NI-DAQ fails
+- Implementation: Configure ST-PMC1 sequences, wire NI-9263 relay to ST-PMC1 trigger input
 
-**Option C: Serial/USB Control**
-- Stepper controller has USB or RS-232 interface
-- Solution: Laptop controls directly via serial/USB
-- No NI module needed for this function
-- NI hardware reserved for coil + sensors
+**Option B: Real-Time Motor Control via NI-DAQ**
+- NI-9425 (digital output module) generates pulse+direction signals directly to TB6600 driver
+- Bypasses ST-PMC1, controlled entirely by laptop
+- Frequency: Up to 100+ kHz (exceeds stepper controller capability)
+- Advantage: Full laptop control, real-time coordination with coil power and quench timing
+- Disadvantage: Laptop must manage timing; stepper driver requires lower frequencies (~20 kHz typical)
+- Implementation: Wire NI-9425 Channels 1-2 to TB6600 pulse/direction inputs
 
-**ACTION REQUIRED**: Identify stepper controller model to determine integration approach.
+**Recommended Approach**: **Option A (Standalone ST-PMC1)**
+- Simplicity: Hardware already supports this architecture
+- Reliability: Motor control independent of laptop/NI-DAQ
+- Flexibility: Can still coordinate timing via external triggers
+- No additional hardware needed (no NI-9425 module required)
 
 ### Water Filling System
 
@@ -235,9 +250,10 @@ Shutdown:
 
 | Item | Status | Action |
 |------|--------|--------|
-| Stepper controller model | ❌ Unknown | Locate controller, document input type |
-| Stepper controller input type | ❌ TBD | Pulse/direction? Analog? Serial? USB? |
-| Power supply control interface | ⏳ Assumed 0-10V | Verify power supply accepts analog input |
+| Stepper controller model | ✅ Identified | [[Design/Mechanisms/Ball Screw Motor Control|ST-PMC1 (SN: 170120011) + TB6600 (SN: 170120011)]] |
+| Stepper controller input type | ✅ Pulse/Direction | NI-DAQ Option A: Standalone; Option B: NI-9425 for real-time control |
+| Stepper motor model | ✅ Identified | [[Design/Mechanisms/Ball Screw Motor Control|NEMA 23/34 with ball screw (SN: 161104226)]] |
+| Power supply control interface | ⏳ Assumed 0-10V | Verify coil power supply accepts analog input |
 | Water system mechanism | ⏳ TBD | Direct valve or pump? Current setup? |
 | NI-DAQ chassis connection | ⏳ TBD | USB or Ethernet from laptop? |
 | Control software platform | ⏳ TBD | LabVIEW, Python, or C#? |
@@ -250,7 +266,8 @@ Shutdown:
 
 📖 **Related Documentation:**
 - [[Design/Wiring/INDEX|Wiring Subsystem INDEX]]
-- [[Design/Wiring/Electrical System|Original Electrical System Overview]]
+- [[Design/Wiring/Electrical System|Electrical System Overview]]
+- [[Design/Mechanisms/Ball Screw Motor Control|Ball Screw Motor Control (Complete Specification)]]
 - [[Design/Mechanisms/Control System|Mechanisms & Automation (Manual Phase)]]
 - [[Design/Plumbing/Fluid Systems|Fluid Systems & Valve Control]]
 - [[Design/Coil Geometry/Induction Coil|Induction Coil Specifications]]
