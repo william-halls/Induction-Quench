@@ -59,7 +59,8 @@ media/
 |-------|------|-----------|
 | **Charpy Standard Sample** | `charpy-standard-sample.png` | [[Design/Sample Quenching/Charpy\|Charpy.md]] |
 | **Charpy Standard Reference** | `charpy-standard-reference.png` | [[Design/Sample Quenching/Charpy\|Charpy.md]] |
-| **Charpy Modified Sample** | `charpy-modified-sample.png` | [[Design/Sample Quenching/Modified Charpy\|Modified Charpy.md]] |
+| **Charpy Modified Sample (button head, superseded)** | `charpy-modified-sample.png` | [[Design/Sample Quenching/Modified Charpy\|Modified Charpy.md]] |
+| **Charpy Modified Sample (T-slot head, current)** | `charpy-modified-tslot.png` | [[Design/Sample Quenching/Modified Charpy\|Modified Charpy.md]] |
 | **Air Control Assembly** | `air-control-assembly.png` | [[Design/Plumbing/Air System Control Assembly\|Air System Control Assembly.md]] |
 | **Coil Lead Pass-Through 1** | `coil-lead-passthrough-1.png` | [[Design/Plumbing/Coil Lead Pass-Throughs\|Coil Lead Pass-Throughs.md]] |
 | **Coil Lead Pass-Through 2** | `coil-lead-passthrough-2.png` | [[Design/Plumbing/Coil Lead Pass-Throughs\|Coil Lead Pass-Throughs.md]] |
