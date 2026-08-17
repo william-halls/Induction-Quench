@@ -201,6 +201,7 @@
   },
   "active": "107ece3b5c9caf3e",
   "lastOpenFiles": [
+    "Design/Wiring/NI-DAQ Control Architecture.md.tmp.8104.1f66fc439771",
     "README.md.tmp.20788.46c05caa513f",
     "media/INDEX.md.tmp.20788.108a03085ee5",
     "media/samples/charpy-modified-tslot.png",
@@ -230,7 +231,6 @@
     "Design/SUBSYSTEMS.md",
     "Media/mechanisms/ball-screw-full-assembly.png",
     "Media/mechanisms/shaft-clamp-mount.png",
-    "_check_orphans.py",
     "Design/Wiring/NI-DAQ Control Architecture.md",
     "Design/Wiring/INDEX.md",
     "Design/Wiring/Electrical System.md",

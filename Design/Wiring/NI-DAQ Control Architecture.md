@@ -223,6 +223,14 @@ Shutdown:
 
 ---
 
+## Laptop / Host Update (08-17-2026)
+
+- NI devices (NI-9219, NI-9263, etc.) will be plugged into a **new laptop** rather than the legacy laptop originally referenced above.
+- New laptop has **NI App** (NI hardware configuration/driver software) installed.
+- Action: verify NI-DAQmx driver version compatibility and re-confirm chassis connection type (USB vs. Ethernet) on the new machine once devices are connected.
+
+---
+
 ## Outstanding Questions & Actions
 
 | Item | Status | Action |
