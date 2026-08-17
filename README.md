@@ -55,8 +55,16 @@ The vault is organized by **engineering subsystems**, each with its own design n
 
 ```
 Induction Quench Vault/
+├── CLAUDE.md (auto-loaded session startup instructions)
 ├── README.md (this file)
 ├── Induction Quench Research Instrument.md (main project hub)
+│
+├── Claude/
+│   ├── AGENT_PREFERENCES.md (agent behavioral conventions)
+│   ├── GRUNT.md (specs for cheap model execution)
+│   ├── PUSHING_TO_GITHUB.md (push workflow)
+│   ├── PULLING_FROM_GITHUB.md (pull workflow)
+│   └── PUSH_LOG.md (commit history)
 │
 ├── Design/
 │   ├── SUBSYSTEMS.md (interconnection map & architecture diagram)
@@ -103,7 +111,12 @@ Induction Quench Vault/
 │       └── Design History.md (project evolution)
 │
 └── Media/
-    └── INDEX.md (image asset catalog; coil/, mechanisms/, vacuum-chamber/, plumbing/)
+    ├── INDEX.md (image asset catalog)
+    ├── coil/ (induction heating elements)
+    ├── mechanisms/ (sample mounts, actuation, ceramic mount)
+    ├── samples/ (test sample geometries - Charpy variants)
+    ├── plumbing/ (fluid systems, pass-throughs)
+    └── vacuum-chamber/ (chamber assembly, enclosure)
 ```
 
 ---
@@ -176,8 +189,16 @@ Use tags to organize and filter your vault queries.
 
 ## ✅ Vault Maintenance
 
-This vault was last **polished on 2026-08-07** with:
+This vault was last **reorganized on 2026-08-17** with:
 
+✓ Reorganized media folder — moved ceramic mount images to `media/mechanisms/`  
+✓ Created dedicated `media/samples/` folder for Charpy test geometries  
+✓ Updated media/INDEX.md with correct folder structure and all assets  
+✓ Added CLAUDE.md bootstrap file with startup instructions  
+✓ Added Claude/ folder with agent preferences and workflow documentation  
+✓ Updated file structure tree and documentation  
+
+**Previous maintenance (2026-08-07):**
 ✓ Flattened nested folder structure  
 ✓ Added frontmatter to all files  
 ✓ Standardized wikilinks to root-relative format  
@@ -188,6 +209,6 @@ This vault was last **polished on 2026-08-07** with:
 
 ---
 
-**Last Updated:** 2026-08-07  
+**Last Updated:** 2026-08-17  
 **Status:** 🟢 Organized & Ready  
-**Files:** 38 total (2 root, 35 under Design/, 1 under Media/)
+**Files:** 44 total (3 root + 5 Claude/ + 35 Design/ + 1 media/)

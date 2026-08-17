@@ -11,9 +11,10 @@ Organized repository of all images, diagrams, and visual references for the Indu
 ```
 media/
 ├── coil/                      # Induction coil designs & geometry
-├── mechanisms/                # Sample mounting & actuation
-├── vacuum-chamber/            # Chamber assembly & overview
-└── plumbing/                  # Fluid systems, samples, components
+├── mechanisms/                # Sample mounting & actuation (includes ceramic mount)
+├── samples/                   # Test sample geometries (Charpy variants)
+├── plumbing/                  # Fluid systems & pass-through components
+└── vacuum-chamber/            # Chamber assembly & overview
 ```
 
 ---
@@ -43,17 +44,7 @@ media/
 
 ---
 
-## Vacuum Chamber
-
-| Image | File | Reference |
-|-------|------|-----------|
-| **Chamber CAD Overview** | `chamber-cad-overview.png` | [[Design/Vacuum Chamber/Vacuum Chamber CAD\|Vacuum Chamber CAD.md]] |
-| **Chamber Assembly** | `chamber-assembly.png` | [[Design/Vacuum Chamber/Vacuum Chamber CAD\|Vacuum Chamber CAD.md]] |
-| **Used Vacuum Chamber** | `used-vacuum-chamber.png` | [[Design/Vacuum Chamber/Used Vacuum Chamber\|Used Vacuum Chamber.md]] |
-
----
-
-## Plumbing & Components
+## Samples & Test Geometries
 
 | Image | File | Reference |
 |-------|------|-----------|
@@ -61,6 +52,24 @@ media/
 | **Charpy Standard Reference** | `charpy-standard-reference.png` | [[Design/Sample Quenching/Charpy\|Charpy.md]] |
 | **Charpy Modified Sample (button head, superseded)** | `charpy-modified-sample.png` | [[Design/Sample Quenching/Modified Charpy\|Modified Charpy.md]] |
 | **Charpy Modified Sample (T-slot head, current)** | `charpy-modified-tslot.png` | [[Design/Sample Quenching/Modified Charpy\|Modified Charpy.md]] |
+
+---
+
+## Vacuum Chamber
+
+| Image | File | Reference |
+|-------|------|-----------|
+| **Chamber CAD Overview** | `chamber-cad-overview.png` | [[Design/Vacuum Chamber/Vacuum Chamber CAD\|Vacuum Chamber CAD.md]] |
+| **Chamber Assembly** | `chamber-assembly.png` | [[Design/Vacuum Chamber/Vacuum Chamber CAD\|Vacuum Chamber CAD.md]] |
+| **Main Assembly** | `main-assembly.png` | [[Design/Vacuum Chamber/Vacuum Enclosure\|Vacuum Enclosure.md]] |
+| **Used Vacuum Chamber** | `used-vacuum-chamber.png` | [[Design/Vacuum Chamber/Used Vacuum Chamber\|Used Vacuum Chamber.md]] |
+
+---
+
+## Plumbing & Fluid Systems
+
+| Image | File | Reference |
+|-------|------|-----------|
 | **Air Control Assembly** | `air-control-assembly.png` | [[Design/Plumbing/Air System Control Assembly\|Air System Control Assembly.md]] |
 | **Coil Lead Pass-Through 1** | `coil-lead-passthrough-1.png` | [[Design/Plumbing/Coil Lead Pass-Throughs\|Coil Lead Pass-Throughs.md]] |
 | **Coil Lead Pass-Through 2** | `coil-lead-passthrough-2.png` | [[Design/Plumbing/Coil Lead Pass-Throughs\|Coil Lead Pass-Throughs.md]] |
@@ -85,7 +94,7 @@ All images follow a descriptive naming pattern:
 
 ## How to Add New Images
 
-1. **Determine category** — coil, mechanisms, vacuum-chamber, or plumbing
+1. **Determine category** — coil, mechanisms, samples, vacuum-chamber, or plumbing
 2. **Rename descriptively** — e.g., `new-feature-diagram.png`
 3. **Place in appropriate folder** — e.g., `media/mechanisms/new-feature-diagram.png`
 4. **Update markdown** — Reference as `![[image-name.png]]`
