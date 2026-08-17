@@ -4,6 +4,13 @@ Record of what changed with each push to GitHub.
 
 <!-- Newest entries at the top -->
 
+## 2026-08-17 - Acrylic vacuum lid design, shaft/seal part numbers
+**Commit**: `e257a4f`
+- New [[Design/Vacuum Chamber/Acrylic Vacuum Lid.md]]: material/stock (11/16" cast acrylic), 3-bracket mounting with aluminum backing plates, hole pattern/edge-distance guidelines, acrylic drilling notes
+- [[Design/Plumbing/Vertical Sliding Shaft Seal.md]]: added McMaster part numbers — 5154T48 lip seal, 8934K31 304 SS shaft (tolerance, finish, hardness, cost); noted 316/316L upgrade path if quenchant chemistry changes
+- Cross-linked new lid note from Vacuum Enclosure.md and Vacuum Chamber INDEX.md
+- 4 files changed
+
 ## 2026-08-17 - Coil pass-through redesign, T-slot sample geometry, CLAUDE.md bootstrap
 **Commit**: `8b42bf6`
 - Coil lead pass-throughs: bronze/brass flared fittings -> Omega SSLK-14-14 compression fittings (fixes excess resistive power loss); noted one-piece-lead trade-off; archived rejected design in Design/Archive/INDEX.md
