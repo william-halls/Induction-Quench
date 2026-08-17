@@ -4,6 +4,11 @@ Record of what changed with each push to GitHub.
 
 <!-- Newest entries at the top -->
 
+## 2026-08-17 - Add thermocouple pass-through part ID
+**Commit**: `1c50812`
+- [[Design/Plumbing/Thermal Couple Pass-through.md]]: added part ID PFT2NPT-1K to the current plan
+- 1 file changed
+
 ## 2026-08-17 - Acrylic vacuum lid design, shaft/seal part numbers
 **Commit**: `e257a4f`
 - New [[Design/Vacuum Chamber/Acrylic Vacuum Lid.md]]: material/stock (11/16" cast acrylic), 3-bracket mounting with aluminum backing plates, hole pattern/edge-distance guidelines, acrylic drilling notes
