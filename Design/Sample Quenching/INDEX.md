@@ -12,7 +12,7 @@ Sample geometries, rapid cooling strategies, and quenching methods for achieving
 |------|---------|--------|
 | **[[Design/Sample Quenching/Quenching Methods|Quenching Methods.md]]** | Cooling strategy overview & candidate methods | 🔵 Hub |
 | **[[Design/Sample Quenching/Charpy|Charpy.md]]** | Standard Charpy sample geometry (10×10×55 mm) | 🔵 Reference |
-| **[[Design/Sample Quenching/Modified Charpy|Modified Charpy.md]]** | Test variant with button head (61 mm total) | 🔵 Reference |
+| **[[Design/Sample Quenching/Modified Charpy|Modified Charpy.md]]** | Test variant with T-slot head (61 mm total) | 🔵 Reference |
 
 ---
 
@@ -50,10 +50,12 @@ Sample geometries, rapid cooling strategies, and quenching methods for achieving
 - **CAD**: OnShape document (reference geometry model)
 
 ### Modified Charpy
-- **Dimensions**: 10 × 10 × 55 mm base + 6 mm button head (61 mm total length)
-- **Purpose**: Variant for specific testing needs; allows gripping via button
+- **Dimensions**: 10 × 10 × 55 mm base + 6 mm head feature (61 mm total length)
+- **Head Geometry**: T-slot (square-shouldered tab) — changed from original round button head (2026-08-17) to allow mass-quantity water jet cutting
+- **Purpose**: Variant for specific testing needs; allows gripping/retention via head feature in [[Design/Mechanisms/Ceramic Mount|Ceramic Mount]]
 - **Use**: If sample holder requires positive location feature
 - **Consideration**: Dr. Buchely interested in heating longer samples; modified charpy bridges baseline to extended geometry
+- **Downstream Impact**: Ceramic mount retaining slot extended/reshaped to seat the square T-slot tab within its round bore
 
 ---
 

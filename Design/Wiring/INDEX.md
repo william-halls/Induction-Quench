@@ -48,8 +48,8 @@ Power delivery, control circuits, and instrumentation for induction heating and 
 - **Status**: Specifications pending equipment selection
 
 ### Coil Connections
-- **High-Frequency Leads**: Via coil lead pass-throughs (bronze tubes, flared fittings)
-- **Connection Type**: Soldered high-frequency joints
+- **High-Frequency Leads**: Via coil lead pass-throughs (Omega SSLK-14-14, 1/4" x 1/4" NPT compression fittings — bronze/flared-fitting design rejected due to excessive resistive loss, see [[Design/Archive/INDEX|Archive]])
+- **Connection Type**: Soldered high-frequency joints; lead from coil to power supply is now one continuous piece (must un-solder/re-solder to swap or iterate on the coil)
 - **Impedance Matching**: To be verified during thermal testing
 - **Cooling**: Coil cooled via separate water circuit (isolated from electrical)
 

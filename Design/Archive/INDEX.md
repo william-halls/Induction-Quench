@@ -72,6 +72,21 @@ Historical designs, rejected concepts, and engineering decisions from previous i
 
 ---
 
+## Rejected Power Connection Designs
+
+### Bronze/Brass Flared-Fitting Coil Lead Pass-Throughs (Rejected 2026-08-17)
+**Why Rejected**: Brass tube resisted too much high-frequency power, requiring roughly double the input power to heat the sample at the same rate (copper unavailable in required size, and likely too soft anyway)  
+**Concept**: Bronze tube + flared fitting nuts + flanged nut + O-ring + acrylic lid, allowing leads to disconnect independently for easy coil swaps  
+**Current Solution**: Omega SSLK-14-14 1/4" x 1/4" NPT stainless compression fittings — much lower-resistance connection, at the cost of requiring the coil-to-power-supply lead to be one continuous piece (un-solder/re-solder needed to swap or iterate on the coil)  
+
+**See Full Details:** Refer to [[Design/Plumbing/Coil Lead Pass-Throughs\|Coil Lead Pass-Throughs.md]]
+
+**Connected Subsystems:**
+- [[Design/Wiring/Electrical System\|Wiring & Electrical System]] — Power delivery to coil
+- [[Design/Coil Geometry/Induction Coil\|Coil Geometry]] — Coil swap/iteration workflow affected
+
+---
+
 ## Rejected Chamber Concepts
 
 ### Quartz Glass Tube Chamber (Abandoned)
@@ -97,6 +112,7 @@ Historical designs, rejected concepts, and engineering decisions from previous i
 | **Release** | Trapdoor | Manual extraction | Incompatible with scanning |
 | **Coil** | Square profile | Round cylinder | Easier manufacturing |
 | **Chamber** | Quartz tube | Repurposed bucket | Proven vessel; faster |
+| **Coil Power Connection** | Brass flared fittings | SSLK-14-14 compression fittings | Brass resistance forced ~2x power draw |
 
 ---
 

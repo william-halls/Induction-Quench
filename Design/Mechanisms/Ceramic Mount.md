@@ -15,7 +15,7 @@ Simple two-part sample holder using a threaded boron nitride cylinder and stainl
 **Part 1: Boron Nitride Cylinder**
 - **Material**: Boron nitride (20mm OD)
 - **Top Port**: 1/4" NPT thread for attachment to seal shaft
-- **Bottom Feature**: Groove for sliding in modified charpy sample
+- **Bottom Feature**: T-slot retaining groove for sliding in modified charpy sample (updated 2026-08-17 — see below)
 - **Advantages**: Non-magnetic, low thermal conductivity, chemically inert
 
 **Part 2: Polished Stainless Steel Shaft**
@@ -65,7 +65,8 @@ Simple two-part sample holder using a threaded boron nitride cylinder and stainl
 
 ## Design Evolution
 
-**Version 1**: Initial concept based on available boron nitride stock  
+**Version 1**: Initial concept based on available boron nitride stock, retaining groove sized for a round button-head sample  
+**Version 2 (2026-08-17)**: Retaining groove updated to match new [[Design/Sample Quenching/Modified Charpy|Modified Charpy]] T-slot head geometry (button head → T-slot, changed for mass water-jet manufacturability). Because the sample head is now a square-shouldered tab seated in what is otherwise a circular bore, the slot had to be cut a bit farther/deeper into the cylinder to fully capture the square feature.  
 **Iterations**: Refined groove depth and thread interface  
 **Status**: Locked in as primary approach
 
@@ -81,8 +82,9 @@ Simple two-part sample holder using a threaded boron nitride cylinder and stainl
 | Feature | Spec | Purpose |
 |---------|------|---------|
 | Cylinder OD | 20mm | Fit in quartz tube clearance |
-| Groove Depth | TBD | Hold charpy sample |
+| Groove Depth | TBD (deeper than v1, to fully seat square T-slot tab in round bore) | Hold charpy sample |
 | Groove Width | TBD | Friction fit sample |
+| Groove Profile | T-slot (square-shouldered) | Match modified charpy T-slot head |
 | Thread | 1/4" NPT | Attach seal shaft |
 | Shaft Polish | Mirror finish | Vacuum seal quality |
 

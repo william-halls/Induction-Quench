@@ -13,7 +13,7 @@ Gas delivery, vacuum evacuation, and quenching medium circulation systems for ch
 | **[[Design/Plumbing/Fluid Systems|Fluid Systems.md]]** | Overview of gas/vacuum/quench systems | 🔵 Hub |
 | **[[Design/Plumbing/Vacuum Lid Systems|Vacuum Lid Systems.md]]** | Plumbing in chamber lid | 🔵 Reference |
 | **[[Design/Plumbing/Air System Control Assembly|Air System Control Assembly.md]]** | Vacuum/argon manifold (3-way valve) | 🟢 Active |
-| **[[Design/Plumbing/Coil Lead Pass-Throughs|Coil Lead Pass-Throughs.md]]** | Bronze tube + flared fittings for coil power | 🟢 Active |
+| **[[Design/Plumbing/Coil Lead Pass-Throughs|Coil Lead Pass-Throughs.md]]** | Omega SSLK-14-14 compression fittings for coil power | 🟢 Active |
 | **[[Design/Plumbing/Vertical Sliding Shaft Seal|Vertical Sliding Shaft Seal.md]]** | 1/2" shaft seal for sample port | 🟢 Active |
 | **[[Design/Plumbing/Thermal Couple Pass-through|Thermal Couple Pass-through.md]]** | Thermocouple quick-connect interface | 🟡 Planned |
 | **[[Design/Plumbing/Random Holes|Random Holes.md]]** | Existing chamber ports (evaluate/seal) | 🔵 Reference |
@@ -87,11 +87,11 @@ Gas delivery, vacuum evacuation, and quenching medium circulation systems for ch
 **Note:** Repurposed from original chamber; being integrated into new lid
 
 ### Coil Lead Pass-Throughs
-**Configuration:**
-- Material: Bronze tube with flared fitting nuts
-- Arrangement: Threaded brass tube + flanged nut + O-ring + acrylic lid compression
-- Purpose: Allow high-frequency power to reach coil without breaking vacuum seal
-- Concern: Hundreds of amps through brass (copper preferable but unavailable in size needed)
+**Configuration (current, as of 2026-08-17):**
+- Fitting: Omega SSLK-14-14, 1/4" x 1/4" NPT stainless compression fitting
+- Purpose: Allow high-frequency power to reach coil without breaking vacuum seal, with a low-resistance connection
+- Trade-off: Lead from coil to power supply must be one continuous piece — swapping/iterating on the coil now requires un-soldering and re-soldering the lead
+- Previous design (bronze tube + flared fitting nuts) rejected: brass resistance forced ~2x the power to heat the sample at the same rate — see [[Design/Archive/INDEX|Archive]]
 
 ### Vertical Sliding Shaft Seal
 **Configuration:**
