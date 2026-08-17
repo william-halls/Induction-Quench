@@ -1,18 +1,38 @@
 ---
-tags: [design, mechanisms, automation, motor-control]
+tags: [design, mechanisms, automation, motor-control, stepper-motor]
 ---
 
 # Ball Screw Assembly
 
 Similar to the FUYU FSK40E series but unbranded. The actual parts and stepper are identical except with no logo attached. This is what we currently use to move the shaft up and down.
 
+## Identified Components
+
+**Complete electrical control system now documented.** See [[Design/Mechanisms/Ball Screw Motor Control|Ball Screw Motor Control]] for full specifications, wiring diagrams, and system architecture.
+
+| Component | Model / SN | Purpose |
+|-----------|-----------|---------|
+| **Power Supply** | SDN 10-24-100P (SolaHD) | AC→DC conversion (240W, 24V @ 10A) |
+| **Motion Controller** | ST-PMC1 (SN: 170120011) | Programmable stepper sequencer (99 programs, 40 kHz max) |
+| **Stepper Driver** | TB6600 or equiv. (SN: 170120011) | Coil amplifier (5-10A @ 24V) |
+| **Stepper Motor** | NEMA 23 or 34 (SN: 161104226) | Rotary actuator (200 steps/rev, integrated ball screw) |
+
+**Key Capability:** ±0.025mm positioning per full step, or ±0.006mm with 1/16 microstepping.
+
 ## Motor Control
 
-**Current Setup**: NEMA 23 2-phase stepper motor with external controller (model TBD)
+**Current Setup**: [[Design/Mechanisms/Ball Screw Motor Control|ST-PMC1 programmable controller]] + NEMA 23/34 stepper motor with ball screw linear actuator
+
+**Electrical Specifications:**
+- ✅ Power: 24V DC, 10A supply (SDN 10-24-100P) provides 2× safety margin
+- ✅ Control: Pulse+direction signals (1–40 kHz) from ST-PMC1 to stepper driver
+- ✅ Motion: Up to 200 full-steps per revolution = ~0.025mm per step (5–10mm ball screw lead)
+- ✅ Holding: Motor coils always energized → fail-safe position hold (sample cannot drift)
 
 **Automated Control** (in development):
 - See [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] for integration with NI-9263 signal output
-- Awaiting stepper controller identification to determine best control method (pulse/direction vs. analog speed vs. serial)
+- ST-PMC1 can receive start/stop commands from external triggers; coordinate motor timing with quench valve relay outputs
+- See [[Design/Mechanisms/Ball Screw Motor Control|Motor Control documentation]] for detailed commissioning guide
 
 ## Shaft Clamp Design
 

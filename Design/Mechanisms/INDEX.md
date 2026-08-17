@@ -13,6 +13,7 @@ Mechanical systems, actuation, control logic, and safety interlocks for repeatab
 | **[[Design/Mechanisms/Control System|Control System.md]]** | Overview & integration points | 🔵 Hub |
 | **[[Design/Mechanisms/Ceramic Mount|Ceramic Mount.md]]** | Active sample holder (2-part design) | 🟢 Active |
 | **[[Design/Mechanisms/Ball Screw|Ball Screw.md]]** | Stepper-driven vertical shaft actuation | 🟢 Active |
+| **[[Design/Mechanisms/Ball Screw Motor Control|Ball Screw Motor Control.md]]** | Complete control system (power supply, controller, driver, motor) | 🟢 Complete |
 | **[[Design/Mechanisms/Bottom Lift|Bottom Lift.md]]** | Linear actuator approach (deferred) | 🟡 Deferred |
 | **[[Design/Mechanisms/Titanium Claw|Titanium Claw.md]]** | Gripper mechanism (abandoned - heat sink) | 🔴 Abandoned |
 | **[[Design/Mechanisms/Trapdoor|Trapdoor.md]]** | Rotating release mechanism (deferred) | 🟡 Deferred |
