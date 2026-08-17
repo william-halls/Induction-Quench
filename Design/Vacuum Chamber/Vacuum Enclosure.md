@@ -1,4 +1,5 @@
 ---
+subsystem: vacuum_chamber
 tags: [design, vacuum, chamber, inert-atmosphere, containment]
 ---
 

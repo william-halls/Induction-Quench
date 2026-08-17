@@ -1,4 +1,5 @@
 ---
+subsystem: vacuum_chamber
 tags: [vacuum-chamber, current-design, upcycled, active]
 ---
 

@@ -1,4 +1,5 @@
 ---
+subsystem: coil_geometry
 tags: [index, coil-geometry, thermal-systems]
 ---
 

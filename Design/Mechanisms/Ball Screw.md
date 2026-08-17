@@ -1,4 +1,5 @@
 ---
+subsystem: mechanisms
 tags: [design, mechanisms, automation, motor-control, stepper-motor]
 ---
 

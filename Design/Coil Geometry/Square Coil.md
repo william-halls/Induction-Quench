@@ -1,4 +1,5 @@
 ---
+subsystem: coil_geometry
 tags: [coil-design, square, rejected, theoretical, archived]
 ---
 

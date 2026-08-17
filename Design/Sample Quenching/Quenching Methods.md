@@ -1,4 +1,5 @@
 ---
+subsystem: sample_quenching
 tags: [design, quenching, sample-handling, heat-treatment, thermal-cycling]
 ---
 

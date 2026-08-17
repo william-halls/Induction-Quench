@@ -1,4 +1,5 @@
 ---
+subsystem: sample_quenching
 tags: [index, sample-quenching, cooling, heat-treatment, sample-geometry]
 ---
 

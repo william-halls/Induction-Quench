@@ -1,4 +1,5 @@
 ---
+subsystem: wiring
 tags: [wiring, control-system, NI-DAQ, automation, PID, stepper-motor]
 ---
 

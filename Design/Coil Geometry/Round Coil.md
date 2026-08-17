@@ -1,4 +1,5 @@
 ---
+subsystem: coil_geometry
 tags: [coil-design, round, manufactured, current, induction-heating, power-delivery]
 ---
 

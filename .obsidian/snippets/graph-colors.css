@@ -1,0 +1,32 @@
+/* Graph View Color Enhancement
+   Subsystem color coding for better visual organization
+*/
+
+/* Make graph nodes slightly larger and more visible */
+.graph-view .node-circle {
+  stroke-width: 2px;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.3));
+}
+
+/* Enhance text visibility on colored nodes */
+.graph-view text {
+  font-weight: 500;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Highlight node on hover */
+.graph-view .node-circle:hover {
+  stroke-width: 3px;
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.5));
+}
+
+/* Color scheme reference for notes:
+   🔴 Coil Geometry:        #FF5050 (Red)
+   🟠 Sample Quenching:     #FFA550 (Orange)
+   🟡 Mechanisms:           #FFC850 (Yellow)
+   🟢 Plumbing:             #78C878 (Green)
+   🔵 Wiring:               #6496FF (Blue)
+   🟣 Vacuum Chamber:       #C878FF (Purple)
+   🟦 Claude:               #64C8DC (Cyan)
+   ⚪ Design (fallback):    #B4B4B4 (Gray)
+*/

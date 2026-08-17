@@ -1,4 +1,5 @@
 ---
+subsystem: wiring
 tags: [design, wiring, electrical, power-delivery, control-systems]
 ---
 

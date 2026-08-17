@@ -1,4 +1,5 @@
 ---
+subsystem: plumbing
 tags: [index, plumbing, fluid-systems, vacuum, gas-delivery]
 ---
 

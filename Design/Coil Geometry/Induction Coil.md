@@ -1,4 +1,5 @@
 ---
+subsystem: coil_geometry
 tags: [design, coil, induction-heating, electromagnetic]
 ---
 

@@ -1,4 +1,5 @@
 ---
+subsystem: plumbing
 tags: [design, plumbing, cooling, quenching-systems, automation]
 ---
 

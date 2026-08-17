@@ -1,4 +1,5 @@
 ---
+subsystem: wiring
 tags: [index, wiring, electrical-systems, power-delivery, instrumentation]
 ---
 

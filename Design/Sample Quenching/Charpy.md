@@ -1,4 +1,5 @@
 ---
+subsystem: sample_quenching
 tags: [design, sample-geometry, charpy, quenching-samples]
 ---
 
