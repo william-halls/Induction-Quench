@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Design/Mechanisms/Titanium Claw.md",
+                "file": "Design/Sample Quenching/Modified Charpy.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Titanium Claw"
+              "title": "Modified Charpy"
             }
           }
         ]
@@ -199,9 +199,19 @@
       "realclaudian:Open Claudian": false
     }
   },
-  "active": "6be50165b9ca2c1a",
+  "active": "107ece3b5c9caf3e",
   "lastOpenFiles": [
+    "Claude/GRUNT.md",
+    "media/plumbing/charpy-modified-tslot.png",
+    "CLAUDE.md",
+    "CLAUDE.md.tmp.14080.c909c804a372",
+    "Claude/AGENT_PREFERENCES.md",
+    "Claude/AGENT_PREFERENCES.md.tmp.14080.abe1ccf41b6a",
+    "Design/Sample Quenching/Charpy.md",
     "Design/Mechanisms/Ceramic Mount.md",
+    "Design/Mechanisms/Ceramic Mount.md.tmp.14080.486b391ad192",
+    "Design/Plumbing/Coil Lead Pass-Throughs.md",
+    "Design/Mechanisms/Titanium Claw.md",
     "Design/Mechanisms/Ball Screw.md",
     "_verify.py",
     "Design/Mechanisms/INDEX.md.tmp.35208.fb45c17f8b30",
@@ -214,14 +224,11 @@
     "_check_orphans.py",
     "_check_orphans.py.tmp.35208.0f3f652cd33c",
     "_check_links.py",
-    "_check_links.py.tmp.35208.606233108335",
-    "_test_split.py",
     "Design/Wiring/NI-DAQ Control Architecture.md",
     "Design/Wiring/INDEX.md",
     "Design/Wiring/Electrical System.md",
     "Design/Plumbing/Random Holes.md",
     "Design/Archive.md",
-    "Design/SUBSYSTEMS.md.tmp.27232.9e6d9a85a9ce",
     "Design/Plumbing/INDEX.md",
     "Design/Vacuum Chamber.md",
     "Design/Mechanisms.md",
@@ -236,15 +243,9 @@
     "Claude/PUSH_LOG.md",
     "Claude/PUSHING_TO_GITHUB.md",
     "Media/vacuum-chamber/main-assembly.png",
-    "Design/Mechanisms/Titanium Claw.md",
     "Design/Mechanisms/INDEX.md",
     "Design/Mechanisms/Control System.md",
     "Media/vacuum-chamber/chamber-assembly.png",
-    "Media/vacuum-chamber/chamber-cad-overview.png",
-    "Design/Archive/Design History.md",
-    "Design/Vacuum Chamber/INDEX.md",
-    "Design/Sample Quenching/INDEX.md",
-    "Design/Coil Geometry/INDEX.md",
-    "Design/Archive/INDEX.md"
+    "Design/Archive/Design History.md"
   ]
 }
