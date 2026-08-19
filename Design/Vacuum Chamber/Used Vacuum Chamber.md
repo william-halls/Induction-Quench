@@ -37,7 +37,7 @@ tags: [vacuum-chamber, current-design, upcycled, active]
 To support bucket load with ~4L water and pressure:
 - **Aluminum Plate Stack** — 3 sheets (1/4" or 3/8" thick)
 - **Fastening** — 8× 1/4"-20 screws per sheet into new acrylic lid
-- **Load Path** — Each plate connects via 3/8" screw to 1.5" aluminum extrusion frame above
+- **Load Path** — Each plate connects via 3/8" screw to 1.5" aluminum extrusion frame above (see [[Design/Vacuum Chamber/Frame|Frame]] for thread engagement analysis)
 
 #### Feedthrough Ports
 - **Coil Power Leads** — 2 holes for high-frequency power connections
