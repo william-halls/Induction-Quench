@@ -3,8 +3,5 @@
   "cssTheme": "AnuPpuccin",
   "accentColor": "#90091d",
   "baseFontSize": 16,
-  "textFontFamily": "",
-  "cssSnippets": {
-    "graph-colors": true
-  }
+  "textFontFamily": ""
 }

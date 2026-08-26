@@ -18,7 +18,7 @@
       "query": "path:\"Design/Sample Quenching\"",
       "color": {
         "a": 1,
-        "rgb": 16754000
+        "rgb": 10258035
       }
     },
     {
@@ -32,14 +32,14 @@
       "query": "path:\"Design/Plumbing\"",
       "color": {
         "a": 1,
-        "rgb": 7915640
+        "rgb": 7963336
       }
     },
     {
       "query": "path:\"Design/Wiring\"",
       "color": {
         "a": 1,
-        "rgb": 6592255
+        "rgb": 16721093
       }
     },
     {
@@ -53,7 +53,7 @@
       "query": "path:Claude",
       "color": {
         "a": 1,
-        "rgb": 6604020
+        "rgb": 16015970
       }
     },
     {
@@ -64,16 +64,16 @@
       }
     }
   ],
-  "collapse-display": true,
+  "collapse-display": false,
   "showArrow": false,
   "textFadeMultiplier": 0,
-  "nodeSizeMultiplier": 1,
+  "nodeSizeMultiplier": 1.68246652133292,
   "lineSizeMultiplier": 1,
   "collapse-forces": true,
   "centerStrength": 0.518713248970312,
   "repelStrength": 10,
   "linkStrength": 1,
   "linkDistance": 250,
-  "scale": 0.5262460388334266,
-  "close": false
+  "scale": 0.37031935838194646,
+  "close": true
 }

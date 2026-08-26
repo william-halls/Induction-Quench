@@ -1,3 +1,6 @@
 {
+  "cssSnippets": {
+    "graph-colors": true
+  },
   "alwaysUpdateLinks": true
 }

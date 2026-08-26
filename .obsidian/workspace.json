@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Design/Mechanisms/Ball Screw.md",
+                "file": "Design/Wiring/Ball Screw Motor Control.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Ball Screw"
+              "title": "Ball Screw Motor Control"
             }
           }
         ]
@@ -201,18 +201,30 @@
   },
   "active": "d518b2d8f79b6c8a",
   "lastOpenFiles": [
+    "Design/Wiring/Control System.md",
+    "Design/Wiring/Coil Lead Pass-Throughs.md",
+    "Design/Mechanisms/Ball Screw.md",
     "Design/Mechanisms/Ball Screw Motor Control.md",
+    "Design/Plumbing/INDEX.md.tmp.41128.15955d42b69f",
+    "Design/Wiring/INDEX.md.tmp.41128.bcb6f989eeec",
+    "Design/Wiring/Ball Screw Motor Control.md",
+    "Design/Wiring/Electrical System.md",
+    "Design/Wiring/NI-DAQ Control Architecture.md",
+    "media/plumbing/coil-lead-passthrough-1.png",
     "Design/Mechanisms/Control System.md",
+    "Design/Mechanisms/Titanium Claw.md",
+    "Design/Coil Geometry/INDEX.md",
+    "Design/Archive/INDEX.md",
+    "Design/Plumbing/Thermal Couple Pass-through.md",
+    "Design/Plumbing/Vertical Sliding Shaft Seal.md",
+    "Design/Vacuum Chamber/Acrylic Vacuum Lid.md",
+    "Design/Plumbing/Vertical Sliding Shaft Seal.md.tmp.26172.b8293d2b8bad",
     "COLOR_SCHEME.md",
     "COLOR_SCHEME.md.tmp.9440.4524698d75f2",
     "Design/Mechanisms/Trapdoor.md",
-    "Design/Mechanisms/Titanium Claw.md",
     "Design/Mechanisms/INDEX.md",
-    "Design/Mechanisms/Ball Screw.md",
-    "Design/Wiring/NI-DAQ Control Architecture.md",
     "Design/Wiring/NI-DAQ Control Architecture.md.tmp.27240.ab53b543f84d",
     "Design/Wiring/NI-DAQ Control Architecture.md.tmp.27240.197428b71ec9",
-    "Design/Wiring/Electrical System.md",
     "Design/SUBSYSTEMS.md",
     "Design/Sample Quenching/Modified Charpy.md",
     "Design/Mechanisms/INDEX.md.tmp.27240.67993f243f9d",
@@ -226,26 +238,13 @@
     "media/mechanisms/ceramic-mount-rendering.png",
     "media/mechanisms/ceramic-mount-detail.png",
     "media/mechanisms/ceramic-mount-assembly.png",
-    "media/samples",
     "Claude/GRUNT.md",
     "media/plumbing/charpy-modified-tslot.png",
     "CLAUDE.md",
-    "CLAUDE.md.tmp.14080.c909c804a372",
     "Claude/AGENT_PREFERENCES.md",
-    "Claude/AGENT_PREFERENCES.md.tmp.14080.abe1ccf41b6a",
     "Design/Sample Quenching/Charpy.md",
     "Design/Mechanisms/Ceramic Mount.md",
     "Design/Plumbing/Coil Lead Pass-Throughs.md",
-    "Media/mechanisms/ball-screw-full-assembly.png",
-    "Media/mechanisms/shaft-clamp-mount.png",
-    "Design/Wiring/INDEX.md",
-    "Design/Plumbing/Random Holes.md",
-    "Design/Archive.md",
-    "Design/Plumbing/INDEX.md",
-    "Design/Vacuum Chamber.md",
-    "Design/Mechanisms.md",
-    "Design/Coil Geometry.md",
-    "Design/Wiring.md",
-    "Design/Sample Quenching.md"
+    "Media/mechanisms/ball-screw-full-assembly.png"
   ]
 }
