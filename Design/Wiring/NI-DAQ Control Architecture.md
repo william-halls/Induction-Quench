@@ -103,7 +103,7 @@ Thermocouple (sample)
   - Inputs: Pulse + direction from ST-PMC1
   - Output: 5–10A per coil phase @ 24V
   - Microstepping: Full, 1/2, 1/4, 1/8, 1/16 step options
-- **Motor**: NEMA 23/34 stepper with integrated ball screw (SN: 161104226)
+- **Motor**: NEMA 23 stepper with integrated ball screw (SN: 161104226)
   - 200 steps/revolution (1.8° per step)
   - Positioning: ~0.025mm per full step
 
@@ -253,7 +253,7 @@ Shutdown:
 |------|--------|--------|
 | Stepper controller model | ✅ Identified | [[Design/Mechanisms/Ball Screw Motor Control|ST-PMC1 (SN: 170120011) + TB6600 (SN: 170120011)]] |
 | Stepper controller input type | ✅ Pulse/Direction | NI-DAQ Option A: Standalone; Option B: NI-9425 for real-time control |
-| Stepper motor model | ✅ Identified | [[Design/Mechanisms/Ball Screw Motor Control|NEMA 23/34 with ball screw (SN: 161104226)]] |
+| Stepper motor model | ✅ Identified | [[Design/Mechanisms/Ball Screw Motor Control|NEMA 23 with ball screw (SN: 161104226)]] |
 | Power supply control interface | ⏳ Assumed 0-10V | Verify coil power supply accepts analog input |
 | Water system mechanism | ⏳ TBD | Direct valve or pump? Current setup? |
 | NI-DAQ chassis connection | ⏳ TBD | USB or Ethernet from laptop? |

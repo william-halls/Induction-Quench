@@ -22,6 +22,62 @@ The ball screw uses a **24V DC stepper motor system** to provide precise vertica
 
 ---
 
+## ⚡ Quick Reference: Confirmed Wiring & Controller Navigation
+
+*Everything below is verified against the physical unit (see Commissioning Log at the end of this doc for the full history). Detailed explanations for each item live in the sections further down.*
+
+### Wiring: ST-PMC1 Controller → Stepper Driver
+
+**Power:**
+
+| PSU (SDN 10-24-100P) | ST-PMC1 |
+|---|---|
+| +24V | +24V |
+| GND | GRD |
+
+**Confirmed physical ports on the ST-PMC1 back panel:**
+- **Back left:** `+24V, GRD, OUT3, OUT2, OUT1, OPTO, CW, CP`
+- **Back right:** `Com+, Com−, IN2, IN1, A, B, Stop, RUN`
+
+**Signal wiring to the driver's PU/DR/MF terminal block:**
+
+```
+ST-PMC1 OPTO ──┬── Driver PU+
+               └── Driver DR+
+
+ST-PMC1 CP  ────────── Driver PU−
+ST-PMC1 CW  ────────── Driver DR−
+
+Driver MF+ / MF− ─── left unconnected (no matching enable output on ST-PMC1)
+```
+
+- **OPTO** is the controller's own isolated common/pull-up rail for the pulse+direction outputs — supplies the `+` side of both driver opto-inputs, so no external 5V source is needed.
+- **CP** (pulse) sinks low to generate each step edge → feeds **PU−**.
+- **CW** (direction) sinks low/high to set rotation direction → feeds **DR−**.
+- Keep OPTO separate from GRD — don't tie them together (avoids ground loops).
+
+**Motor coil wiring (driver → motor):** Standard bipolar 4-wire — A+, A−, B+, B− → driver's coil A/B outputs. Direction is reversed correctly by swapping **A+ and A− with each other** (same coil pair) — never cross wires between coil A and coil B.
+
+**Driver current setting:** **4A** — confirmed working. Reliable up to speed 8000 (unloaded); 8200 produced an occasional jam (treat 8000 as the safe working max until retested under load).
+
+### Navigating the ST-PMC1 Controller
+
+**Entering programming mode:**
+1. From **Manual mode** (default/idle screen), press **Edit**.
+2. Drops into program edit state — instruction lines auto-numbered starting at **00**.
+3. Use **∧ / ∨ arrows** to browse between lines and fields (line number, move parameters, SPEED, direction, etc.).
+4. Press **Enter** to select a field for editing.
+5. Press **Quit** to exit back to Manual mode — **changes save automatically**.
+
+**Operating modes:**
+- **Manual** — direct jog control via keypad.
+- **Auto** — runs a saved program from line 00 when Run is pressed.
+- **External Trigger** — waits on wired inputs (A/B limit switches, Stop, Run) to advance/start.
+
+**Input bank (back-right ports):** IN1, IN2, A, B, Stop, Run — the 6 optically-isolated inputs, with Com+/Com− as the shared reference depending on whether switches are wired sourcing or sinking.
+
+---
+
 ## Component Details
 
 ### 1. Power Supply: SDN 10-24-100P (SolaHD)
@@ -113,6 +169,56 @@ Line 4: Move 100 steps, CCW direction, 20 kHz frequency
 
 ---
 
+#### ST-PMC1 Physical Port Reference (confirmed from unit)
+
+Ports as labeled on the back of the physical controller, top to bottom:
+
+**Back left (power + pulse/direction outputs):**
+
+| Port | Function |
+|---|---|
+| +24V | Power input to controller |
+| GRD | Power ground |
+| OUT3, OUT2, OUT1 | The 3 relay outputs (e.g. trigger quench valve solenoid) |
+| **OPTO** | Common/return rail for the opto-isolated output stage (CP, CW, likely OUT1–3) — a **separate isolated common, not the same node as GRD** |
+| CW | Direction output (switching signal) |
+| CP | Pulse output (switching signal) |
+
+**Back right (inputs):**
+
+| Port | Function |
+|---|---|
+| Com+, Com− | Common terminals for the input bank — pick one depending on whether switches are wired sourcing or sinking |
+| IN2, IN1 | General-purpose inputs |
+| A, B | Likely limit switches (home / end-of-travel) |
+| Stop | E-stop input |
+| Run | Start/run button input |
+
+This accounts for all 6 optically-isolated inputs (IN1, IN2, A, B, Stop, Run) and all 3 relay outputs (OUT1–3) called out in the spec section above.
+
+#### Corrected Wiring: ST-PMC1 → Stepper Driver (PU/DR/MF terminals)
+
+The driver's logic-input terminal block uses **PU+/PU−** (pulse), **DR+/DR−** (direction), and **MF+/MF−** (enable/"motor free" — unused here). These are opto-isolated inputs requiring a common supply on the `+` side and a switched signal on the `−` side.
+
+The ST-PMC1's **OPTO** terminal supplies exactly that common rail — no external 5V source needed:
+
+```
+ST-PMC1 OPTO ──┬── Driver PU+
+               └── Driver DR+
+
+ST-PMC1 CP  ────────── Driver PU−
+ST-PMC1 CW  ────────── Driver DR−
+```
+
+- **OPTO → PU+ and DR+** (tied together): supplies pull-up voltage for both driver opto-inputs.
+- **CP → PU−**, **CW → DR−**: controller sinks these low to generate each pulse/direction edge.
+- **Do not tie OPTO to GRD** — keep it isolated; that's the likely reason it's broken out separately from GRD on the terminal block (avoids ground loops between the pulse/dir circuit and main power ground).
+- **MF+/MF−**: leave unused — no matching enable terminal identified on this controller.
+
+**⚠️ Needs verification:** Confirm with a multimeter before first power-up that OPTO carries a voltage compatible with the driver's opto-input rating (commonly 5V or 12V) relative to GRD — do not assume it's a pass-through of the 24V supply rail.
+
+---
+
 ### 3. Stepper Driver (SN: 170120011)
 
 **Classification:** Stepper motor driver IC (likely TB6600 or compatible variant)
@@ -156,21 +262,23 @@ The ST-PMC1 outputs pulse+direction signals at configurable frequencies (1–40 
 
 **Classification:** NEMA-size stepper motor with integrated ball screw linear actuator
 
-**Type:** Likely NEMA 23 or NEMA 34 (mid-to-large stepper, appropriate for vertical load)
+**Type:** ✅ **Confirmed NEMA 23** (verified against physical unit, SN: 161104226 — mounting faceplate size)
 
 **Mechanical Function:** Converts electrical pulses into rotational mechanical energy; coupled directly to ball screw shaft.
 
-**Typical NEMA Specifications (23–34 range):**
+**Typical NEMA 23 Specifications:**
 
-| Parameter | NEMA 23 | NEMA 34 |
-|-----------|---------|---------|
-| **Step Angle** | 1.8° | 1.8° |
-| **Steps/Revolution** | 200 | 200 |
-| **Holding Torque** | 2–3 N·m | 4.5+ N·m |
-| **Current Rating** | 3–5A per phase | 5.5A per phase |
-| **Coil Impedance** | ~3–5 Ω | ~1.5–3 Ω |
-| **Ball Screw Lead** | 5–8mm/rev | 10mm/rev |
-| **Linear Travel** | 0.025–0.04mm per step | 0.05mm per step |
+| Parameter | NEMA 23 |
+|-----------|---------|
+| **Step Angle** | 1.8° |
+| **Steps/Revolution** | 200 |
+| **Holding Torque** | 2–3 N·m |
+| **Current Rating** | 3–5A per phase (verify exact value against motor nameplate before setting driver DIP switches) |
+| **Coil Impedance** | ~3–5 Ω |
+| **Ball Screw Lead** | 5–8mm/rev |
+| **Linear Travel** | 0.025–0.04mm per step |
+
+*(NEMA 34 columns removed — no longer applicable now that the motor is confirmed NEMA 23. Note: exact current rating still needs confirming from the motor's nameplate/model number, since "3–5A" is a typical range for NEMA 23 motors generally, not a spec read directly off this unit.)*
 
 **How Ball Screw Coupling Works:**
 1. Motor shaft couples to ball screw (via flexible coupler or direct drive)
@@ -186,7 +294,7 @@ With 1/4 microstepping = 0.025mm ÷ 4 = 0.00625mm per step
 ```
 
 **Typical Load Specifications:**
-- **Max Thrust:** 320N (for NEMA 23–34 range)
+- **Max Thrust:** 320N (typical for NEMA 23)
 - **Speed Range:** 0–3000 RPM (limited by control frequency and motor specs)
 - **Duty Cycle:** Continuous (with adequate cooling)
 
@@ -266,7 +374,7 @@ With 1/4 microstepping = 0.025mm ÷ 4 = 0.00625mm per step
     │  │  NEMA Stepper Motor         │              │
     │  │  (Integrated Ball Screw)    │              │
     │  │  SN: 161104226              │              │
-    │  │  NEMA 23 or 34              │              │
+    │  │  NEMA 23 (confirmed)        │              │
     │  │  ┌──────────────────────┐   │              │
     │  │  │ 200 steps/revolution │   │              │
     │  │  │ 1.8° per step        │   │              │
@@ -352,7 +460,7 @@ AC SUPPLY                POWER SUPPLY                CONTROLLER
                                       │        │
                     STEPPER MOTOR     │        │
                     ┌─────────────────┼───┐    │
-                    │ NEMA 23/34      │   │    │
+                    │ NEMA 23         │   │    │
                     │ SN:161104226    │   │    │
                     │                 │   │    │
                     │ Coil A:  ────────   │    │
@@ -887,7 +995,7 @@ Once homed, the ball screw system achieves:
 | **Control Frequency** | 1–40 kHz, 1 Hz steps | 40 kHz = ~3000 RPM motor |
 | **Step Resolution** | 1.8° per pulse (200 steps/rev) | Microstepping → finer resolution |
 | **Linear Travel** | ~0.025mm per full step | Depends on ball screw lead |
-| **Holding Torque** | 2–4.5+ N·m (NEMA 23–34) | Sufficient for vertical load |
+| **Holding Torque** | 2–3 N·m (NEMA 23) | Sufficient for vertical load |
 | **Repeatability** | ±0.1–0.05mm | With mechanical centering |
 | **Thermal Operation** | 14–140°F (−10 to +60°C) | Power supply rated |
 | **Efficiency** | >90% | Switching power supply |
@@ -912,6 +1020,30 @@ Once homed, the ball screw system achieves:
 
 ---
 
-**Last Updated:** 2026-08-17  
-**Status:** 🟢 Complete specification (commissioned components identified)  
-**Next Steps:** Finalize NI-DAQ integration; commission automated quench sequences
+## Commissioning Log
+
+Chronological record of hardware setup/troubleshooting actions taken on the physical unit.
+
+| Date | Action | Notes |
+|---|---|---|
+| 2026-08-25 | Confirmed motor is **NEMA 23** (measured mounting faceplate on physical unit) | Corrected from earlier "NEMA 23 or 34" guess throughout this doc and related notes |
+| 2026-08-25 | Wired ST-PMC1 → driver: **OPTO → PU+/DR+**, **CP → PU−**, **CW → DR−**, MF unused | Based on confirmed physical port labels on back of ST-PMC1 (see port reference table above); not yet bench-verified against oscilloscope/multimeter |
+| 2026-08-25 | Set driver current to **4A** | Motor was very loud/noisy at this setting (likely resonance) |
+| 2026-08-25 | Reduced driver current to 3.5A to fix noise | Still within NEMA 23 typical range (3–5A per phase) |
+| 2026-08-25 | **Reverted to / confirmed 4A — works fine** | Noise at 4A was reassessed and found acceptable; **4A is the final working driver current setting** |
+| 2026-08-25 | Accidentally cross-wired **A+ to B−** (wire from Coil A to a Coil B terminal) while attempting to reverse motor direction | Incorrect — crosses two different coils, breaks the 90° phase relationship between them; not a valid way to reverse direction |
+| 2026-08-25 | **Corrected: swapped A+ and A− (same coil pair only)** | This is the correct way to reverse rotation direction in hardware; B coil wiring untouched |
+| 2026-08-25 | **Empirically tested max speed at 4A, no load: 8000 reliable; 8200 jammed once in 10 back-and-forth cycles** | Retested at **4A** driver current (not 3.5A), motor unloaded (no ball screw/sample load applied). **8000** (SPEED/frequency field) ran reliably across repeated back-and-forth cycling. **8200** jammed once during a 10-cycle back-and-forth test — treat 8200 as unreliable/borderline, not a safe working max. Both figures are well below the ST-PMC1's 40 kHz electrical ceiling and below the previous 20 kHz used in the lift/quench program. Note: this was tested at 4A, which is louder than the 3.5A setting logged above — current setting may have been changed back to 4A for this test; confirm which current setting is the final working config. |
+
+**Open items / not yet verified:**
+- Confirm OPTO output voltage against driver's opto-input rating (recommended before this was wired — flagged in port reference section above, still unconfirmed)
+- Confirm whether the A+/A− swap actually reversed direction as expected on a test run
+- Read exact model number off motor nameplate to get exact (not "typical range") current rating
+- Retest max reliable speed **under actual load** (8000/8200 figures are no-load only — loaded max will likely be lower)
+- 8200 jam: determine if this was a one-off or a repeatable failure point — recommend treating **8000 as the safe working max** until retested more thoroughly
+
+---
+
+**Last Updated:** 2026-08-25  
+**Status:** 🟢 Complete specification (commissioned components identified); NEMA size and driver current now confirmed on physical unit  
+**Next Steps:** Finalize NI-DAQ integration; commission automated quench sequences; verify A+/A− swap achieved correct direction

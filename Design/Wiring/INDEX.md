@@ -13,7 +13,9 @@ Power delivery, control circuits, and instrumentation for induction heating and 
 |------|---------|--------|
 | **[[Design/Wiring/Electrical System|Electrical System.md]]** | Power delivery & instrumentation overview | 🔵 Hub |
 | **[[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture.md]]** | Automated control via NI-9219 + NI-9263 on legacy laptop | 🟢 Active |
-| **[[Design/Mechanisms/Ball Screw Motor Control|Ball Screw Motor Control.md]]** | 24V stepper motor control system (power supply, controller, driver, motor) | 🟢 Complete |
+| **[[Design/Wiring/Ball Screw Motor Control|Ball Screw Motor Control.md]]** | 24V stepper motor control system (power supply, controller, driver, motor) | 🟢 Complete |
+| **[[Design/Wiring/Control System|Control System.md]]** | Control logic, signal timing, automation sequences | 🟢 Active |
+| **[[Design/Wiring/Coil Lead Pass-Throughs|Coil Lead Pass-Throughs.md]]** | High-frequency power lead routing through chamber | 🟢 Active |
 
 ---
 
@@ -31,10 +33,10 @@ Power delivery, control circuits, and instrumentation for induction heating and 
 - **[[Design/Plumbing/Fluid Systems\|Plumbing & Fluid Systems]]** — Valve & pump control signals
   - *Connection*: Solenoid valve actuation (24V); 24V diaphragm pump power; pressure sensor monitoring
 
-### 🔧 Mechanical Control & Actuation
-- **[[Design/Mechanisms/Control System\|Mechanisms & Automation]]** — Control signals, feedback loops, safety interlocks
+### 🔧 Control & Automation
+- **[[Design/Wiring/Control System\|Control System]]** — Control logic, signal timing, safety interlocks
   - *Connection*: Temperature sensor (thermocouple); pressure monitoring (vacuum safety); emergency stop wiring; quench trigger signal
-- **[[Design/Mechanisms/Ball Screw Motor Control\|Ball Screw Motor Control]]** — 24V stepper motor system for vertical sample positioning
+- **[[Design/Wiring/Ball Screw Motor Control\|Ball Screw Motor Control]]** — 24V stepper motor system for vertical sample positioning
   - *Connection*: Power supply (SDN 10-24-100P, 24V @ 10A); Motion controller (ST-PMC1) receives external commands; Motor driver (TB6600) sends coil drive signals; Limit switch input for automatic homing
 
 ### ❄️ Quench Triggering
@@ -52,23 +54,23 @@ Power delivery, control circuits, and instrumentation for induction heating and 
 - **Status**: Specifications pending equipment selection
 
 ### Stepper Motor Control Power (24V DC)
-- **Power Supply**: [[Design/Mechanisms/Ball Screw Motor Control#Component Details|SolaHD SDN 10-24-100P]]
+- **Power Supply**: [[Design/Wiring/Ball Screw Motor Control#Component Details|SolaHD SDN 10-24-100P]]
 - **Output**: 24V DC @ 10A (240W max)
 - **Scope**: Powers ST-PMC1 motion controller, TB6600 stepper driver, solenoid valve, diaphragm pump
 - **Protection**: Indefinite short-circuit protection, overvoltage/overtemperature shutdown
 - **Status**: 🟢 Complete — Components identified and specified
 
 ### Coil Connections (Heating Element)
-- **High-Frequency Leads**: Via coil lead pass-throughs (Omega SSLK-14-14, 1/4" x 1/4" NPT compression fittings — bronze/flared-fitting design rejected due to excessive resistive loss, see [[Design/Archive/INDEX|Archive]])
+- **High-Frequency Leads**: Via [[Design/Wiring/Coil Lead Pass-Throughs|coil lead pass-throughs]] (Omega SSLK-14-14, 1/4" x 1/4" NPT compression fittings — bronze/flared-fitting design rejected due to excessive resistive loss, see [[Design/Archive/INDEX|Archive]])
 - **Connection Type**: Soldered high-frequency joints; lead from coil to power supply is now one continuous piece (must un-solder/re-solder to swap or iterate on the coil)
 - **Impedance Matching**: To be verified during thermal testing
 - **Cooling**: Coil cooled via separate water circuit (isolated from electrical)
 
 ### Control & Low-Voltage (24V DC)
-- **Stepper Motor**: Ball screw vertical positioning (see [[Design/Mechanisms/Ball Screw Motor Control|Ball Screw Motor Control]])
+- **Stepper Motor**: Ball screw vertical positioning (see [[Design/Wiring/Ball Screw Motor Control|Ball Screw Motor Control]])
   - Motion controller: ST-PMC1 (40 kHz pulse+direction, 99 programmable sequences)
   - Driver: TB6600 (5–10A per coil phase)
-  - Motor: NEMA 23/34 with integrated ball screw (~0.025mm positioning)
+  - Motor: NEMA 23 with integrated ball screw (~0.025mm positioning)
 - **Solenoid Valve**: 24V for quench trigger (via relay output from ST-PMC1)
 - **Diaphragm Pump**: 24V option for spray quenching
 - **Pressure Relief**: Valve in air control assembly
@@ -156,8 +158,8 @@ Power delivery, control circuits, and instrumentation for induction heating and 
 
 📖 **Related Reading:**
 - [[Design/Coil Geometry/Round Coil\|Coil Design]] — Heating element specifications
-- [[Design/Plumbing/Coil Lead Pass-Throughs\|Lead Feedthroughs]] — Power delivery through chamber
-- [[Design/Mechanisms/Control System\|Control Strategy]] — Signal timing & automation
+- [[Design/Wiring/Coil Lead Pass-Throughs\|Lead Feedthroughs]] — Power delivery through chamber
+- [[Design/Wiring/Control System\|Control Strategy]] — Signal timing & automation
 - [[Design/Vacuum Chamber/Vacuum Enclosure\|Chamber Feedthroughs]] — All penetrations overview
 
 ---

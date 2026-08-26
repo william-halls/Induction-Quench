@@ -16,13 +16,13 @@ Similar to the FUYU FSK40E series but unbranded. The actual parts and stepper ar
 | **Power Supply** | SDN 10-24-100P (SolaHD) | AC→DC conversion (240W, 24V @ 10A) |
 | **Motion Controller** | ST-PMC1 (SN: 170120011) | Programmable stepper sequencer (99 programs, 40 kHz max) |
 | **Stepper Driver** | TB6600 or equiv. (SN: 170120011) | Coil amplifier (5-10A @ 24V) |
-| **Stepper Motor** | NEMA 23 or 34 (SN: 161104226) | Rotary actuator (200 steps/rev, integrated ball screw) |
+| **Stepper Motor** | NEMA 23 (SN: 161104226) | Rotary actuator (200 steps/rev, integrated ball screw) |
 
 **Key Capability:** ±0.025mm positioning per full step, or ±0.006mm with 1/16 microstepping.
 
 ## Motor Control
 
-**Current Setup**: [[Design/Mechanisms/Ball Screw Motor Control|ST-PMC1 programmable controller]] + NEMA 23/34 stepper motor with ball screw linear actuator
+**Current Setup**: [[Design/Mechanisms/Ball Screw Motor Control|ST-PMC1 programmable controller]] + NEMA 23 stepper motor with ball screw linear actuator
 
 **Electrical Specifications:**
 - ✅ Power: 24V DC, 10A supply (SDN 10-24-100P) provides 2× safety margin

@@ -25,7 +25,7 @@ Power delivery, control circuits, and instrumentation for induction heating and 
 - **Power Supply**: SolaHD SDN 10-24-100P (240W, 24V @ 10A)
 - **Motion Controller**: ST-PMC1 (SN: 170120011) — programmable pulse+direction sequencer
 - **Stepper Driver**: TB6600 (SN: 170120011) — coil amplifier (5–10A per phase)
-- **Motor**: NEMA 23/34 stepper with integrated ball screw (SN: 161104226) — ±0.025mm positioning
+- **Motor**: NEMA 23 stepper with integrated ball screw (SN: 161104226) — ±0.025mm positioning
 - **Homing**: Limit switch on Input #1 for automatic home finding
 - **Capabilities**: Up to 99 programmed motion sequences, 40 kHz max frequency
 
