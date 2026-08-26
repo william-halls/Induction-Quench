@@ -16,6 +16,7 @@ Inert atmosphere enclosure for controlled heating and quenching without oxidatio
 | **[[Design/Vacuum Chamber/Vacuum Chamber CAD|Vacuum Chamber CAD.md]]** | OnShape model & CAD assembly | 🔵 Reference |
 | **[[Design/Vacuum Chamber/Acrylic Vacuum Lid|Acrylic Vacuum Lid.md]]** | Custom lid design & fabrication | 🟡 In Progress |
 | **[[Design/Vacuum Chamber/Quartz Glass Tube|Quartz Glass Tube.md]]** | Archived compact chamber design | 🔴 Abandoned |
+| **[[Design/Vacuum Chamber/Frame|Frame.md]]** | Extrusion frame hardware & thread engagement | 🟢 Active |
 
 ---
 
