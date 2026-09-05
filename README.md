@@ -57,14 +57,16 @@ The vault is organized by **engineering subsystems**, each with its own design n
 Induction Quench Vault/
 ├── CLAUDE.md (auto-loaded session startup instructions)
 ├── README.md (this file)
+├── COLOR_SCHEME.md (graph view subsystem color coding)
 ├── Induction Quench Research Instrument.md (main project hub)
 │
-├── Claude/
+├── Claude/ (agent workflow conventions only — no project content)
 │   ├── AGENT_PREFERENCES.md (agent behavioral conventions)
 │   ├── GRUNT.md (specs for cheap model execution)
 │   ├── PUSHING_TO_GITHUB.md (push workflow)
 │   ├── PULLING_FROM_GITHUB.md (pull workflow)
-│   └── PUSH_LOG.md (commit history)
+│   ├── PUSH_LOG.md (commit history)
+│   └── gemini-relay/ (local Gemini chat relay script, not vault content)
 │
 ├── Design/
 │   ├── SUBSYSTEMS.md (interconnection map & architecture diagram)
@@ -79,6 +81,8 @@ Induction Quench Vault/
 │   │   ├── Vacuum Enclosure.md (overview)
 │   │   ├── Used Vacuum Chamber.md (current design)
 │   │   ├── Vacuum Chamber CAD.md (OnShape model)
+│   │   ├── Acrylic Vacuum Lid.md (custom lid design & fabrication)
+│   │   ├── Frame.md (extrusion frame hardware & thread engagement)
 │   │   └── Quartz Glass Tube.md (archived)
 │   │
 │   ├── Mechanisms/ (+ INDEX.md)
@@ -105,7 +109,12 @@ Induction Quench Vault/
 │   │
 │   ├── Wiring/ (+ INDEX.md)
 │   │   ├── Electrical System.md (power & instrumentation overview)
-│   │   └── NI-DAQ Control Architecture.md (automated control system)
+│   │   ├── NI-DAQ Control Architecture.md (automated control system)
+│   │   ├── Ball Screw Motor Control.md (24V stepper motor control)
+│   │   ├── Control System.md (control logic & signal timing)
+│   │   ├── Coil Lead Pass-Throughs.md (high-frequency lead routing)
+│   │   ├── Ambrell Contact - HOTSHOT 103927.md (draft vendor outreach)
+│   │   └── TODO - HOTSHOT Docs & E-Stop-Wiring.md (open action list)
 │   │
 │   └── Archive/ (+ INDEX.md)
 │       └── Design History.md (project evolution)
@@ -189,7 +198,13 @@ Use tags to organize and filter your vault queries.
 
 ## ✅ Vault Maintenance
 
-This vault was last **reorganized on 2026-08-17** with:
+This vault was last **reorganized on 2026-08-30** with:
+
+✓ Moved project-content files out of `Claude/` (agent-conventions only) into `Design/Wiring/`: `Ambrell Contact - HOTSHOT 103927.md` and `TODO - HOTSHOT Docs & E-Stop-Wiring.md`, updating all cross-links and adding both to `Design/Wiring/INDEX.md`  
+✓ Fixed `media/INDEX.md`: removed a stale row pointing at a nonexistent `used-vacuum-chamber.png`, corrected the `main-assembly.png` reference to the note that actually embeds it, and flagged `chamber-assembly.png` as currently unused  
+✓ Updated file structure tree to include `COLOR_SCHEME.md`, `Claude/gemini-relay/`, `Design/Vacuum Chamber/Acrylic Vacuum Lid.md` & `Frame.md`, and the full current `Design/Wiring/` file list  
+
+**Previous maintenance (2026-08-17):**
 
 ✓ Reorganized media folder — moved ceramic mount images to `media/mechanisms/`  
 ✓ Created dedicated `media/samples/` folder for Charpy test geometries  
@@ -209,6 +224,6 @@ This vault was last **reorganized on 2026-08-17** with:
 
 ---
 
-**Last Updated:** 2026-08-17  
+**Last Updated:** 2026-08-30  
 **Status:** 🟢 Organized & Ready  
-**Files:** 44 total (3 root + 5 Claude/ + 35 Design/ + 1 media/)
+**Files:** 50 markdown files total (4 root + 5 Claude/ + 40 Design/ + 1 media/INDEX)

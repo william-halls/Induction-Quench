@@ -50,8 +50,9 @@ Gas delivery, vacuum evacuation, and quenching medium circulation systems for ch
 
 ### Vacuum System
 - **Purpose**: Evacuate chamber; create low-pressure environment to prevent water boiling
-- **Components**: Existing pump (details TBD)
+- **Components**: JB Industries DV-85N Platinum vacuum pump (2-stage, 3 CFM, rated 15 micron ultimate vacuum)
 - **Concern**: Water boil-off at vacuum — impact on backfill dynamics
+- **Concern**: Observed max pull is only ~28" Hg vs. the pump's rated near-full-vacuum capability — suspected leak in shaft seal/lid/fittings (see [[Design/Plumbing/Air System Control Assembly|Air System Control Assembly]] for diagnosis steps)
 - **Integration**: Via air control manifold (3-way valve)
 
 ### Inert Gas System
@@ -102,7 +103,8 @@ Gas delivery, vacuum evacuation, and quenching medium circulation systems for ch
 ⏳ **Water Boil-Off** — Evaluate impact on vacuum performance and backfill strategy  
 ⏳ **Quench Medium** — Select oil/water/gas based on desired cooling rate  
 ⏳ **Spray Nozzle** — If pursuing spray quench, design custom nozzle from diaphragm pump inlet  
-⏳ **Thermocouple Routing** — Finalize lead management through chamber
+⏳ **Thermocouple Routing** — Finalize lead management through chamber  
+⏳ **Vacuum Leak Check** — Isolate pump and watch gauge decay to confirm/locate leak limiting pull to 28" Hg (pump is rated for 15 microns / near-full vacuum)
 
 ---
 

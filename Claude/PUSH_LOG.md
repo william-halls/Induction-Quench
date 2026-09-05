@@ -4,6 +4,12 @@ Record of what changed with each push to GitHub.
 
 <!-- Newest entries at the top -->
 
+## 2026-09-05 - Ball screw MF/STOP wiring decisions
+**Commit**: (pending)
+- [[Design/Wiring/Ball Screw Motor Control.md]]: decided TB6600 MF+/− will be DAQ-controlled via the spare LCD4075DD3-type SSR (motor-free/coil-disable for manual repositioning); decided ST-PMC1 STOP will be permanently jumpered closed rather than wired as a safety E-stop or SSR-controlled, since the ball screw stage doesn't present the hazard level that motivated the hardwired-E-stop approach elsewhere (HOTSHOT RF, vacuum chamber) — "stop everything" now relies on the existing AC power-release interlock instead
+- Updated SSR inventory table (added MF row, added explicit STOP-not-SSR-controlled row) and USB-6009 digital line budget (MF added, STOP line freed up) to match
+- 1 file changed
+
 ## 2026-08-17 - Add thermocouple pass-through part ID
 **Commit**: `1c50812`
 - [[Design/Plumbing/Thermal Couple Pass-through.md]]: added part ID PFT2NPT-1K to the current plan

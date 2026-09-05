@@ -8,11 +8,11 @@ Your vault files are now color-coded in Obsidian's graph view by subsystem. This
 |-------|-----------|-------|----------|
 | 🔴 Red | Coil Geometry | 5 files | `#FF5050` |
 | 🟠 Orange | Sample Quenching | 4 files | `#FFA550` |
-| 🟡 Yellow | Mechanisms | 8 files | `#FFC850` |
-| 🟢 Green | Plumbing | 8 files | `#78C878` |
-| 🔵 Blue | Wiring | 3 files | `#6496FF` |
-| 🟣 Purple | Vacuum Chamber | 5 files | `#C878FF` |
-| 🟦 Cyan | Claude (project docs) | 5 files | `#64C8DC` |
+| 🟡 Yellow | Mechanisms | 6 files | `#FFC850` |
+| 🟢 Green | Plumbing | 7 files | `#78C878` |
+| 🔵 Blue | Wiring | 8 files | `#6496FF` |
+| 🟣 Purple | Vacuum Chamber | 7 files | `#C878FF` |
+| 🟦 Cyan | Claude (agent-convention docs) | 5 files | `#64C8DC` |
 | ⚪ Gray | Design hub | Hub files | `#B4B4B4` |
 
 ## How It Works

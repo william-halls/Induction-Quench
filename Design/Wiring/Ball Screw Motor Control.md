@@ -76,6 +76,8 @@ Driver MF+ / MF− ─── left unconnected (no matching enable output on ST-P
 
 **Input bank (back-right ports):** IN1, IN2, A, B, Stop, Run — the 6 optically-isolated inputs, with Com+/Com− as the shared reference depending on whether switches are wired sourcing or sinking.
 
+**✅ Confirmed input voltage (from official ST-PMC1 manual):** All 6 inputs (RUN, STOP, A, B, IN1, IN2) share the same input interface circuit, powered from the **COM+/COM− rail at a fixed DC24V** — not a tolerant/flexible range. Behavior is **active-low**: closing the switch/contact pulls the input low (logic "0", panel indicator lights); open = high (logic "1"). This matches the 24V pull-up behavior already confirmed empirically on the limit-switch input. See [[#Triggering RUN via NI-DAQ]] below for how this applies to triggering the program from the NI-9263.
+
 ---
 
 ## Component Details
@@ -213,7 +215,7 @@ ST-PMC1 CW  ────────── Driver DR−
 - **OPTO → PU+ and DR+** (tied together): supplies pull-up voltage for both driver opto-inputs.
 - **CP → PU−**, **CW → DR−**: controller sinks these low to generate each pulse/direction edge.
 - **Do not tie OPTO to GRD** — keep it isolated; that's the likely reason it's broken out separately from GRD on the terminal block (avoids ground loops between the pulse/dir circuit and main power ground).
-- **MF+/MF−**: leave unused — no matching enable terminal identified on this controller.
+- **MF+/MF−**: originally left unused (no matching enable output on the ST-PMC1) — **now planned for DAQ control (2026-09-05)**, see "MF+/− Motor-Free Control" below.
 
 **⚠️ Needs verification:** Confirm with a multimeter before first power-up that OPTO carries a voltage compatible with the driver's opto-input rating (commonly 5V or 12V) relative to GRD — do not assume it's a pass-through of the 24V supply rail.
 
@@ -939,6 +941,245 @@ Program Flow Diagram:
 
 ---
 
+### USB-6009 Pinout Reference
+
+**Update (08-29-2026):** Actual DAQ hardware in hand is an **NI USB-6009** (not the NI-9263 originally assumed — see superseded plan below). Two 16-terminal screw-terminal connector blocks, 32 terminals total. Pulled from NI's official USB-6008/6009 user guide; **verify against the labels silkscreened directly on the physical unit before wiring** — this is safety-relevant wiring.
+
+**Connector 0 — Analog (terminals 1–16):**
+
+| Terminal | Signal | Terminal | Signal |
+|---|---|---|---|
+| 1 | GND | 9 | AI 6 |
+| 2 | AI 0 | 10 | GND |
+| 3 | AI 4 | 11 | AI 3 |
+| 4 | GND | 12 | AI 7 |
+| 5 | AI 1 | 13 | GND |
+| 6 | AI 5 | 14 | AO 0 |
+| 7 | GND | 15 | AO 1 |
+| 8 | AI 2 | 16 | GND |
+
+**Connector 1 — Digital I/O & power (terminals 17–32):**
+
+| Terminal | Signal | Terminal | Signal |
+|---|---|---|---|
+| 17 | P0.0 | 25 | P1.0 |
+| 18 | P0.1 | 26 | P1.1 |
+| 19 | P0.2 | 27 | P1.2 |
+| 20 | P0.3 | 28 | P1.3 |
+| 21 | P0.4 | 29 | PFI 0 |
+| 22 | P0.5 | 30 | +2.5V |
+| 23 | P0.6 | 31 | +5V |
+| 24 | P0.7 | 32 | GND |
+
+**Channel assignments for this project:**
+
+| Terminal | Signal | Used for |
+|---|---|---|
+| 17 | P0.0 | ST-PMC1 RUN trigger — currently pivoting from relay module to LCD4075DD3 SSR control input, see below |
+| 18 | P0.1 | SOLA DC-OK contact → SSR input (AC power release, gates AC into SDN 10-24-100P for the stepper controller+driver) |
+| 19 | P0.2 | SOLA DC-OK contact → digital input (software readback: is the 24V rail healthy?) |
+| — | P0.x (TBD) | ST-PMC1 IN1 trigger — new SSR, see below |
+| — | P0.x (TBD) | ST-PMC1 IN2 trigger — new SSR, see below |
+| — | P0.x (TBD) | Diaphragm pump on/off — new **DC-rated** SSR, see below |
+| — | P0.x (TBD) | TB6600 driver MF+/− (motor-free/disable) — new SSR (spare LCD4075DD3-type), see "MF+/− Motor-Free Control" below |
+| **14 (AO0)** | AO 0 | Reserved for HOTSHOT power command (0-5V → voltage-to-current isolator → HOTSHOT CTB1:1-2, 4-20mA). See [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] for the isolator wiring (ASIN B09KTBJGZB). |
+| 32 | GND | Common return |
+
+**Digital line budget (updated 2026-09-05):** 12 digital lines total on the 6009; 3 committed (P0.0, P0.1, P0.2) + 3 more planned (IN1, IN2, pump) + 1 more planned (MF) = 7 of 12. STOP no longer needs a line (permanently jumpered, not DAQ-controlled — see below), freeing up budget versus the earlier plan that held a slot for it. Room remains for the HOTSHOT START trigger plus future expansion.
+
+### On-Demand Position Control: GOTO Instruction + Finalized I/O Mapping (2026-09-01)
+
+**Confirmed: the ST-PMC1 supports absolute positioning**, not just the relative/incremental `MOVE` used in the homing routine above. A separate **`GOTO ±xxxxxxx`** instruction moves directly to an absolute position (in pulses, referenced to the zero point established during homing) regardless of current location — range **-7,999,999 to +7,999,999 pulses**, far more than needed for the ~100mm travel range. This means Home/Center/Top/Bottom can each be a single `GOTO <fixed pulse count>` instruction, callable on-demand from wherever the sample currently sits — no need to track/calculate relative deltas.
+
+**Finalized I/O mapping for on-demand actions** (Home, Center-of-coil, Top-of-coil, Bottom-of-coil, Quench — 5 actions needed):
+
+| Input | Assignment | Behavior |
+|---|---|---|
+| **A** | Home limit switch (moved from IN1) | Hardware interrupt — instant reaction regardless of program state |
+| **B** | Quench trigger | Hardware interrupt — same "whenever, right now" behavior, appropriate for the most time-critical action |
+| **IN1 + IN2** | 4 combinations (00/01/10/11) → Home / Center / Top / Bottom | Polled — program must be structured as a continuous poll loop (`CHECK INPUT` → jump → execute `GOTO` → loop back to poll) for these to feel responsive "whenever wanted"; not instantaneous like A/B, but timing is controllable by how tightly the poll loop is written |
+
+This exactly uses all 5 available slots (2 interrupts + 4 polled combinations) — no spare capacity for a 6th action without adding hardware or bypassing to full NI software control (see [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] discussion on continuous scanning).
+
+**Rework required:** the homing routine documented above was built around polling IN1 (`CHECK INPUT #1, JUMP→line5`) — moving the limit switch to A means rewriting it to use A's automatic interrupt-jump entry point instead of a poll, per the A/B mechanism described below.
+
+**Source:** [ST-PMC1 manual excerpt, ManualsLib](https://www.manualslib.com/manual/1269811/St-St-Pmc1.html) — GOTO instruction confirmed via page-specific fetch, 2026-09-01.
+
+### A/B vs. IN1/IN2 — what each ST-PMC1 input actually does (2026-09-01)
+
+Pulled directly from the ST-PMC1 manufacturer manual (not just the port-reference guess further up this doc):
+
+- **A / B — hardware interrupt inputs.** Triggering either one *while a program is running* immediately decelerates the motor to a stop, interrupts the program, and jumps execution to a dedicated subroutine entry point ("A operation" / "B operation") defined separately in the program — the controller remembers the interrupted position. Manual's own framing: for situations where "motor displacement cannot be pre-calculated" — the textbook use case is a limit switch or other real-time event that needs an immediate reaction, not a scheduled check. **Not** a program-select mechanism.
+- **IN1 / IN2 — plain "switching signal input terminals."** Read passively, only when the program explicitly checks them (e.g. the `CHECK INPUT #1` step in the homing sequence above). No automatic interrupt behavior.
+
+**Decision (2026-09-01):** Since there's no current use case requiring real-time interrupt/abort behavior, **A and B are left unused for now** — no SSRs purchased for them. **IN1 and IN2 will get DC SSRs** (same LCD4075DD3-type part as RUN) so the DAQ can drive general-purpose polled conditions into the ST-PMC1 program. Exact IN1/IN2 use case still TBD.
+
+**Source:** [ST-PMC1 manual, ManualsLib](https://www.manualslib.com/manual/1269811/St-St-Pmc1.html); [ST-PMC1 manual PDF, cnccat.com](https://cnccat.com/cnccat_photos/files/ST-PMC1%20Single%20Axis%20Programmable%20Controller.pdf)
+
+### Diaphragm Pump — confirmed DC, needs its own DC-rated SSR (2026-09-01)
+
+The diaphragm pump is **24V DC** (consistent with [[Design/Plumbing/Fluid Systems.md]] and [[Design/Wiring/INDEX.md]]), **not** AC. This matters: the AC-rated SSR already in use for the stepper controller/driver power-release circuit (LCDS4048ZD3, triac/thyristor-based) relies on the AC waveform crossing zero to turn off — feeding it a DC load risks it latching on and never releasing. **Do not reuse the AC-output SSR for the pump.** Instead, use a small **DC-rated SSR** (same LCD4075DD3-type family as the RUN/IN1/IN2 signal-level SSRs, just current-rated for the pump's actual draw) switching the 24V DC line to the pump, triggered off its own spare 6009 digital line.
+
+**Full SSR/relay inventory as of 2026-09-01** (see [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] for the HOTSHOT-side additions):
+
+| # | Function | Type | Status |
+|---|---|---|---|
+| 1 | ST-PMC1 RUN trigger | DC SSR (LCD4075DD3) | In progress, not yet bench-tested |
+| 2 | ST-PMC1 IN1 trigger | DC SSR (LCD4075DD3-type) | Planned |
+| 3 | ST-PMC1 IN2 trigger | DC SSR (LCD4075DD3-type) | Planned |
+| 4 | Diaphragm pump on/off | DC SSR (LCD4075DD3-type, current-rated for pump) | Planned |
+| 5 | AC power release (stepper controller+driver) | AC SSR (LCDS4048ZD3) | Existing/documented below |
+| 6 | TB6600 driver MF+/− (motor-free/disable) | DC SSR (LCD4075DD3-type, spare unit) | Planned (2026-09-05) — see "MF+/− Motor-Free Control" below |
+| — | ST-PMC1 STOP | — | **Not SSR-controlled, by design (2026-09-05)** — permanently jumpered closed, not treated as safety-critical for this mechanism; see below |
+| — | ST-PMC1 A, B | — | **Unused** — no SSR needed unless a real-time interrupt use case is defined |
+
+---
+
+### Triggering RUN via USB-6009 — Current Plan: LCD4075DD3 DC-DC SSR
+
+**Update (08-29-2026, later):** Pivoted away from the TS0011 relay module (see "Attempted: TS0011 Relay Module" below for the troubleshooting history) — suspected faulty after extensive testing showed no response to `P0.0` toggling. Switching to the **LCD4075DD3** (DC-DC solid-state relay: 3-32VDC control input, 3-75VDC switched output) already on hand, which was originally acquired for a different purpose but fits this job well — no coil, no separate coil-power rail (`JD-VCC`), no mechanical failure point.
+
+**Wiring plan:**
+
+```
+USB-6009 P0.0 (terminal 17) ──► LCD4075DD3 control input (+)
+USB-6009 GND  (terminal 32) ──► LCD4075DD3 control input (−)
+
+LCD4075DD3 output (+) ──► ST-PMC1 RUN
+LCD4075DD3 output (−) ──► ST-PMC1 COM− (24V rail return)
+```
+
+The SSR's output acts as a switch between its two output terminals when the control input is driven — functionally a drop-in replacement for the relay's `COM`/`NO` pair. RUN/COM− is just a signal-level contact closure (not a real load), so the SSR's 3-75V/multi-amp output rating is far oversized for this; that's fine, it'll switch cleanly regardless.
+
+**Why this is expected to succeed where the relay module didn't:**
+- No separate coil supply to forget wiring (root cause of the earlier `JD-VCC` problem) — the SSR's control input draws directly off the same signal current the DAQ line already provides.
+- Control-side current draw is expected to be low-mA (inferred from the sibling part LCDS4048ZD3, same "LCD" SSR family, confirmed elsewhere in this doc as low-mA at 5V) — likely within the 6009's ~8.5mA budget, unlike the TS0011's spec'd 15–20mA.
+- 3-32VDC control range comfortably covers the 6009's 5V logic level, assuming (typical for this SSR family) a ~3V minimum turn-on threshold.
+
+**⚠️ Still needs verification:**
+- LCD4075DD3's exact "must operate current" spec has not been independently confirmed from a datasheet — inferred from the sibling LCDS4048ZD3 part only. If turn-on proves unreliable, fall back to a small NPN transistor buffer between P0.0 and the SSR control input, same pattern as discussed for the relay module.
+- STOP's normal-state polarity (open vs. closed = "run allowed") — still unconfirmed; STOP stays hard-wired outside DAQ control regardless of RUN's trigger method (see below).
+- Test in the USB-6009 NI MAX test panel the same way the relay module was tested: toggle P0.0, confirm RUN response at the ST-PMC1.
+
+**STOP left out of DAQ control:** Per the earlier design discussion, STOP should stay hard-wired in its safe/ready state (e.g., jumpered or through a physical E-stop N.C. contact) rather than routed through the USB-6009, so an E-stop remains available independent of the laptop/software. Confirmed during troubleshooting (08-29-2026) that neither RUN nor STOP are permanently/statically wired to COM− — both are switched, as intended.
+
+**Update (2026-09-05) — STOP is not being treated as a safety-critical E-stop.** Reassessed: the ball screw stage (light sample + mount, vertical lift, NEMA 23 holding torque) doesn't present the kind of hazard that motivated the hardwired-E-stop philosophy elsewhere in this system (e.g. HOTSHOT RF power, vacuum chamber). Decision: **STOP will simply be permanently jumpered closed** (always "run-allowed") rather than wired to a physical E-stop switch or routed through DAQ/SSR control. Actual "stop everything" duty is handled at the power level instead, via the existing AC power-release SSR + SOLA DC-OK interlock (see "AC Power Release Interlock" below) — cutting power to the stepper controller/driver achieves the same practical effect without needing a dedicated STOP circuit. No SSR is allocated to STOP.
+
+### MF+/− Motor-Free Control (added 2026-09-05)
+
+**Decision:** Wire MF+/− on the TB6600 driver for DAQ-controlled "motor free" (coil de-energize) — using the spare LCD4075DD3-type SSR left over after covering RUN/IN1/IN2/pump (5 needed, bought in packs of 2 = 6, 1 spare from stock already on hand).
+
+**Why MF instead of using the spare SSR for STOP:** STOP was deliberately kept independent of DAQ/software (see above) — routing it through an SSR would make the "stop" path depend on the 6009, software, and 24V rail all being healthy, undermining the point of an independent stop. MF has no such safety role — it's a convenience feature (let the shaft spin freely by hand, e.g. during assembly/alignment) — so DAQ control is a clean, low-consequence use of the spare SSR. Note MF is **not** a safety disable: engaging it removes holding torque, so it should never be triggered with the sample loaded/suspended (see load-holding note above — coils energized is the failsafe assumption throughout this doc).
+
+**Wiring plan (same opto-isolated pattern as PU/DR):**
+
+```
+ST-PMC1 OPTO (shared pull-up rail) ──► Driver MF+   (tied together with PU+/DR+)
+
+Spare USB-6009 digital line ──► LCD4075DD3 SSR control input (+)
+USB-6009 GND ──► LCD4075DD3 SSR control input (−)
+LCD4075DD3 SSR output ──► Driver MF−  (sinks low to activate motor-free mode)
+```
+
+**Still needs:** assign a spare 6009 digital line (check budget below), bench-test MF activation with the shaft unloaded before ever using it near a mounted sample.
+
+**Source:** [ST-PMC1 Operating Manual (cnccat.com PDF)](https://cnccat.com/cnccat_photos/files/ST-PMC1%20Single%20Axis%20Programmable%20Controller.pdf) — page 4, back panel signal descriptions.
+
+---
+
+### Attempted: TS0011 Relay Module (suspected faulty, superseded)
+
+**Update (08-29-2026):** Originally attempted with an **NI USB-6009** (digital I/O DAQ) plus a **TS0011** (SunFounder-branded 4-channel 5V relay module, SRD-05VDC-SL-C relays on board, 1 of 4 channels used) as the RUN-trigger intermediary, superseding an earlier NI-9263 analog-output plan. After extended troubleshooting (see Commissioning Log), this path was abandoned in favor of the LCD4075DD3 SSR plan above — leaving this section as a record of what was tried and why.
+
+**Confirmed constraint that originally motivated using a relay/SSR at all:** RUN (like STOP, A, B, IN1, IN2) is a **DC24V, active-low opto-isolated input** — confirmed from the ST-PMC1's official manual. The USB-6009's digital lines are 0–5V logic and can't drive a 24V input directly at all (wrong voltage domain, not just a current-limit problem) — some form of relay/SSR intermediary is required. This constraint still applies to the SSR-based plan above; only the intermediary device changed.
+
+**Original wiring plan (TS0011):**
+
+```
+USB-6009 P0.0 (5V digital out) ──► TS0011 IN1 (channel 1 of 4, only channel used)
+                                              │
+                                    Relay module NO contact
+                                              │
+        ST-PMC1 RUN ◄──────────────────────────┴──────────────────────────► ST-PMC1 COM− (24V rail return)
+```
+
+- `VCC`/`GND` (logic side) → USB-6009 terminal 31 (+5V, 200mA) / terminal 32 (GND)
+- `IN1` → USB-6009 terminal 17 (P0.0)
+- `JD-VCC`/`JD-GND` (coil side) → jumper installed, bridged from `VCC` (no separate supply available on the bench) — current draw (~71mA coil + a few mA logic, well under the 6009's 200mA +5V budget) confirmed safe for single-supply operation
+- Confirmed via datasheet: TS0011 is active-LOW (NO connects to COM when IN1 is pulled low) — matches the fail-safe assumption that a floating/undriven line defaults to relay-off/Stop
+- Confirmed physically: relay's `COM` (center terminal) wired to ST-PMC1 `COM−`; `NO` wired to `RUN`; neither RUN nor STOP found to be permanently/statically bridged — wiring topology itself was correct
+
+**Why it's suspected faulty:** With the `JD-VCC` jumper removed, no response (expected — coil rail unpowered, matches theory). With jumper reinstalled (bridging `VCC`→`JD-VCC`), an audible click occurred at power-up, but this was a one-time power-on transient — toggling `P0.0` afterward in the NI MAX test panel produced no click, no LED response, and no effect on the ST-PMC1 RUN state, despite correct wiring topology, confirmed ground path expectations, and correct trigger polarity understanding. Root cause not isolated to a single failure point (ground continuity / IN1 voltage swing / module failure were the three candidate explanations) before the decision was made to switch to the LCD4075DD3 rather than continue debugging this specific board.
+
+**Source:** [TS0011 Datasheet (DigiKey-hosted PDF)](https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/5773/TS0011%20DATASHEET.pdf)
+
+---
+
+### AC Power Release Interlock: USB-6009 + SOLA DC-OK + SSR (separate circuit)
+
+**Not part of the ball screw system** — documented here for now since it shares the USB-6009 and the SDN 10-24-100P with the ball screw circuit above; may get moved to [[Design/Wiring/Electrical System.md]] once the HOTSHOT interlock plan (see [[Design/Wiring/TODO - HOTSHOT Docs & E-Stop-Wiring.md]]) is finalized.
+
+**Purpose:** Gate release of switched AC power (via the LCDS4048ZD3 solid-state relay, 3-32VDC control / 24-480VAC load) so it only fires when both (a) the USB-6009 explicitly commands it, and (b) the SDN 10-24-100P confirms its 24V rail is healthy.
+
+**Wiring — deliberately no relay in this path** (unlike the RUN trigger above): both ends are already voltage/current-compatible, so an intermediate relay would just be an extra failure point.
+
+```
+USB-6009 P0.y (5V digital out) ──► SOLA DC-OK contact (N.O. solid-state, 200mA/60Vdc max) ──► LCDS4048ZD3 SSR input(+)
+LCDS4048ZD3 SSR input(−) ──► USB-6009 GND
+```
+
+- SDN 10-24-100P DC-OK signal: confirmed from the SolaHD SDN-P datasheet — **N.O. solid-state contact, rated 200 mA / 60 Vdc**, active when Vout is within regulation. Both the 6009's ~5V/~8.5mA output and the SSR's low-mA control input sit well within that contact's rating.
+- Series arrangement makes this a hardware AND: the SSR only receives a control signal (and therefore only switches AC to the load) when the DAQ line is driven true **and** the DC-OK contact is closed. If the 24V rail sags/faults, DC-OK opens and the SSR de-energizes regardless of DAQ state.
+- This only certifies the 24VDC control rail is healthy — it is **not** a substitute for the hardware E-stop → mains contactor path already planned for the HOTSHOT (see TODO doc); keep that as the authoritative mains cutoff.
+
+**⚠️ Still needs verification:**
+- Confirm actual LCDS4048ZD3 minimum turn-on current against the 6009's ~8.5mA source budget; add a small NPN transistor buffer stage if marginal.
+- Common ground between USB-6009 and this circuit, consistent with the star-ground point called out in [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]].
+
+#### Alternative/additional use: DC-OK as a software-readable status input
+
+Separate from the hardware interlock above (DC-OK gating the SSR), DC-OK can also be wired straight into a spare USB-6009 digital line so software can log/monitor "is the 24V rail actually healthy" independent of the SSR path. Since DC-OK is a dry contact (no voltage of its own), the input pin needs a resistor to define its state when the contact is open — otherwise the pin floats and reads noise instead of a clean logic level.
+
+```
++5V (terminal 31) ──[10kΩ]── digital input pin (e.g. P0.2) ──[DC-OK contact]── GND (terminal 32)
+```
+
+- Contact **open** (rail unhealthy) → pulled to **HIGH**
+- Contact **closed** (rail healthy) → pulled to **LOW**
+- Logic is inverted (HIGH = bad) with this pull-up wiring; flip the wiring (switch to +5V side, resistor to GND) for the opposite polarity, or just invert in software (DAQ Assistant) — either works, pick one and be consistent.
+- In LabVIEW, read this as a native Boolean by setting the DAQ Assistant's digital input task to **Acquisition Mode → "1 Sample (On Demand)"** — wires directly to a Boolean LED/indicator with no extra conversion. If the task instead outputs a Digital Waveform (e.g. multi-sample/continuous mode), convert with **Digital Waveform to Boolean Array → Index Array [0]** before feeding a Boolean indicator.
+- This is a separate physical contact use from the SSR-gating wiring above — don't try to wire the same DC-OK contact into both circuits simultaneously (it's a single series path, not a tap point shared across two consumers).
+
+#### Extending the same SSR pattern to other ST-PMC1 inputs (IN1, A, B, etc.)
+
+The RUN-trigger SSR approach above generalizes to any of the ST-PMC1's other active-low inputs (IN1, IN2, A, B — everything except STOP, which stays hard-wired outside DAQ control per the safety note above). The DAQ can't source/sink the 24V COM− rail directly from a 5V digital line, so each input that needs DAQ-driven triggering needs its own switching device between COM− and that input terminal:
+
+```
+USB-6009 P0.x (5V digital out) ──► SSR control input(+)
+USB-6009 GND                   ──► SSR control input(−)
+SSR output leg 1               ──► ST-PMC1 input terminal (IN1 / A / B / etc.)
+SSR output leg 2               ──► ST-PMC1 COM−
+```
+
+- Use the same **solid-state relay** approach (LCD4075DD3 or equivalent), not a mechanical relay module — the TS0011 mechanical relay module was already tried for the RUN trigger and abandoned due to the JD-VCC coil-supply reliability problem (see Commissioning Log); no reason to expect a mechanical relay would fare better on a second input.
+- Each additional triggered input needs its **own** SSR/digital-output-line pair — one contact closure per input, can't share a single SSR across multiple ST-PMC1 inputs unless only one is ever active at a time.
+- Confirmed input behavior (from the ST-PMC1 manual, see Quick Reference section above): active-low, COM+/COM− fixed at DC24V — closing the contact pulls the input to logic "0".
+
+**AC mains-side wiring (confirmed 08-29-2026) — only L goes through the SSR:**
+
+```
+AC Source L   ──► LCDS4048ZD3 switched input/output ──► Load L
+AC Source N   ─────────────────────────────────────────► Load N   (straight through, never switched)
+AC Source GRD ─────────────────────────────────────────► Load GRD (straight through, always continuous)
+```
+
+- **Line (L) only** goes through the SSR's switched path.
+- **Neutral (N) must never be switched** — if only N were interrupted, the load would remain live relative to ground through the still-connected L, creating a shock hazard on equipment that appears "off."
+- **Ground/PE must never be switched, under any circumstance** — it must remain a continuous bonding path at all times so a line-to-chassis fault has a low-impedance return to trip upstream protection instead of energizing the chassis. This applies to any switching device (SSR, relay, contactor), not just this one.
+- This SSR switching decision is independent of, and does not replace, the hardware E-stop → mains contactor path already planned for the HOTSHOT in [[Design/Wiring/TODO - HOTSHOT Docs & E-Stop-Wiring.md]] — that remains the authoritative mains cutoff.
+
+---
+
 ### Performance After Homing
 
 Once homed, the ball screw system achieves:
@@ -1034,16 +1275,32 @@ Chronological record of hardware setup/troubleshooting actions taken on the phys
 | 2026-08-25 | Accidentally cross-wired **A+ to B−** (wire from Coil A to a Coil B terminal) while attempting to reverse motor direction | Incorrect — crosses two different coils, breaks the 90° phase relationship between them; not a valid way to reverse direction |
 | 2026-08-25 | **Corrected: swapped A+ and A− (same coil pair only)** | This is the correct way to reverse rotation direction in hardware; B coil wiring untouched |
 | 2026-08-25 | **Empirically tested max speed at 4A, no load: 8000 reliable; 8200 jammed once in 10 back-and-forth cycles** | Retested at **4A** driver current (not 3.5A), motor unloaded (no ball screw/sample load applied). **8000** (SPEED/frequency field) ran reliably across repeated back-and-forth cycling. **8200** jammed once during a 10-cycle back-and-forth test — treat 8200 as unreliable/borderline, not a safe working max. Both figures are well below the ST-PMC1's 40 kHz electrical ceiling and below the previous 20 kHz used in the lift/quench program. Note: this was tested at 4A, which is louder than the 3.5A setting logged above — current setting may have been changed back to 4A for this test; confirm which current setting is the final working config. |
+| 2026-08-27 | **Decision: run driver subdivision/microstepping at full step (200 steps/rev)** | Chosen deliberately to prioritize max sample speed over smoothness — positioning resolution at full step (0.025mm/step) is well under the mechanical repeatability floor (±0.05–0.1mm, backlash-limited) anyway, so finer microstepping buys no real precision. Tradeoff accepted: full step has the most torque ripple/resonance of any subdivision setting, which is the likely mechanism behind the single 8200-speed jam logged above. The 8000-reliable/8200-borderline speed limits should still be treated as valid **only at this full-step setting** — do not assume higher subdivision settings share the same safe ceiling, and watch for jams if pushing past 8000 in search of more speed. |
+| 2026-08-27 | **Confirmed RUN/STOP/A/B/IN1/IN2 input voltage is fixed DC24V, active-low** (from official manual, cnccat.com PDF) | Resolves earlier open item: these 6 inputs share one input circuit type, powered from COM+/COM− at a fixed 24V (not a tolerant range) — closing the contact pulls the input low (logic 0). Confirms the 24V approach already used for the limit switch is correct and required (not just convenient) for RUN as well. Added NI-9263 → relay → RUN trigger wiring plan to this doc. |
+| 2026-08-27 | **DIP switch 4 identified as PUL/DIR vs CW/CCW input-mode selector, not standby current** | Physical test: with switch 4 down, motor only steps in one direction — direction control was lost entirely. This rules out "standby/idle current reduction," which was the initial (incorrect) guess for switch 4 and would not affect directionality. The one-direction symptom matches a driver input-mode switch that toggles between **PUL/DIR mode** (one pulse-train input + one static direction level) and **CW/CCW mode** (two separate pulse-train inputs, one per direction, no direction line). The existing wiring in this doc (**OPTO → PU+/DR+, CP → PU−, CW → DR−**) assumes PUL/DIR mode — CW only ever carries a static HIGH/LOW, never a pulse train, so in CW/CCW mode the driver would never see step pulses for the direction the CW line represents, producing exactly the observed one-direction-only behavior. **Needs confirmation:** flip switch 4 to the opposite position and retest both-direction motion; whichever position restores CCW motion is the correct PUL/DIR setting and should be logged as final alongside SW1–3 (current) and SW5–8 (subdivision). |
+| 2026-08-29 | **Superseded NI-9263 RUN-trigger plan with NI USB-6009 + 4-channel relay module (1 channel used)** | Actual DAQ hardware in hand is a USB-6009, not the NI-9263 assumed in the original plan. Rewrote "Triggering RUN via NI-DAQ" section accordingly: USB-6009 digital output → SRD-05VDC-SL-C relay module channel 1 → NO contact bridges ST-PMC1 RUN↔COM−. Also documented a separate, unrelated interlock circuit sharing the same USB-6009: SOLA SDN 10-24-100P DC-OK contact (confirmed 200mA/60Vdc N.O. solid-state, per SolaHD SDN-P datasheet) wired directly (no relay) in series with a second USB-6009 line into the LCDS4048ZD3 SSR's control input, gating AC power release on both DAQ command and power-supply health. |
+| 2026-08-29 | **Added USB-6009 pinout reference and assigned specific terminals to both circuits** | Documented the full 32-terminal screw-terminal pinout (from NI's official USB-6008/6009 user guide) and assigned P0.0 (terminal 17) to the relay module's RUN trigger and P0.1 (terminal 18) to the SSR/DC-OK line, with terminal 32 (GND) as the shared return. Confirmed AO0/AO1 (terminals 14–15) are deliberately not used for either circuit — both are simple on/off triggers, better served by digital lines than analog outputs (digital lines default to a known high-impedance/off-reading state at power-up; AO channels have no equivalent documented safe default). Pinout not yet cross-checked against the physical unit's silkscreened labels — treat as needing verification before wiring. |
+| 2026-08-29 | **Identified relay module as TS0011 (SunFounder-branded), confirmed active-LOW trigger from datasheet, confirmed USB-6009 +5V (terminal 31) can power module logic side directly** | TS0011 datasheet confirms "NO connects to COM when IN1 is low" — matches active-LOW assumption. Corrected earlier statement that USB-6009 has no onboard 5V — confirmed +5V/200mA available at terminal 31, sufficient for both module logic side and (with JD-VCC jumper installed) the ~71mA relay coil, single-supply operation. |
+| 2026-08-29 | **TS0011 troubleshooting: JD-VCC unpowered (jumper removed, no separate supply) → no relay response** | With jumper out and JD-VCC/JD-GND unconnected, LED responded to P0.0 toggling but relay didn't click — consistent with logic side (opto) working while coil side (transistor/coil) has no power rail. Diagnosis: JD-VCC needs either a separate 5V supply or the jumper reinstalled. |
+| 2026-08-29 | **TS0011 troubleshooting: jumper reinstalled, single click at power-on, but P0.0 toggling produces no response at all (no click, no LED)** | Regression from earlier session where LED did respond to P0.0. Ruled out static/permanent wiring of RUN or STOP to COM− (confirmed both are switched, not hardwired) and ruled out relay COM/NO wiring topology (confirmed COM− → relay COM, correct). Root cause not isolated between ground continuity, IN1 signal path, and module failure before troubleshooting was stopped. |
+| 2026-08-29 | **Decision: abandon TS0011, suspected faulty; pivot RUN-trigger circuit to LCD4075DD3 DC-DC SSR** | After the above troubleshooting failed to restore function, decided to use the already-on-hand LCD4075DD3 (3-32VDC control / 3-75VDC output SSR) as the RUN-trigger intermediary instead of the relay module — eliminates the coil-power-rail failure mode entirely (no JD-VCC equivalent on a solid-state device). Rewrote "Triggering RUN via USB-6009" section accordingly; TS0011 section retained as troubleshooting history under "Attempted: TS0011 Relay Module." Not yet bench-tested. |
+| 2026-08-29 | **Confirmed AC mains-side wiring convention for LCDS4048ZD3: Line only, never Neutral or Ground** | Documented under the AC Power Release Interlock section: SSR switches L only; N and GRD/PE run straight through unswitched at all times. Applies generally to any single-pole switching device in this design, not just this SSR. |
+| 2026-08-30 | **Confirmed DC-OK working as a bench-tested digital input on the USB-6009 (switch-to-ground, no pull resistor on the closed side)** | Bench setup wired DC-OK contact directly between GND and a digital input pin with no additional GND-side resistor — user confirmed this works correctly on the physical unit. Documented alongside it, for completeness, the general floating-pin rationale for why a pull resistor (10kΩ) is still needed on whichever side isn't actively driven, so the open-contact state is defined rather than floating. |
+| 2026-08-30 | **Documented plan to extend the RUN-trigger SSR pattern to other ST-PMC1 inputs (IN1, A, B)** | Same active-low COM− switching approach as RUN, one SSR per additional input needed; explicitly reuses the SSR-over-mechanical-relay lesson learned from the TS0011 troubleshooting above rather than repeating the mechanical relay attempt. |
 
 **Open items / not yet verified:**
+- Confirm DIP switch 4 (PUL/DIR vs CW/CCW mode) is set to the position that restores both-direction motion, and log the final SW4 position alongside SW1–3/SW5–8
 - Confirm OPTO output voltage against driver's opto-input rating (recommended before this was wired — flagged in port reference section above, still unconfirmed)
 - Confirm whether the A+/A− swap actually reversed direction as expected on a test run
 - Read exact model number off motor nameplate to get exact (not "typical range") current rating
 - Retest max reliable speed **under actual load** (8000/8200 figures are no-load only — loaded max will likely be lower)
 - 8200 jam: determine if this was a one-off or a repeatable failure point — recommend treating **8000 as the safe working max** until retested more thoroughly
+- Confirm relay module trigger polarity (active-LOW vs active-HIGH) and STOP's safe-state polarity before wiring the USB-6009 RUN trigger live
+- Confirm LCDS4048ZD3 minimum turn-on current against USB-6009's ~8.5mA source budget for the SSR/DC-OK interlock circuit
+- Build and bench-test the additional IN1/A/B SSR trigger circuits (currently only planned/documented, not yet wired)
 
 ---
 
-**Last Updated:** 2026-08-25  
-**Status:** 🟢 Complete specification (commissioned components identified); NEMA size and driver current now confirmed on physical unit  
-**Next Steps:** Finalize NI-DAQ integration; commission automated quench sequences; verify A+/A− swap achieved correct direction
+**Last Updated:** 2026-08-30  
+**Status:** 🟢 Complete specification (commissioned components identified); NEMA size and driver current now confirmed on physical unit. 🟡 RUN-trigger circuit mid-pivot: TS0011 relay module suspected faulty (unresolved after troubleshooting), switching to LCD4075DD3 SSR — not yet bench-tested. 🟢 DC-OK confirmed working as a bench-tested USB-6009 digital input.  
+**Next Steps:** Bench-test LCD4075DD3 as RUN trigger (P0.0 → SSR control in, SSR output → RUN/COM−); confirm STOP safe-state polarity; build/bench-test SSR trigger circuits for IN1/A/B; commission automated quench sequences; verify A+/A− swap achieved correct direction

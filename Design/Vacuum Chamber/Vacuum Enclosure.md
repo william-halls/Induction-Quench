@@ -43,6 +43,7 @@ Inert atmosphere enclosure for controlled heating and quenching without oxidatio
 - [[Design/Vacuum Chamber/Used Vacuum Chamber|Used Vacuum Chamber]] — Repurposed resin-degassing chamber (active design)
 - [[Design/Vacuum Chamber/Vacuum Chamber CAD|Vacuum Chamber CAD]] — OnShape parametric model and assembly
 - [[Design/Vacuum Chamber/Acrylic Vacuum Lid|Acrylic Vacuum Lid]] — Custom lid material, bracket mounting, and drilling notes
+- [[Design/Vacuum Chamber/Frame|Frame]] — Extrusion frame hardware and thread engagement for the support structure above the lid
 
 ### Archived Concepts
 - [[Design/Vacuum Chamber/Quartz Glass Tube|Quartz Glass Tube]] — Compact sealed-tube design (abandoned due to sealing complexity)

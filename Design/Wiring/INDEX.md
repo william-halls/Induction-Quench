@@ -16,6 +16,9 @@ Power delivery, control circuits, and instrumentation for induction heating and 
 | **[[Design/Wiring/Ball Screw Motor Control|Ball Screw Motor Control.md]]** | 24V stepper motor control system (power supply, controller, driver, motor) | 🟢 Complete |
 | **[[Design/Wiring/Control System|Control System.md]]** | Control logic, signal timing, automation sequences | 🟢 Active |
 | **[[Design/Wiring/Coil Lead Pass-Throughs|Coil Lead Pass-Throughs.md]]** | High-frequency power lead routing through chamber | 🟢 Active |
+| **[[Design/Wiring/Ambrell Contact - HOTSHOT 103927|Ambrell Contact - HOTSHOT 103927.md]]** | Draft outreach to Ambrell for HOTSHOT interlock/0-10V documentation | 🟡 Draft |
+| **[[Design/Wiring/TODO - HOTSHOT Docs & E-Stop-Wiring|TODO - HOTSHOT Docs & E-Stop-Wiring.md]]** | Action list: nameplate photos, end-stop decision, consolidated wiring diagram | 🟡 Open |
+| **[[Design/Wiring/HOTSHOT Manual - Full Transcription|HOTSHOT Manual - Full Transcription.md]]** | Full plain-text transcription of the Ameritherm HOTSHOT manual (all 49 pages) — reference so the manual photos don't need to be re-read as images | 📖 Reference |
 
 ---
 

@@ -60,9 +60,8 @@ media/
 | Image | File | Reference |
 |-------|------|-----------|
 | **Chamber CAD Overview** | `chamber-cad-overview.png` | [[Design/Vacuum Chamber/Vacuum Chamber CAD\|Vacuum Chamber CAD.md]] |
-| **Chamber Assembly** | `chamber-assembly.png` | [[Design/Vacuum Chamber/Vacuum Chamber CAD\|Vacuum Chamber CAD.md]] |
-| **Main Assembly** | `main-assembly.png` | [[Design/Vacuum Chamber/Vacuum Enclosure\|Vacuum Enclosure.md]] |
-| **Used Vacuum Chamber** | `used-vacuum-chamber.png` | [[Design/Vacuum Chamber/Used Vacuum Chamber\|Used Vacuum Chamber.md]] |
+| **Chamber Assembly** | `chamber-assembly.png` | Unused — not currently embedded in any note |
+| **Main Assembly** | `main-assembly.png` | [[Design/Vacuum Chamber/Used Vacuum Chamber\|Used Vacuum Chamber.md]] |
 
 ---
 
