@@ -1,4 +1,4 @@
----
+﻿---
 tags: [index, navigation, project-overview]
 ---
 
@@ -41,7 +41,7 @@ The vault is organized by **engineering subsystems**, each with its own design n
 | Subsystem | Purpose | Status |
 |-----------|---------|--------|
 | **[[Design/Sample Quenching/Quenching Methods\|Sample Quenching Routes]]** | Rapid cooling strategies | 🟡 In Progress |
-| **[[Design/Mechanisms/Control System\|Mechanisms & Automation]]** | Actuation, control, and safety systems | 🟡 In Progress |
+| **Mechanisms & Automation** | Actuation, control, and safety systems | 🟡 In Progress |
 
 ### Reference & History
 
@@ -86,7 +86,6 @@ Induction Quench Vault/
 │   │   └── Quartz Glass Tube.md (archived)
 │   │
 │   ├── Mechanisms/ (+ INDEX.md)
-│   │   ├── Control System.md (overview & integration)
 │   │   ├── Ceramic Mount.md (active design)
 │   │   ├── Ball Screw.md (vertical actuation)
 │   │   ├── Bottom Lift.md (rejected)
@@ -113,7 +112,7 @@ Induction Quench Vault/
 │   │   ├── Ball Screw Motor Control.md (24V stepper motor control)
 │   │   ├── Control System.md (control logic & signal timing)
 │   │   ├── Coil Lead Pass-Throughs.md (high-frequency lead routing)
-│   │   ├── Ambrell Contact - HOTSHOT 103927.md (draft vendor outreach)
+│   │   ├── HOTSHOT Manual - Full Transcription.md (full manual transcription)
 │   │   └── TODO - HOTSHOT Docs & E-Stop-Wiring.md (open action list)
 │   │
 │   └── Archive/ (+ INDEX.md)

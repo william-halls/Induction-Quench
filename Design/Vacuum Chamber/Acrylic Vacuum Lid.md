@@ -1,4 +1,4 @@
----
+﻿---
 subsystem: vacuum_chamber
 tags: [design, vacuum, chamber, lid, acrylic, fabrication]
 ---
@@ -54,5 +54,5 @@ Custom-fabricated lid for the [[Design/Vacuum Chamber/Used Vacuum Chamber|repurp
 
 - [[Design/Vacuum Chamber/Vacuum Enclosure|Vacuum Enclosure]] — Parent chamber overview
 - [[Design/Vacuum Chamber/Used Vacuum Chamber|Used Vacuum Chamber]] — Bucket base specifications
-- [[Design/Mechanisms/Control System|Mechanisms & Automation]] — Scissor (X-) lift supporting the bucket from below
+- Mechanisms & Automation — Scissor (X-) lift supporting the bucket from below
 - [[Design/Plumbing/Vertical Sliding Shaft Seal|Shaft Seal Design]] — Sample port seal in lid center

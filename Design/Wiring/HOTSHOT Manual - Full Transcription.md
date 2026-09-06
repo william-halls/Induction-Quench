@@ -1,7 +1,7 @@
 ---
 subsystem: wiring
 tags: [wiring, electrical, reference, ambrell, hotshot, manual]
-related: [[Design/Wiring/Electrical System.md]], [[Design/Wiring/Ambrell Contact - HOTSHOT 103927.md]], [[Design/Wiring/TODO - HOTSHOT Docs & E-Stop-Wiring.md]]
+related: [[Design/Wiring/Electrical System.md]], [[Design/Wiring/TODO - HOTSHOT Docs & E-Stop-Wiring.md]]
 source: media/wiring/Ameritherm HOTSHOT 103927 Manual (Doc 801-9252k).pdf
 status: reference
 ---
@@ -82,7 +82,7 @@ Your HOTSHOT uses RF energy to raise the temperature of your work-piece. Most of
 
 The power supply is fitted with an external rear panel jumper (CTB1:15-16) which must be removed to insert any safety switches required.
 
-**⚠ This is the key quote for E-stop scope: the manual describes this purely as an internal 24Vdc control-rail interlock. It never states this loop disconnects mains/chassis power. Treat "fully de-energizes" as unconfirmed for compliance purposes — see [[Design/Wiring/Ambrell Contact - HOTSHOT 103927.md]].**
+**⚠ This is the key quote for E-stop scope: the manual describes this purely as an internal 24Vdc control-rail interlock. It never states this loop disconnects mains/chassis power. Treat "fully de-energizes" as unconfirmed for compliance purposes.**
 
 ### 1.2 Front and Rear Panels
 
@@ -827,5 +827,4 @@ Navigate to Menu Selection → Heat Station → select ▶Modify Tap → select 
 
 ## See also
 - [[Design/Wiring/Electrical System.md]] — curated/verified subset of this data (CTB1 pinout table, power ratings) integrated into the project's wiring design
-- [[Design/Wiring/Ambrell Contact - HOTSHOT 103927.md]] — outreach draft and history of what was confirmed from this manual, and when
 - [[Design/Wiring/TODO - HOTSHOT Docs & E-Stop-Wiring.md]] — action items depending on this manual's content

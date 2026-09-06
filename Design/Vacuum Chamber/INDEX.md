@@ -1,4 +1,4 @@
----
+﻿---
 subsystem: vacuum_chamber
 tags: [index, vacuum-chamber, containment-systems]
 ---
@@ -33,7 +33,7 @@ Inert atmosphere enclosure for controlled heating and quenching without oxidatio
   - *Connection*: Thermocouple feedthrough; pressure transducer monitoring vacuum; safety interlock signals
 
 ### 🔧 Sample Handling
-- **[[Design/Mechanisms/Control System\|Mechanisms & Automation]]** — Sample positioning & access
+- **Mechanisms & Automation** — Sample positioning & access
   - *Connection*: Sample mount installs in chamber; door interlock prevents opening under vacuum; scissor lift for maintenance
 
 ### 💧 Plumbing

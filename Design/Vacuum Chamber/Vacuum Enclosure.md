@@ -1,4 +1,4 @@
----
+﻿---
 subsystem: vacuum_chamber
 tags: [design, vacuum, chamber, inert-atmosphere, containment]
 ---
@@ -52,6 +52,6 @@ Inert atmosphere enclosure for controlled heating and quenching without oxidatio
 
 - [[Design/Coil Geometry/Induction Coil|Coil Geometry]] — Houses the induction coil
 - [[Design/Plumbing/Fluid Systems|Plumbing & Fluid Systems]] — Vacuum pump, inert gas, quench medium lines
-- [[Design/Mechanisms/Control System|Mechanisms & Automation]] — Access door, pressure relief, scissor lift
+- Mechanisms & Automation — Access door, pressure relief, scissor lift
 - [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] — Pressure monitoring via NI-9219; thermocouple feedthrough for temperature feedback
 - [[Design/Archive/Design History|Design Archive]] — Previous chamber designs and material trials

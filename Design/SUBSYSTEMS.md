@@ -1,4 +1,4 @@
----
+﻿---
 tags: [navigation, subsystems, interconnections, design-map]
 ---
 
@@ -82,8 +82,8 @@ Each folder contains an INDEX.md with detailed connections:
 5. **Monitoring** → [[Design/Wiring/INDEX|Thermocouple]] records thermal profile
 
 ### During Quench (Critical Phase)
-1. **Trigger Event** → [[Design/Mechanisms/Control System\|Manual valve activation]]
-2. **Medium Release** → [[Design/Plumbing/Fluid Systems\|Quench system]] delivers cooling medium
+1. **Trigger Event** → Ball screw actuation commanded (manual or automated)
+2. **Immersion** → [[Design/Mechanisms/Ball Screw\|Ball screw]] drops the sample (still clamped in its mount) down into the water bath — no separate release/drop mechanism; the mount never lets go of the sample
 3. **Rapid Cool** → [[Design/Sample Quenching/Quenching Methods\|Sample cools]] to room temp
 4. **Data Capture** → [[Design/Wiring/INDEX|Pressure spike]] recorded; timing logged
 
@@ -119,15 +119,16 @@ Each folder contains an INDEX.md with detailed connections:
 - [[Design/Wiring/INDEX|Pressure monitoring]]
 
 ### Control Path
-**User Input → Solenoid Valve → Quench Medium → Sample**
+**User Input → Ball Screw Actuation → Sample Immersed in Quench Medium (pre-filled bath)**
 - Dependency: Timing between end of heating and start of quench critical
 - Dependency: Emergency stop must kill all power immediately
 - Critical: Interlock prevents heating without vacuum
+- Note: No release/drop mechanism — the sample stays clamped in its mount for the entire cycle; the ball screw does the physical work of getting it into the quench medium
 
 **Subsystems Involved:**
-- [[Design/Mechanisms/Control System\|Manual/automated control]]
+- Manual/automated control
 - [[Design/Wiring/INDEX|Electrical signals]]
-- [[Design/Plumbing/INDEX|Valve actuation]]
+- [[Design/Mechanisms/Ball Screw|Ball screw actuation]]
 
 ### Data Path
 **Thermocouple → Feedthrough → Amplifier → Logger**
@@ -163,7 +164,7 @@ Each folder contains an INDEX.md with detailed connections:
 ### [[Design/Plumbing/INDEX|Plumbing]]
 - ✅ **Active**: Air control assembly, coil lead pass-throughs, shaft seal
 - ⏳ **Pending**: Thermocouple feedthrough design, quench medium selection
-- 🔗 **Connects To**: Vacuum pump, argon supply, cooling water, quench valve
+- 🔗 **Connects To**: Vacuum pump, argon supply, cooling water, quench water bath (fill only — no quench valve; ball screw drives immersion)
 
 ### [[Design/Sample Quenching/INDEX|Sample Quenching]]
 - ✅ **Reference**: Charpy geometries (standard + modified)

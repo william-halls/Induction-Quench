@@ -1,4 +1,4 @@
----
+﻿---
 tags: [project, induction-quench, research, materials-science]
 ---
 
@@ -30,7 +30,7 @@ The instrument design is organized into **interconnected subsystems**:
 
 ### Functional Integration
 - **[[Design/Sample Quenching/Quenching Methods|Sample Quenching Routes]]** — Cooling strategies and methods
-- **[[Design/Mechanisms/Control System|Mechanisms & Automation]]** — Actuation, control, and safety systems
+- **Mechanisms & Automation** — Actuation, control, and safety systems
 
 ### Reference  
 - **[[Design/Archive/Design History|Design Archive]]** — Historical designs and rejected concepts

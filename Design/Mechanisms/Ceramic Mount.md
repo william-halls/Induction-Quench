@@ -1,4 +1,4 @@
----
+﻿---
 subsystem: mechanisms
 tags: [mechanisms, sample-mounting, current-design, active]
 ---
@@ -97,7 +97,7 @@ Simple two-part sample holder using a threaded boron nitride cylinder and stainl
 
 ## Related Mechanisms
 
-- [[Design/Mechanisms/Control System|Control System]] — Part of overall automation architecture
+- Control System — Part of overall automation architecture
 - [[Design/Mechanisms/Ball Screw|Ball Screw]] — Potential future linear actuation
 - [[Design/Mechanisms/Bottom Lift|Bottom Lift]] — Alternative lifting mechanism (rejected)
 - [[Design/Mechanisms/Titanium Claw|Titanium Claw]] — Multi-part gripper approach (rejected due to heat sink effect)

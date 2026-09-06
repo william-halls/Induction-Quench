@@ -23,7 +23,7 @@ Mechanical systems, actuation, control logic, and safety interlocks for repeatab
 ### Control & Operation (Prototype Phase)
 - **Heating**: Manual ramp control via power supply
 - **Temperature Monitoring**: Thermocouple measurement (planned instrumentation)
-- **Quench Trigger**: Manual valve actuation or timer-based
+- **Quench Trigger**: Manual ball screw actuation (lowers sample into water bath) or timer-based — no valve involved
 - **Data Logging**: Thermocouple + pressure readings (via external equipment)
 - **Safety Interlocks**: Vacuum pressure monitoring required before heating; emergency vent available
 
@@ -70,7 +70,7 @@ Mechanical systems, actuation, control logic, and safety interlocks for repeatab
 - [[Design/Wiring/Electrical System|Wiring & Electrical]] — Control signals, sensor inputs, actuator power
 - [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] — Automated control system (active development)
 - [[Design/Mechanisms/Ball Screw|Ball Screw]] — Linear actuation via NEMA 23 stepper motor
-- [[Design/Plumbing/Fluid Systems|Plumbing & Fluid Systems]] — Quench valve control, pump relay
+- [[Design/Plumbing/Fluid Systems|Plumbing & Fluid Systems]] — Water bath fill/drain (no quench valve; ball screw drives the quench-immersion trigger)
 - [[Design/Sample Quenching/Quenching Methods|Sample Quenching Routes]] — Quench triggering mechanism
 - [[Design/Vacuum Chamber/Vacuum Enclosure|Vacuum Chamber]] — Door/access interlocks
 - [[Design/Archive/Design History|Design Archive]] — Previous control schemes and automation attempts

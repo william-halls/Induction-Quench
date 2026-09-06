@@ -1,4 +1,4 @@
----
+﻿---
 subsystem: wiring
 tags: [design, wiring, electrical, power-delivery, control-systems]
 ---
@@ -33,7 +33,7 @@ Still no manuals for the 301-0243D handheld control or the chiller — if physic
 
 | Pins | Function | Detail |
 |---|---|---|
-| 1–2 | Remote analog Input | Default 0-10Vdc, **input impedance Zin = 21kΩ** (1=+, 2=−, jumper set upper); jumper-selectable to 4-20mA, Zin = 250Ω (250Ω resistor included, jumper set lower). Requires touch-pad: System Options → Control From → Rear Panel. Scaling/linearity: manual references "see §3" (rear panel connection instructions) but doesn't spell out an explicit 0V→0%/10V→100% table — treat as the standard linear assumption unless a follow-up with Ambrell says otherwise |
+| 1–2 | Remote analog Input | Default 0-10Vdc, **input impedance Zin = 21kΩ** (1=+, 2=−, jumper set upper); jumper-selectable to 4-20mA, Zin = 250Ω (250Ω resistor included, jumper set lower). Requires touch-pad: System Options → Control From → Rear Panel. **Scaling confirmed by bench measurement 2026-09-06 — not a simple 0V=0%/10V=100% linear ramp**: ~1.10V turn-on threshold, linear `Amps ≈ 137×V − 151` from ~1.10V–5.1V, then saturates at a 550A ceiling (likely the Icap/tap-cap limit) from ~5.1V up to 10V. Full data table in [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] "HOTSHOT Setpoint Calibration Curve" |
 | 3–4 | START | Provide isolated contact closure (contacts rated 24Vdc min, required wetting current 3mA) |
 | 4–5 | STOP | Normally closed loop; opening = STOP |
 | 6–7 | FLS (flow switch) | Internally jumpered by default; remove jumper to wire external N.O. flow switch. Opened contact = Fault. Rated 19Vdc @ 0.1A |
@@ -59,9 +59,9 @@ Still no manuals for the 301-0243D handheld control or the chiller — if physic
 - **Line-to-coil efficiency**: >90%
 - Frequency (50-60Hz) is the mains AC line frequency, not the RF output — RF output frequency is the 150-400kHz row above
 
-**Resolved (2026-09-05)** — both prior open items from [[Design/Wiring/Ambrell Contact - HOTSHOT 103927.md]] are now answered by manual §4.2:
+**Resolved (2026-09-05)** — both prior open items (previously tracked in a since-removed Ambrell outreach draft, superseded once the full manual was on hand) are now answered by manual §4.2:
 - E-stop is confirmed as a control-circuit interlock (24V rail across CTB1:15-16, rated 3Adc min, N.C., opens = STOP) — the manual still never states it disconnects mains/chassis power, so for compliance purposes this remains a control-only interlock unless Ambrell confirms otherwise.
-- 0-10V remote input impedance is confirmed: **Zin = 21kΩ** (4-20mA alternative: Zin = 250Ω). Exact scaling (0V=0%/10V=100%) is implied but not spelled out verbatim in the table — good enough to design the NI-9263 interface (9263 output impedance is far below 21kΩ, so no loading concern), but worth a courtesy follow-up to Ambrell if exact linearity needs to be certified.
+- 0-10V remote input impedance is confirmed: **Zin = 21kΩ** (4-20mA alternative: Zin = 250Ω) — output impedance of the driving NI AO module (now NI-9269, not 9263) is far below 21kΩ, so no loading concern. **Scaling is not linear across the full 0-10V range** — bench-measured 2026-09-06 (see [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]]): ~1.10V turn-on threshold, `Amps ≈ 137×V − 151` linear region up to ~5.1V, then a hard 550A ceiling from ~5.1V to 10V (likely the Icap/tap-cap safe limit). Worth a courtesy follow-up to Ambrell only if this ceiling needs explaining/certifying — otherwise treat the measured curve as authoritative.
 
 ### Control Systems (24V DC)
 
@@ -94,7 +94,7 @@ Still no manuals for the 301-0243D handheld control or the chiller — if physic
 ## Integration Points
 
 - [[Design/Coil Geometry/Induction Coil|Coil Geometry]] — Coil load impedance and connections
-- [[Design/Mechanisms/Control System|Mechanisms & Automation]] — Control signals and feedback loops
+- Mechanisms & Automation — Control signals and feedback loops
 - [[Design/Mechanisms/Ball Screw Motor Control|Ball Screw Motor Control]] — 24V stepper power, motion controller, homing signals
 - [[Design/Plumbing/Fluid Systems|Plumbing & Fluid Systems]] — Pump/valve control circuits
 - [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] — Detailed automated control system implementation

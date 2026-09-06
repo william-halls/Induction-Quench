@@ -1,4 +1,4 @@
----
+﻿---
 subsystem: plumbing
 tags: [design, plumbing, gas-lines, fluid-systems, vacuum]
 ---
@@ -43,6 +43,6 @@ Gas delivery, vacuum evacuation, and quenching medium circulation systems for ch
 
 - [[Design/Vacuum Chamber/Vacuum Enclosure|Vacuum Chamber]] — Chamber connections and feedthroughs
 - [[Design/Sample Quenching/Quenching Methods|Sample Quenching Routes]] — Quench delivery method
-- [[Design/Mechanisms/Control System|Mechanisms & Automation]] — Flow control valve actuation
+- Mechanisms & Automation — Flow control valve actuation
 - [[Design/Wiring/Electrical System|Wiring & Electrical]] — Pump power and control signals
 - [[Design/Archive/Design History|Design Archive]] — Previous fluid system configurations

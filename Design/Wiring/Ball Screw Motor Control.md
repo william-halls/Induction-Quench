@@ -1,4 +1,4 @@
----
+﻿---
 subsystem: mechanisms
 tags: [design, mechanisms, motor-control, stepper-driver, wiring, automation]
 ---
@@ -152,16 +152,16 @@ At 10A output, it provides 2× headroom for a typical NEMA 23 stepper (5A) plus 
 ```
 Program: "Home and Raise 100 Steps"
 Line 1: Move 100 steps, CW direction, 20 kHz frequency
-Line 2: Output relay 1 (trigger cooling valve)
+Line 2: Output relay 1 (generic auxiliary output — NOT used for quenching; quench is triggered by motion alone, see "Control Sequence Example" below)
 Line 3: Wait 5 seconds
 Line 4: Move 100 steps, CCW direction, 20 kHz frequency
 ```
 
 **Typical Usage in Induction-Quench:**
 1. Initialize at home position (limit switch input)
-2. Raise sample shaft to defined height
-3. Trigger quench sequence (relay output to solenoid valve)
-4. Lower shaft back to rest position
+2. Raise sample shaft into the coil for heating
+3. Quench by lowering the shaft back down into the water bath — the lowering motion itself is the quench trigger; no relay/valve involved
+4. Hold submerged for the quench duration
 5. Wait for cool-down before repeat
 
 **Sources:**
@@ -181,7 +181,7 @@ Ports as labeled on the back of the physical controller, top to bottom:
 |---|---|
 | +24V | Power input to controller |
 | GRD | Power ground |
-| OUT3, OUT2, OUT1 | The 3 relay outputs (e.g. trigger quench valve solenoid) |
+| OUT3, OUT2, OUT1 | The 3 relay outputs (general-purpose auxiliary outputs — not used for quenching; quench is a pure motion event, no valve) |
 | **OPTO** | Common/return rail for the opto-isolated output stage (CP, CW, likely OUT1–3) — a **separate isolated common, not the same node as GRD** |
 | CW | Direction output (switching signal) |
 | CP | Pulse output (switching signal) |
@@ -524,61 +524,63 @@ AC SUPPLY                POWER SUPPLY                CONTROLLER
 
 ## Control Sequence Example: Sample Lift & Quench
 
+**Decided (2026-09-06): quenching is a pure ball-screw motion event.** The sample is lowered — still clamped in its mount — directly into a water bath. There is no release mechanism and no quench valve; nothing sprays onto the sample and nothing lets go of it. The bath itself is filled/maintained separately (see [[Design/Plumbing/Fluid Systems|Plumbing & Fluid Systems]]), independent of this motion sequence.
+
 Here's a typical motion sequence programmed into the ST-PMC1:
 
 ```
 ╔══════════════════════════════════════════════════════════════╗
-║  SEQUENCE: "Raise Sample, Trigger Quench, Lower"           ║
+║  SEQUENCE: "Raise Into Coil, Quench By Lowering Into Bath"  ║
 ║  (Typical operation during induction-quench test)           ║
 ╚══════════════════════════════════════════════════════════════╝
 
-Line  Operation          Frequency  Steps   Direction  Relay
-────  ─────────────────  ──────────  ──────  ─────────  ──────
-  1   Move home          1 kHz       50      CW         OFF
-      (press limit sw)   
+Line  Operation          Frequency  Steps   Direction
+────  ─────────────────  ──────────  ──────  ─────────
+  1   Move home          1 kHz       50      CW
+      (press limit sw — sample rests at/in the water bath)
 
-  2   Wait for thermal   -           -       -          OFF
-      equilibrium        
-      (manual timer or 
-       external trigger)
-
-  3   Raise sample       20 kHz      200     CCW        OFF
+  2   Raise sample       20 kHz      200     CCW
+      into coil          
       (2 rotations @     
        5mm lead =        
        10mm height)
 
-  4   Hold position      -           -       -          OFF
+  3   Wait for thermal   -           -       -
+      equilibrium        
+      (manual timer or 
+       external trigger)
+
+  4   Hold position      -           -       -
       (coils locked,
        sample steady)
 
-  5   Trigger quench     -           -       -          ON
-      relay pulse        
-      (opens solenoid
-       valve)
+  5   Quench: lower       20 kHz      200     CW
+      sample back down
+      into the water bath
+      (the lowering motion
+       IS the quench —
+       no relay/valve)
 
-  6   Wait for quench    2 sec       -       -          OFF
-      medium to flow
+  6   Hold submerged     2 sec       -       -
+      (quench duration)
 
-  7   Lower sample       20 kHz      200     CW         OFF
-      (return to start)
-
-  8   Jump to Line 2     -           -       -          OFF
+  7   Jump to Line 2     -           -       -
       if button pressed
       (repeat cycle)
 
 Motion Timing Breakdown:
 ─────────────────────────────────────────────────────────────
-Step 1-2:   Setup & heating (external equipment controls)
-Step 3:     Raise 10mm = 200 steps ÷ 20 kHz = 10 ms
-Step 4:     Sample stable at elevated position
-Step 5:     Quench valve opens (relay energized)
-Step 6:     Cooling medium jets impact sample
-Step 7:     Lower 10mm = 200 steps ÷ 20 kHz = 10 ms
-Step 8:     Wait for cool-down (manual or timer-based)
+Step 1:     Home position — sample at/in the water bath (dry-idle vs. wet-idle at rest is TBD)
+Step 2:     Raise 10mm = 200 steps ÷ 20 kHz = 10 ms, into the coil for heating
+Step 3-4:   Heating (external equipment controls); sample stable at elevated position
+Step 5:     Lower 10mm = 200 steps ÷ 20 kHz = 10 ms — sample re-enters the water bath (quench trigger)
+Step 6:     Hold submerged for quench duration (manual or timer-based)
 
 Total active motion time: ~20 ms
 Total cycle time: 10 minutes (dominated by heating & cool-down)
 ```
+
+**Open question:** whether the home/rest position sits exactly at the water surface or whether additional downward travel beyond home is needed to fully submerge the sample in the bath — needs confirming against actual bath depth once built.
 
 ---
 
@@ -623,10 +625,10 @@ The ball screw motor control system enables:
 | Subsystem | Connection | Status |
 |-----------|-----------|--------|
 | **[[Design/Mechanisms/Ceramic Mount\|Ceramic Mount]]** | Ball screw shaft couples to mount base; controls vertical position | 🟢 Active |
-| **[[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Architecture]]** | ST-PMC1 receives start commands from NI-9263; coordinates with quench valve timing | ⏳ Pending Integration |
+| **[[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Architecture]]** | ST-PMC1 receives start commands from NI-9263; no valve timing to coordinate — quench is the lowering motion itself | ⏳ Pending Integration |
 | **[[Design/Vacuum Chamber/Vacuum Enclosure\|Vacuum Chamber]]** | Shaft passes through chamber lid via seal; motor outside chamber | 🟢 Designed |
-| **[[Design/Plumbing/Fluid Systems\|Plumbing & Valves]]** | Relay outputs from ST-PMC1 can trigger solenoid quench valve | ⏳ Configuration Pending |
-| **[[Design/Sample Quenching/Quenching Methods\|Quenching Methods]]** | Motor timing can synchronize sample position with quench medium release | 🟢 Conceptual |
+| **[[Design/Plumbing/Fluid Systems\|Plumbing & Valves]]** | Water bath is filled/maintained independently of the ball screw; no quench valve exists | 🟢 Decided |
+| **[[Design/Sample Quenching/Quenching Methods\|Quenching Methods]]** | Motor lowers sample directly into the pre-filled water bath — immersion, not medium release | 🟢 Decided |
 
 See [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] for full automated integration.
 
@@ -1250,7 +1252,7 @@ Once homed, the ball screw system achieves:
 - [[Design/Mechanisms/Ball Screw|Ball Screw.md]] — Mechanical assembly & CAD models
 - [[Design/Mechanisms/Ceramic Mount|Ceramic Mount.md]] — Sample holder coupled to ball screw
 - [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] — Automated integration
-- [[Design/Mechanisms/Control System|Control System.md]] — Overall system logic
+- Control System.md — Overall system logic
 - [[Design/Archive/Design History|Design History]] — Why ball screw chosen over alternatives
 
 **External Datasheets & Manuals:**

@@ -1,4 +1,4 @@
----
+﻿---
 subsystem: wiring
 tags: [wiring, control-system, NI-DAQ, automation, PID, stepper-motor]
 ---
@@ -20,7 +20,7 @@ Automated control system for PID-based induction coil power management and auxil
 
 1. **Induction Coil Power** — PID loop to maintain target temperature
 2. **Ball Screw** — Automatic linear motion (stepper motor driven)
-3. **Water Filling System** — Automatic control (solenoid valve or pump)
+3. **Water Filling System** — Automatic control (solenoid valve or pump) — fills/maintains the bath only; not part of the quench trigger itself
 4. **Future: Air Purging** — Automatic oxygen removal + argon backfill
 
 ---
@@ -51,11 +51,11 @@ Automated control system for PID-based induction coil power management and auxil
 ### External Equipment
 
 - **Laptop**: Runs control software (LabVIEW, Python, C#)
-- **Induction Power Supply**: Takes 0-10V analog control signal — **confirmed 2026-09-01** via HOTSHOT manual (Doc# 801-9252k.doc): CTB1 pins 1(+)/2(−), default 0-10Vdc, jumper-selectable to 4-20mA. Requires touch-pad setting System Options → Control From → Rear Panel. See [[Design/Wiring/Electrical System|Electrical System]] for full CTB1 pinout. Exact scaling/linearity (10V = 100%?) still unconfirmed.
+- **Induction Power Supply**: Takes 0-10V analog control signal — **confirmed 2026-09-01** via HOTSHOT manual (Doc# 801-9252k.doc): CTB1 pins 1(+)/2(−), default 0-10Vdc, jumper-selectable to 4-20mA. Requires touch-pad setting System Options → Control From → Rear Panel. See [[Design/Wiring/Electrical System|Electrical System]] for full CTB1 pinout. **Scaling/linearity confirmed by bench measurement 2026-09-06 — see "HOTSHOT Setpoint Calibration Curve" below.**
 - **Stepper Motor Controller**: NEMA 23 2-phase driver (model TBD)
   - Current status: Unknown input type (pulse/direction vs. analog vs. serial)
   - Power supply: Existing (size/voltage TBD)
-- **Solenoid Valve(s)**: 24V for quench trigger + water filling
+- **Solenoid Valve(s)**: 24V for water filling only — NOT used for quench triggering; quenching is done by the ball screw lowering the sample into the (separately filled) water bath, with no valve or release mechanism involved
 - **Optional Pump**: Diaphragm pump for water circulation (24V option)
 
 ---
@@ -329,6 +329,39 @@ Each channel is configured with these parameters (x = channel 1 or 2):
 
 **Source:** [TXDIN70 datasheet, Omega](https://assets.omega.com/spec/TXDIN70.pdf); [TXDIN70 User's Guide, Omega/Dwyer (M4544)](https://assets.dwyeromega.com/manuals/communication-and-connectivity/signal-conditioners-and-transmitters/signal-conditioners/M4544.pdf)
 
+### HOTSHOT Setpoint Calibration Curve (confirmed 2026-09-06)
+
+Bench-measured with `Control From` set to **Rear Panel** and `Start From` left on **Front Panel** (physical START/STOP buttons, no CTB1:3-5 wiring yet), sweeping a 0-10V command onto CTB1:1-2 and reading the resulting Setpoint/Output current off the front panel display:
+
+| Command (V) | Output (A) |
+|---|---|
+| 1.0 | 7.7–8.8 |
+| 1.2 | 13 |
+| 1.3 | 27.5 |
+| 1.4 | 40.7 |
+| 1.5 | 55 |
+| 1.6 | 68.2 |
+| 2.0 | 123.2 |
+| 3.0 | 260 |
+| 4.0 | 397 |
+| 5.0 | 534 |
+| 6.0 | 550 |
+| 10.0 | 550 |
+
+**Not a single 0-10V→0-100% linear ramp.** The data fits a threshold + linear + saturation model:
+
+1. **Turn-on threshold ≈ 1.10V.** Below this, RF output is effectively off (the 1.0V reading of ~8A sits just under the knee, consistent with the fitted line crossing zero at 1.10V rather than a separate "dead zone").
+2. **Linear region, ~1.10V–~5.1V**: fits **`Amps ≈ 137 × V − 151`** almost exactly (predicted vs. actual matches to within ~1A across 1.2V–5.0V).
+3. **Saturation ceiling at 550A, from ~5.1V up to 10V.** Output stops climbing entirely — 6V and 10V both read 550A. This is most likely the HOTSHOT's **Icap** (capacitor safe-current) limit for the current tap/cap setting (§2.3 of the manual: "you are attempting to adjust Setpoint above safe limit for capacitors used"), not a wiring or DAQ scaling problem. **Still open**: visually confirm an `Icap`/`Limit`/`L*` indicator appears on the display at ≥5.1V commanded, to fully confirm this theory rather than some other cause.
+
+**Control software implication**: usable proportional-control range is **1.10V–5.1V**, mapping to roughly **0–550A**. Inverse mapping for a PID output stage: `V = (Amps + 151) / 137`, clamped to [1.10, 5.1]. Commanding above 5.1V wastes range (pinned at 550A); below 1.10V produces no output.
+
+**PID software architecture decision (2026-09-06):** run the PID loop's output in **Amps**, with `PID Advanced.vi` Output Range set to **Low = 0, High = 550** (anti-windup clamps at the real saturation ceiling). The Amps→Volts conversion (`V = (Amps+151)/137`, clamped [1.10, 5.1]) happens as a separate step *after* the PID block, not inside its tuning.
+
+**"Off" cutoff at 50A**: rather than special-casing an explicit heating-off branch, treat any PID output **≤50A as off** (write ~0V / skip HeatOn) instead of passing it through the voltage-conversion formula. Rationale: physically, anything up to ~50A doesn't do meaningful induction heating work on the part regardless of what the display shows — so the entire electrical turn-on knee (1.0V→~8A, 1.2V→13A, i.e. the non-smooth jump right at RF turn-on) sits inside a range that's already irrelevant to the process. No need to smooth or finely control that region at all; just treat all of it as "off." This means the meaningful controllable range is effectively **off, or ~50A+ up to 550A** — fine for this application since the goal is regulating toward a hot setpoint, not holding a precise low-current simmer.
+
+**To raise the 550A ceiling** (if more current is ever needed): would require changing the transformer tap per manual §3.4 ("start high, work down" rule) — only with no part in the coil, and only if actually needed for the process.
+
 ### Status outputs (CTB1:8-13) — read-only, no SSR needed
 
 Ready / HeatOn / Fault are solid-state contact **outputs from** the HOTSHOT (no polarity, 1A limit) — read these into free 6009 digital inputs with pull-up resistors, same pattern already used for the SOLA DC-OK status read. Not yet wired; optional future addition.
@@ -350,7 +383,7 @@ Ready / HeatOn / Fault are solid-state contact **outputs from** the HOTSHOT (no 
 | Stepper controller model | ✅ Identified | [[Design/Mechanisms/Ball Screw Motor Control|ST-PMC1 (SN: 170120011) + TB6600 (SN: 170120011)]] |
 | Stepper controller input type | ✅ Pulse/Direction | NI-DAQ Option A: Standalone; Option B: NI-9425 for real-time control |
 | Stepper motor model | ✅ Identified | [[Design/Mechanisms/Ball Screw Motor Control|NEMA 23 with ball screw (SN: 161104226)]] |
-| Power supply control interface | ✅ Confirmed, native direct drive | CTB1:1-2 stays in default 0-10Vdc mode; NI-9269 drives it directly, no isolator/current-loop conversion needed (2026-09-01, supersedes prior 6009+isolator plan); exact scaling/linearity still TBD |
+| Power supply control interface | ✅ Confirmed, native direct drive, scaling measured | CTB1:1-2 stays in default 0-10Vdc mode; NI-9269 drives it directly, no isolator/current-loop conversion needed (2026-09-01, supersedes prior 6009+isolator plan); scaling confirmed by bench measurement 2026-09-06 — see "HOTSHOT Setpoint Calibration Curve" above (1.10V threshold, `Amps ≈ 137×V − 151` linear region, 550A ceiling ≥5.1V) |
 | E-stop interlock interface | ✅ Confirmed pinout, ⏳ scope TBD | CTB1:15-16, N.C., 24V@3A min (2026-09-01) — see [[Design/Wiring/Electrical System|Electrical System]]; unclear if it also cuts mains/chassis power or only internal 24V rail |
 | HOTSHOT START/STOP automation | ⏳ START planned, STOP pending decision | See "HOTSHOT Control — Consolidated onto NI cDAQ-9174" section above (2026-09-01) |
 | Water system mechanism | ✅ Diaphragm pump, DC SSR | 24V DC pump confirmed (not AC) — needs dedicated DC-rated SSR, not the AC power-release SSR; see [[Design/Wiring/Ball Screw Motor Control|Ball Screw Motor Control]] SSR inventory (2026-09-01) |
@@ -364,10 +397,11 @@ Ready / HeatOn / Fault are solid-state contact **outputs from** the HOTSHOT (no 
 ## Quick Links
 
 📖 **Related Documentation:**
+- [[Design/Wiring/Heat Curve Profile Software|Heat Curve Profile Software]] — multi-segment ramp/hold GUI and execution engine built on top of this PID loop
 - [[Design/Wiring/INDEX|Wiring Subsystem INDEX]]
 - [[Design/Wiring/Electrical System|Electrical System Overview]]
 - [[Design/Mechanisms/Ball Screw Motor Control|Ball Screw Motor Control (Complete Specification)]]
-- [[Design/Mechanisms/Control System|Mechanisms & Automation (Manual Phase)]]
+- Mechanisms & Automation (Manual Phase)
 - [[Design/Plumbing/Fluid Systems|Fluid Systems & Valve Control]]
 - [[Design/Coil Geometry/Induction Coil|Induction Coil Specifications]]
 

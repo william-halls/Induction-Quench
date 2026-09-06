@@ -1,4 +1,4 @@
----
+﻿---
 subsystem: sample_quenching
 tags: [index, sample-quenching, cooling, heat-treatment, sample-geometry]
 ---
@@ -27,18 +27,18 @@ Sample geometries, rapid cooling strategies, and quenching methods for achieving
 - **[[Design/Vacuum Chamber/Vacuum Enclosure\|Vacuum Chamber]]** — Contains quenching medium; pressure affects boil-off
   - *Connection*: Chamber volume determines medium capacity; vacuum level affects water boiling; material survives thermal shock
 
-- **[[Design/Plumbing/Fluid Systems\|Plumbing & Fluid Systems]]** — Quench medium delivery & circulation
-  - *Connection*: Valve controls medium flow; pump options for spray delivery; 24V diaphragm pump available
+- **[[Design/Plumbing/Fluid Systems\|Plumbing & Fluid Systems]]** — Water bath fill/circulation (pre-filled/static, not delivered to the sample)
+  - *Connection*: No quench valve; the water bath just needs to be filled/maintained ahead of time. 24V diaphragm pump remains a candidate alternate (spray) method, not current design
 
-### 🔧 Mechanical Release
-- **[[Design/Mechanisms/Control System\|Mechanisms & Automation]]** — Sample positioning & release timing
-  - *Connection*: Sample holder (ceramic mount) must survive quench temperature; timing between heating & quenching critical
+### 🔧 Mechanical Immersion
+- **[[Design/Mechanisms/INDEX|Mechanisms & Automation]]** — Ball screw drives immersion; no release mechanism
+  - *Connection*: Sample holder (ceramic mount) must survive quench temperature and never releases the sample; timing between heating & quenching critical
 
 ### ⚡ Control Timing
-- **[[Design/Wiring/Electrical System\|Wiring & Electrical]]** — Quench trigger signals, solenoid valve activation
+- **[[Design/Wiring/Electrical System\|Wiring & Electrical]]** — Quench trigger signals (ball screw actuation, not a valve)
   - *Connection*: Timer-based or manual trigger; feedback from sensors (temp, pressure) may inform quench decision
 - **[[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Control Architecture]]** — Automated quench triggering via NI-9263
-  - *Connection*: Software triggers quench valve; temperature/time-based logic; data logging of quench event and pressure spike
+  - *Connection*: Software triggers the ball screw to lower the sample into the bath; temperature/time-based logic; data logging of quench event and pressure spike
 
 ---
 
@@ -62,7 +62,7 @@ Sample geometries, rapid cooling strategies, and quenching methods for achieving
 
 ## Quenching Strategy Decision Matrix
 
-**Status**: TBD — Material properties and experimental objectives will determine cooling rate targets.
+**Status**: Water quench via ball-screw immersion is the decided approach (see [[Design/Sample Quenching/Quenching Methods|Quenching Methods]] "Delivery Mechanism"). Oil/gas/spray remain candidate alternatives, not currently implemented.
 
 ### Candidate Methods
 
@@ -70,13 +70,14 @@ Sample geometries, rapid cooling strategies, and quenching methods for achieving
 - Cooling rate: Fast (material-dependent)
 - Pros: Good control, high cooling power
 - Cons: Oxidation risk, post-quench cleanup required
-- Candidate: TBD
+- Candidate: Alternate, not current design
 
-**Water Quench**
+**Water Quench (current)**
 - Cooling rate: Very fast
 - Pros: Rapid cooling, readily available
 - Cons: Oxidation if not in inert chamber, thermal shock, boiling at vacuum
-- Candidate: TBD (water boil-off concern in vacuum)
+- Delivery: Sample lowered into a pre-filled water bath by the ball screw — no valve, no release mechanism
+- Note: Water boil-off concern in vacuum still applies
 
 **Gas Quench (Argon/Nitrogen)**
 - Cooling rate: Slower (material-dependent)

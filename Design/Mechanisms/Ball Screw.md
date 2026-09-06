@@ -32,7 +32,7 @@ Similar to the FUYU FSK40E series but unbranded. The actual parts and stepper ar
 
 **Automated Control** (in development):
 - See [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] for integration with NI-9263 signal output
-- ST-PMC1 can receive start/stop commands from external triggers; coordinate motor timing with quench valve relay outputs
+- ST-PMC1 can receive start/stop commands from external triggers; the quench itself is the ball screw lowering the sample into the water bath — no quench valve or relay-triggered release involved
 - See [[Design/Mechanisms/Ball Screw Motor Control|Motor Control documentation]] for detailed commissioning guide
 
 ## Shaft Clamp Design

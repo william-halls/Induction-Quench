@@ -1,4 +1,4 @@
----
+﻿---
 subsystem: plumbing
 tags: [index, plumbing, fluid-systems, vacuum, gas-delivery]
 ---
@@ -31,18 +31,18 @@ Gas delivery, vacuum evacuation, and quenching medium circulation systems for ch
   - *Connection*: Coil lead pass-throughs carry high-frequency power; cooling water inlet/outlet
 
 ### ❄️ Quenching
-- **[[Design/Sample Quenching/Quenching Methods\|Sample Quenching Routes]]** — Quench medium delivery
-  - *Connection*: Quench valve controls medium flow; 24V diaphragm pump option for spray nozzle
+- **[[Design/Sample Quenching/Quenching Methods\|Sample Quenching Routes]]** — Water bath, immersion-quenched
+  - *Connection*: Bath is pre-filled/maintained by plumbing; sample is immersed by the [[Design/Mechanisms/Ball Screw|ball screw]], not delivered via valve; 24V diaphragm pump remains a candidate alternate method (spray quench) but is not the current design
 
 ### 🔧 Control & Actuation
-- **[[Design/Mechanisms/Control System\|Mechanisms & Automation]]** — Valve/pump control, pressure monitoring
-  - *Connection*: Solenoid valve triggers quench; pressure relief for safety; feedback signals
+- **[[Design/Mechanisms/INDEX|Mechanisms & Automation]]** — Ball screw actuation, pressure monitoring
+  - *Connection*: Ball screw immersion triggers quench, not a valve; pressure relief for safety; feedback signals
 
 ### ⚡ Power & Instrumentation
-- **[[Design/Wiring/Electrical System\|Wiring & Electrical]]** — Pump power, solenoid valve control, sensor signals
+- **[[Design/Wiring/Electrical System\|Wiring & Electrical]]** — Pump power, water-fill valve control, sensor signals
   - *Connection*: Pump 24V supply; thermocouple amplifier signals; pressure gauge instrumentation
-- **[[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Control Architecture]]** — Automated pump/valve control via NI-9263
-  - *Connection*: Water filling system automation; solenoid actuation via 0-10V command signals
+- **[[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Control Architecture]]** — Automated pump/fill-valve control via NI-9263
+  - *Connection*: Water filling system automation (bath fill only, not quench trigger); solenoid actuation via 0-10V command signals
 
 ---
 

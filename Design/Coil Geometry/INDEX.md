@@ -1,4 +1,4 @@
----
+﻿---
 subsystem: coil_geometry
 tags: [index, coil-geometry, thermal-systems]
 ---
@@ -35,7 +35,7 @@ Design and optimization of the induction heating coil for uniform, efficient hea
   - *Connection*: Coil requires water cooling for high-frequency operation; copper tubing + inlet/outlet
 
 ### 🎯 Sample Positioning
-- **[[Design/Mechanisms/Control System\|Mechanisms & Automation]]** — Sample centering within coil
+- **Mechanisms & Automation** — Sample centering within coil
   - *Connection*: Coil geometry determines sample positioning requirements; ceramic mount must fit inside
 
 ### ❄️ Quenching

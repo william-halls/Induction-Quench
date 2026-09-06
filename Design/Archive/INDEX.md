@@ -1,4 +1,4 @@
----
+﻿---
 tags: [index, archive, history, rejected-designs, lessons-learned]
 ---
 
@@ -51,7 +51,7 @@ Historical designs, rejected concepts, and engineering decisions from previous i
 **See Full Details:** Refer to [[Design/Archive/Design History\|Design History.md]] → Trapdoor section
 
 **Connected Subsystems:**
-- [[Design/Mechanisms/Control System\|Control Strategy]] — Manual vs. automated operation
+- Control Strategy — Manual vs. automated operation
 - [[Design/Sample Quenching/Quenching Methods\|Quenching]] — Timing considerations
 
 ---
@@ -153,7 +153,7 @@ Rejected Designs Archive
 │   └─ Quartz Tube (abandoned) → Bucket (active)
 │
 └─→ Lessons Feed Into
-    ├─ [[Design/Mechanisms/Control System\|Control Strategy]]
+    ├─ Control Strategy
     ├─ [[Design/Coil Geometry/Induction Coil\|Coil Overview]]
     ├─ [[Design/Vacuum Chamber/Vacuum Enclosure\|Chamber Overview]]
     └─ [[Design/Plumbing/Fluid Systems\|Plumbing Strategy]]
@@ -194,7 +194,7 @@ Rejected Designs Archive
 - [[Design/Coil Geometry/Round Coil\|Round Coil (Active)]]
 
 **Current Control:**
-- [[Design/Mechanisms/Control System\|Manual Operation (Prototype)]]
+- Manual Operation (Prototype)
 - [[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Automated Control (In Development)]]
 
 ---

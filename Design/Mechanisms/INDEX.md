@@ -17,7 +17,7 @@ Mechanical systems, actuation, control logic, and safety interlocks for repeatab
 | **[[Design/Mechanisms/Titanium Claw|Titanium Claw.md]]** | Gripper mechanism (abandoned - heat sink) | 🔴 Abandoned |
 | **[[Design/Mechanisms/Trapdoor|Trapdoor.md]]** | Rotating release mechanism (deferred) | 🟡 Deferred |
 
-*Note: Control System and Ball Screw Motor Control have been moved to [[Design/Wiring/]] (see Wiring & Electrical Systems index).*
+
 
 ---
 
@@ -25,21 +25,21 @@ Mechanical systems, actuation, control logic, and safety interlocks for repeatab
 
 ### 🎯 Sample Positioning
 - **[[Design/Sample Quenching/Quenching Methods\|Sample Quenching Routes]]** — Quench timing & triggering
-  - *Connection*: Mount geometry determines how sample is released or positioned for quenching
+  - *Connection*: Ball screw lowers the mounted sample directly into the water bath — the sample stays clamped in its mount the entire time, no release mechanism involved
 
 ### 📦 Chamber Integration
 - **[[Design/Vacuum Chamber/Vacuum Enclosure\|Vacuum Chamber]]** — Access, door interlock, scissor lift
   - *Connection*: Mount must fit inside chamber; door interlock prevents opening under vacuum; lift supports chamber base
 
 ### ⚡ Control Signals
-- **[[Design/Wiring/Electrical System\|Wiring & Electrical]]** — Valve/pump actuation signals, emergency stop
-  - *Connection*: E-stop wiring; solenoid valve control; thermocouple/pressure sensor inputs
-- **[[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Control Architecture]]** — Automated ball screw & valve control
-  - *Connection*: [[Design/Mechanisms/Ball Screw|Ball screw]] motor control via NI-9263; quench valve automation; safety monitoring via NI-9219
+- **[[Design/Wiring/Electrical System\|Wiring & Electrical]]** — Ball screw actuation signals, emergency stop
+  - *Connection*: E-stop wiring; thermocouple/pressure sensor inputs. No quench valve exists — quenching is triggered by ball screw immersion, not a valve
+- **[[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Control Architecture]]** — Automated ball screw control
+  - *Connection*: [[Design/Mechanisms/Ball Screw|Ball screw]] motor control via NI-9263 drives the quench-immersion trigger directly; safety monitoring via NI-9219. (If a quench valve is ever added, it would be triggered by a separate SSR controlled by the USB-6009 — not yet implemented)
 
 ### 💧 Fluid Control
-- **[[Design/Plumbing/Fluid Systems\|Plumbing & Fluid Systems]]** — Quench valve, pump relay, pressure relief
-  - *Connection*: Mechanism triggers quench valve opening; pressure monitoring for safety interlocks
+- **[[Design/Plumbing/Fluid Systems\|Plumbing & Fluid Systems]]** — Water bath fill/drain, pressure relief (no quench valve; bath is pre-filled, sample is immersed by the ball screw)
+  - *Connection*: Ball screw immersion is the quench trigger, not a valve; pressure monitoring for safety interlocks
 
 ### 🔥 Thermal System
 - **[[Design/Coil Geometry/Induction Coil\|Coil Geometry]]** — Sample centering within coil
@@ -63,12 +63,14 @@ Mechanical systems, actuation, control logic, and safety interlocks for repeatab
 2. Insert into ceramic cylinder groove
 3. Screw steel shaft to lock
 4. Slide complete assembly into quartz tube
-5. Heating + quenching occur inside chamber
+5. Heating occurs inside chamber; quench is performed by the [[Design/Mechanisms/Ball Screw|ball screw]] lowering the whole assembly (sample still clamped in the mount) down into the water bath — no release mechanism, the sample never disconnects from the mount
 6. Manual extraction after cooling
 
 ---
 
 ## Rejected/Deferred Designs
+
+**Decided:** quenching uses ball-screw immersion (see [[Design/Sample Quenching/Quenching Methods|Quenching Methods]]) — the sample is lowered into the water bath by the ball screw while still clamped in its mount. No separate sample-release mechanism is used, which is why the designs below (all release/drop mechanisms) remain rejected/deferred rather than pursued further.
 
 ### Abandoned: Titanium Claw
 **Issue:** Fundamental flaw — thermal performance
@@ -94,7 +96,7 @@ Mechanical systems, actuation, control logic, and safety interlocks for repeatab
 
 **Manual Operation:**
 - Temperature ramp via power supply controls
-- Manual quench valve actuation or simple timer
+- Manual ball screw actuation (immersion into water bath) or simple timer
 - Thermocouple monitoring (external equipment)
 - Safety: Vacuum pressure monitoring required before heating
 

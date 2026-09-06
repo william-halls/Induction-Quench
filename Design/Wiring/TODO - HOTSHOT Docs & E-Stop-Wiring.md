@@ -1,7 +1,7 @@
 ---
 subsystem: wiring
 tags: [wiring, electrical, safety, todo, ambrell, hotshot]
-related: [[Design/Wiring/Electrical System.md]], [[Design/Wiring/NI-DAQ Control Architecture.md]], [[Design/Wiring/Ball Screw Motor Control.md]], [[Design/Wiring/Ambrell Contact - HOTSHOT 103927.md]]
+related: [[Design/Wiring/Electrical System.md]], [[Design/Wiring/NI-DAQ Control Architecture.md]], [[Design/Wiring/Ball Screw Motor Control.md]]
 status: open
 ---
 
@@ -11,14 +11,14 @@ Action list to close the open items from the 08-28-2026 e-stop / 0-10V control d
 
 ## 1. Get nameplate photos → send to Ambrell support
 
+**Resolved (2026-09-05)** — the full HOTSHOT manual was located and transcribed (see [[Design/Wiring/HOTSHOT Manual - Full Transcription.md]]), answering the interlock and 0-10V questions this outreach was meant to resolve. The Ambrell outreach draft is no longer needed and has been removed; nameplate photos are no longer required unless a future compliance review needs mains-disconnect confirmation directly from Ambrell.
+
 - [ ] Photograph HOTSHOT main nameplate (SN 103927) — model, voltage/phase, frequency range, max output power, any date codes
 - [ ] Photograph HOTSHOT rear panel in full — capture **all** connectors, not just mains input (remote/interlock connector, any DB9/terminal blocks, labels/silkscreen text)
 - [ ] Close-up photo of any labeled pins/pinout printed near the remote connector, if present
 - [ ] Photograph the 301-0243D handheld remote — nameplate/label + cable connector end
 - [ ] Save photos into `media/` in this vault (descriptive filenames, e.g. `hotshot-103927-nameplate.jpg`, `hotshot-rear-panel.jpg`)
 - [ ] Embed photos in [[Design/Wiring/Electrical System.md]] for permanent reference
-- [ ] Attach photos to the draft email in [[Design/Wiring/Ambrell Contact - HOTSHOT 103927.md]] and send to Ambrell support
-- [ ] Log Ambrell's reply (manual, interlock pinout, 0-10V spec) back into [[Design/Wiring/Ambrell Contact - HOTSHOT 103927.md]] and update [[Design/Wiring/Electrical System.md]] / [[Design/Wiring/NI-DAQ Control Architecture.md]] once confirmed
 
 ## 2. Figure out if end stops (limit switches) are needed
 

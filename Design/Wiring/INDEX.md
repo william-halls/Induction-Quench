@@ -16,7 +16,6 @@ Power delivery, control circuits, and instrumentation for induction heating and 
 | **[[Design/Wiring/Ball Screw Motor Control|Ball Screw Motor Control.md]]** | 24V stepper motor control system (power supply, controller, driver, motor) | 🟢 Complete |
 | **[[Design/Wiring/Control System|Control System.md]]** | Control logic, signal timing, automation sequences | 🟢 Active |
 | **[[Design/Wiring/Coil Lead Pass-Throughs|Coil Lead Pass-Throughs.md]]** | High-frequency power lead routing through chamber | 🟢 Active |
-| **[[Design/Wiring/Ambrell Contact - HOTSHOT 103927|Ambrell Contact - HOTSHOT 103927.md]]** | Draft outreach to Ambrell for HOTSHOT interlock/0-10V documentation | 🟡 Draft |
 | **[[Design/Wiring/TODO - HOTSHOT Docs & E-Stop-Wiring|TODO - HOTSHOT Docs & E-Stop-Wiring.md]]** | Action list: nameplate photos, end-stop decision, consolidated wiring diagram | 🟡 Open |
 | **[[Design/Wiring/HOTSHOT Manual - Full Transcription|HOTSHOT Manual - Full Transcription.md]]** | Full plain-text transcription of the Ameritherm HOTSHOT manual (all 49 pages) — reference so the manual photos don't need to be re-read as images | 📖 Reference |
 
@@ -44,7 +43,7 @@ Power delivery, control circuits, and instrumentation for induction heating and 
 
 ### ❄️ Quench Triggering
 - **[[Design/Sample Quenching/Quenching Methods\|Sample Quenching Routes]]** — Quench initiation timing
-  - *Connection*: Timer circuit or manual trigger → solenoid valve opens; feedback from thermocouple used for temperature-triggered quench option
+  - *Connection*: Timer circuit or manual trigger → ball screw lowers sample into the water bath (no valve); feedback from thermocouple used for temperature-triggered quench option
 
 ---
 
@@ -74,8 +73,8 @@ Power delivery, control circuits, and instrumentation for induction heating and 
   - Motion controller: ST-PMC1 (40 kHz pulse+direction, 99 programmable sequences)
   - Driver: TB6600 (5–10A per coil phase)
   - Motor: NEMA 23 with integrated ball screw (~0.025mm positioning)
-- **Solenoid Valve**: 24V for quench trigger (via relay output from ST-PMC1)
-- **Diaphragm Pump**: 24V option for spray quenching
+- **Quench Trigger**: Ball screw lowers sample into the water bath (motion event, not a valve — see [[Design/Wiring/Ball Screw Motor Control|Ball Screw Motor Control]])
+- **Diaphragm Pump**: 24V option for spray quenching (candidate alternate method, not current design)
 - **Pressure Relief**: Valve in air control assembly
 - **Emergency Stop**: E-stop on main power supply + manual vent valve
 - **Homing**: Limit switch input to ST-PMC1 for automatic home finding
@@ -117,7 +116,7 @@ Power delivery, control circuits, and instrumentation for induction heating and 
 ### Monitoring & Alerts
 - **Over-temperature**: Thermocouple feedback → shut off power supply
 - **Low Vacuum**: Pressure gauge → halt operation, vent chamber
-- **Quench Failure**: If valve doesn't open, log event, abort test
+- **Quench Failure**: If ball screw fails to actuate/immerse sample, log event, abort test
 - **Sensor Failure**: Loss of thermocouple signal → alert operator
 
 ---
