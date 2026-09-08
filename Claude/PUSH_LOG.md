@@ -4,6 +4,17 @@ Record of what changed with each push to GitHub.
 
 <!-- Newest entries at the top -->
 
+## 2026-09-07 - Heat curve safety design: cooling behavior, Pause/Stop, data logging, run-out trip
+**Commit**: (pending)
+- [[Design/Wiring/Heat Curve Profile Software.md]]: major design pass —
+  - Cooling-direction Rate segments redefined as **open-loop** (coil off, wait for natural cooldown to reach target; `rate` unenforceable) since the system has no active cooling, only on/off — closed-loop rate-tracking only applies when heating
+  - **Pause** now holds setpoint at the actual temp at the moment of pause and freezes timers; **Stop** opens the STOP SSR and zeroes the NI-9269 output simultaneously (no quench triggered, no resume)
+  - Added minimal **data logging** requirement: timestamp + TC temp, one row per loop tick, per-run file
+  - Documented the **Startup & Run-Out Safety** design: PID output slew-rate limiter (d(Amps)/dt, smooths real heating rate) paired with a thermocouple run-out trip (d(°C)/dt, detects a detached/faulty TC) — threshold for the latter explicitly calibrated from observed behavior once the former is in place
+  - Recorded the **effective-minimum-power auto-tune as deliberately deferred** (both original justifications superseded by the slew limiter and by ordinary PID integral behavior), and a **Hold-timeout safeguard** / **HOTSHOT Fault-status monitoring** as deliberately dismissed ("bigger problems" reasoning) — both recorded as considered-and-decided-against, not oversights
+- [[Design/Wiring/NI-DAQ Control Architecture.md]]: resolved the previously-pending STOP (CTB1:4-5) wiring decision — now confirmed routed through a fail-safe SSR (ON by default, de-energize to stop), since the Heat Curve software's Stop control requires it to be DAQ-controllable rather than left hardwired
+- 2 files changed, both intentional
+
 ## 2026-09-06 - HOTSHOT calibration curve, PID architecture, heat curve/quench software design
 **Commit**: `99c1cc6`
 - [[Design/Wiring/NI-DAQ Control Architecture.md]]: added the bench-measured HOTSHOT Setpoint Calibration Curve (Control From set to Rear Panel, NI-9269 → CTB1:1-2) — confirmed ~1.10V turn-on threshold, linear region `Amps ≈ 137×V − 151` from ~1.10V–5.1V, hard saturation ceiling at 550A from ~5.1V to 10V (likely the Icap/tap-cap limit); resolves the long-open "exact scaling/linearity still TBD" item. Also logged the PID software architecture decision: PID output runs in Amps (`PID Advanced.vi` Output Range 0–550 for correct anti-windup), Amps→Volts conversion done as a separate step after the PID block, and anything ≤50A treated as "off" (no meaningful heating below that regardless of electrical turn-on, so the non-smooth knee near 8-13A doesn't need to be modeled)

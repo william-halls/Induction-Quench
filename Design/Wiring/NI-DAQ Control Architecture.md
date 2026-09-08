@@ -279,9 +279,11 @@ Thermocouple → AD8495 (or similar analog CJC amp, mounted at the chamber feedt
 ### START / STOP (CTB1:3-5) — still applies regardless of AO source
 
 - **START (CTB1:3-4)** — N.O., momentary closure initiates heating. If automated start is wanted, needs its own DC SSR (same LCD4075DD3-type as the ST-PMC1 RUN trigger), driven as a brief pulse from a spare 6009 digital line — same pattern as ST-PMC1 RUN.
-- **STOP (CTB1:4-5)** — N.C., **active-open**: the loop must stay **closed** for heating to be allowed; **opening** it halts heating. This is the opposite of "power it to stop" — you break the connection to stop, not energize something. Decision pending on whether to route this through the DAQ:
-  - **Leave hardwired** (jumpered or through a physical switch), matching the ST-PMC1 STOP philosophy — keeps a stop path independent of software.
-  - **Route through an SSR** driven **ON by default** (holding the loop closed) and **de-energized to stop** — unlike the ST-PMC1 case, this fails safe: DAQ/SSR power loss opens the loop and halts heating on its own. Legitimate option if software-controlled pause (separate from the hard E-stop at CTB1:15-16) is wanted.
+- **STOP (CTB1:4-5)** — N.C., **active-open**: the loop must stay **closed** for heating to be allowed; **opening** it halts heating. This is the opposite of "power it to stop" — you break the connection to stop, not energize something.
+
+**Decision (confirmed 2026-09-07): route through an SSR.** The [[Design/Wiring/Heat Curve Profile Software|Heat Curve Profile Software]]'s Stop control needs to command the HOTSHOT to stop from software, which requires this line to be DAQ-controlled rather than left hardwired — resolving the prior open decision in favor of the SSR option:
+  - SSR driven **ON by default** (holding the loop closed) and **de-energized to stop** — this fails safe: DAQ/SSR power loss opens the loop and halts heating on its own, same as a genuine Stop command.
+  - Software's Stop action de-energizes this SSR (opens STOP) **and** commands 0A on the NI-9269 output at the same time — belt-and-suspenders, since either alone should halt heating, but doing both avoids relying on only one mechanism.
   - **Do not** put START and STOP on the same DAQ line/SSR — START is a momentary edge-trigger, STOP is a continuously-held level signal; tying them together either causes an immediate self-halt right after starting, or risks re-triggering START if held high (same failure mode already flagged for the ST-PMC1's 1-button start mode).
 
 ### TXDIN70 — Dual-Channel Transmitter/Isolator (spare / optional future use, 2026-09-01)
@@ -385,7 +387,7 @@ Ready / HeatOn / Fault are solid-state contact **outputs from** the HOTSHOT (no 
 | Stepper motor model | ✅ Identified | [[Design/Mechanisms/Ball Screw Motor Control|NEMA 23 with ball screw (SN: 161104226)]] |
 | Power supply control interface | ✅ Confirmed, native direct drive, scaling measured | CTB1:1-2 stays in default 0-10Vdc mode; NI-9269 drives it directly, no isolator/current-loop conversion needed (2026-09-01, supersedes prior 6009+isolator plan); scaling confirmed by bench measurement 2026-09-06 — see "HOTSHOT Setpoint Calibration Curve" above (1.10V threshold, `Amps ≈ 137×V − 151` linear region, 550A ceiling ≥5.1V) |
 | E-stop interlock interface | ✅ Confirmed pinout, ⏳ scope TBD | CTB1:15-16, N.C., 24V@3A min (2026-09-01) — see [[Design/Wiring/Electrical System|Electrical System]]; unclear if it also cuts mains/chassis power or only internal 24V rail |
-| HOTSHOT START/STOP automation | ⏳ START planned, STOP pending decision | See "HOTSHOT Control — Consolidated onto NI cDAQ-9174" section above (2026-09-01) |
+| HOTSHOT START/STOP automation | ✅ START planned, STOP confirmed (SSR, fail-safe) | STOP routed through an SSR (ON by default, de-energize to stop) per Heat Curve Profile Software's Stop requirement (2026-09-07) — see "START / STOP (CTB1:3-5)" section above |
 | Water system mechanism | ✅ Diaphragm pump, DC SSR | 24V DC pump confirmed (not AC) — needs dedicated DC-rated SSR, not the AC power-release SSR; see [[Design/Wiring/Ball Screw Motor Control|Ball Screw Motor Control]] SSR inventory (2026-09-01) |
 | NI-DAQ chassis connection | ⏳ TBD | USB or Ethernet from laptop? |
 | Control software platform | ⏳ TBD | LabVIEW, Python, or C#? |
