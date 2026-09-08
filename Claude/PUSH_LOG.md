@@ -5,7 +5,7 @@ Record of what changed with each push to GitHub.
 <!-- Newest entries at the top -->
 
 ## 2026-09-07 - Heat curve safety design: cooling behavior, Pause/Stop, data logging, run-out trip
-**Commit**: (pending)
+**Commit**: `6937c9f`
 - [[Design/Wiring/Heat Curve Profile Software.md]]: major design pass —
   - Cooling-direction Rate segments redefined as **open-loop** (coil off, wait for natural cooldown to reach target; `rate` unenforceable) since the system has no active cooling, only on/off — closed-loop rate-tracking only applies when heating
   - **Pause** now holds setpoint at the actual temp at the moment of pause and freezes timers; **Stop** opens the STOP SSR and zeroes the NI-9269 output simultaneously (no quench triggered, no resume)
