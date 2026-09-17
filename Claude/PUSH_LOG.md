@@ -4,6 +4,15 @@ Record of what changed with each push to GitHub.
 
 <!-- Newest entries at the top -->
 
+## 2026-09-17 - Seal thermal margin analysis, Ceramic Mount v3 geometry + Lava/titanium mitigation plan
+**Commit**: `09c06a9`
+- New [[Design/Plumbing/Seal Thermal Margin Analysis.md]]: full RC thermal derivation for the shaft seal — geometry chain, corrected compounding equations (caught and fixed a PowerShell case-insensitive-variable bug, plus an initial error treating the mica washer as the only heat path instead of properly modeling it in parallel with the titanium screw bypass), a material-property sensitivity sweep, a real thermocouple calibration point (~100°C at the seal with sample held at 850°C — right at the seal's 210°F rated limit), and a final comparison of BN/Titanium/Lava holder options
+- [[Design/Plumbing/Vertical Sliding Shaft Seal.md]]: recorded the real measured seal temp and the outcome of an extensive higher-temp seal replacement search (McMaster wiper-lip family, PTFE V-ring packing, AVX, SKF/CR, Kurt J. Lesker feedthroughs — no clean drop-in match found combining correct dimensions + adequate pressure rating + confirmed linear-motion service); decided to keep the seal and fix the thermal path instead
+- [[Design/Mechanisms/Ceramic Mount.md]]: documented the actual Version 3 CAD geometry (4 boron nitride zones + screw + shaft, superseding the old two-part/NPT-thread description); the titanium (Grade 5) screw + mica washer heat-break at the rod-to-holder joint; and the alumina silicate ("Lava") holder material recommendation, with thermal-shock risk reassessed and narrowed given the holder is never directly water-quenched (only the sample is) — Grade 5 Titanium recorded as a fully-characterized fallback (+49% margin vs. Lava's +75%) if Lava's shock behavior doesn't validate. Embedded the CAD section/isometric/dimension renders and 6 mass-property screenshots (uploaded by user, renamed to descriptive filenames per [[Claude/AGENT_PREFERENCES.md]])
+- [[Design/Plumbing/INDEX.md]]: linked the new analysis note
+- Commit also included pre-existing carryover from prior uncommitted sessions not part of this conversation: [[Design/Wiring/Heat Curve Profile Software.md]], [[Design/Wiring/NI-DAQ Control Architecture.md]], .obsidian workspace/plugin state
+- 17 files changed (9 new: 1 note + 8 images; 6 modified intentional; 2 modified carryover)
+
 ## 2026-09-07 - Heat curve safety design: cooling behavior, Pause/Stop, data logging, run-out trip
 **Commit**: `6937c9f`
 - [[Design/Wiring/Heat Curve Profile Software.md]]: major design pass —
