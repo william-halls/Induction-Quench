@@ -65,6 +65,30 @@ margin% = (210°F - T_seal_worst_case) / (210°F - T_ambient) × 100
 ```
 This works because T_seal can never exceed its steady-state asymptote during a finite hold (monotonic approach) — so this is a guaranteed upper bound per hold segment, and ramp segments are short enough not to matter much next to holds.
 
+## Calibrated ("more realistic") estimate for the simulated heat curve
+
+The modeled sweep above (BN, assumed k, no heat-break) gave -83% to -358% margin for the 800°C/2min-hold mock cycle — but that model has no path for heat to escape to ambient (pure series conduction only), so it structurally can't reproduce the real measured behavior. Applying the **calibrated steady-state gain** from the real thermocouple test to that same mock cycle instead:
+
+```
+f = (T_seal_ss - T_ambient) / (T_sample_ss - T_ambient) = (212°F - 68°F) / (1562°F - 68°F) = 0.0964
+T_seal_worst_case = T_ambient + f × (T_hold - T_ambient) = 68 + 0.0964 × (1472 - 68) = 203.3°F (95.2°C)
+margin% = (210 - 203.3) / (210 - 68) × 100 = +4.7%
+```
+
+**This is a materially different (and more trustworthy) answer than the modeled sweep** — +4.7% margin instead of deeply negative — for the *exact same* 800°C/2min-hold cycle. The reason: this number is anchored to a real measurement instead of assumed material properties, and it correctly accounts for the ambient heat-loss path (convection/radiation off the shaft and surrounding hardware) that the pure series-conduction model omits entirely — which is also why the series model's τ-based simulations (elsewhere in this document) always trend toward the sample's own temperature at long hold times, while the real hardware visibly doesn't.
+
+**Important scope caveat**: this calibration was measured on the **original, as-built hardware** — boron nitride holder, whatever standoff distance currently exists, no heat-break installed. It is **not** validated for the Titanium or Lava holder variants, or for a longer standoff, since those configurations haven't been physically tested. Use this calibrated number as the "realistic baseline for what's already built," and the modeled sweep's *relative* improvements (e.g. the ~80-160% resistance increase from the joint heat-break, the ~40x conductivity drop from switching to Lava) as directionally trustworthy multipliers on top of it — not the modeled sweep's absolute peak-temperature numbers, which are calibrated to nothing.
+
+### Comparison: user-supplied real measurement vs. modeled approaches
+
+| Source | Condition | Result |
+|---|---|---|
+| **Real thermocouple measurement (user-supplied)** | Sample held at 850°C (sustained/steady state), original as-built BN holder, thermocouple placed at the seal location | **Seal stabilized at ~100°C (212°F)** |
+| Modeled sweep (assumed k, pure series conduction, no ambient loss path) | 800°C sample, 2min hold, mock cycle | Peak seal temp 328-554°F (165-290°C) depending on k_BN/k_steel assumption — margin -83% to -358% |
+| **Calibrated estimate (this section)** — derived directly from the real measurement above | Same 800°C/2min-hold mock cycle | **Peak seal temp 203.3°F (95.2°C) — margin +4.7%** |
+
+The calibrated estimate lands close to the user's real measured value (95.2°C calculated vs. 100°C measured, for a comparable but not identical condition — the real measurement was a sustained 850°C hold, the calibrated estimate applies that same ratio to a shorter 800°C/2min mock hold) — which is the expected relationship, since the calibration is built directly from that measurement. The point of this comparison is to show how far off the pure series-conduction model was (328-554°F) versus anything anchored to the real data (~95-100°C) — a ~3-5x overestimate from the unanchored model.
+
 ## 2-node model (seal + downstream rod mass)
 
 For completeness: added a second node representing the ~11in of rod beyond the seal (277.8g, C₂≈130.6 J/K), coupled via R₁₂≈68.9 K/W (half-length approximation). For a single ~155s cycle, this only reduced peak seal temp by ~10°F (400.3°F → 390.4°F) because the downstream mass's own time constant (R₁₂·C₂≈9,000s) is much longer than one cycle — it doesn't have time to help on a single fast pulse. Would matter more for long soaks or repeated back-to-back cycles without full cooldown.
@@ -103,6 +127,10 @@ Full-assembly modeled results for the 800°C/2min-hold mock cycle, with the join
 Joint resistance note: the mica washer alone would add far more resistance than shown (e.g. 167 K/W for a 1/4" thickness) if it were the only path — but the titanium screw is a parallel bypass through the same joint, and titanium (k=6.7) still conducts ~22x better than mica (k=0.3), so despite its smaller cross-section the screw ends up carrying most of the heat through that joint. The parallel combination (mica ∥ screw) is what's shown above (25.4 K/W for the 1/4" washer case) — always compute both paths together, not the washer in isolation.
 
 **Recommended path**: Lava holder + Ti screw + 1/4" mica washer, with Grade 5 Titanium holder as a fully-characterized fallback if Lava's thermal-shock behavior doesn't validate (see [[Design/Mechanisms/Ceramic Mount.md]] for the immersion-vs-conduction risk reassessment — holder is never directly water-quenched, only the sample is, which substantially de-risks the ceramic option).
+
+## Material properties reference
+
+Full comparison table (thermal conductivity, max temp, tensile strength) for every material evaluated during this analysis: [[Design/Plumbing/Material Properties Reference.md]]
 
 ## Known open items
 - Confirm exact "6440 steel" shaft/screw grade (matters for k_steel — swings result significantly)

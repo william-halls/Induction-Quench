@@ -11,12 +11,14 @@
             "id": "acbd31a4801774e4",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "media/mechanisms/ceramic-mount-detail.png"
+                "file": "Design/Mechanisms/Ceramic Mount.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-image",
-              "title": "ceramic-mount-detail"
+              "icon": "lucide-file",
+              "title": "Ceramic Mount"
             }
           }
         ]
@@ -159,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "media/mechanisms/ceramic-mount-detail.png",
+                "file": "Design/Mechanisms/Ceramic Mount.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": "claude"
@@ -197,19 +199,20 @@
       "realclaudian:Open Claudian": false
     }
   },
-  "active": "2b62d346bdd6857e",
+  "active": "acbd31a4801774e4",
   "lastOpenFiles": [
+    "Design/Plumbing/Material Properties Reference.md",
+    "Design/Mechanisms/Ceramic Mount.md.tmp.9468.e8f11fdaba7c",
     "media/mechanisms/ceramic-mount-v3-dimensions.png",
     "media/mechanisms/ceramic-mount-v3-isometric.png",
     "media/mechanisms/ceramic-mount-shaft-mass-props.png",
-    "media/mechanisms/ceramic-mount-screw-mass-props.png",
-    "media/mechanisms/ceramic-mount-purple-cap-mass-props.png",
     "media/mechanisms/ceramic-mount-teal-body-mass-props.png",
+    "media/mechanisms/ceramic-mount-screw-mass-props.png",
+    "media/mechanisms/ceramic-mount-rendering.png",
+    "media/mechanisms/ceramic-mount-detail.png",
     "media/mechanisms/ceramic-mount-gold-ring-mass-props.png",
     "media/mechanisms/ceramic-mount-orange-wedge-mass-props.png",
-    "media/mechanisms/ceramic-mount-v3-section-view.png",
-    "media/mechanisms/Pasted image 20260917132533.png",
-    "media/mechanisms/Pasted image 20260917132527.png",
+    "media/mechanisms/ceramic-mount-purple-cap-mass-props.png",
     "Design/Mechanisms/Ceramic Mount.md",
     "Design/Plumbing/Seal Thermal Margin Analysis.md.tmp.18808.cc39cbec4131",
     "Design/Vacuum Chamber/Acrylic Vacuum Lid.md",
@@ -239,11 +242,9 @@
     "Design/Vacuum Chamber/Vacuum Chamber CAD.md",
     "Design/Plumbing/Vacuum Lid Systems.md",
     "Design/Plumbing/Vertical Sliding Shaft Seal.md",
-    "Design/Plumbing/Fluid Systems.md",
     "README.md.tmp.31588.cdeb5983392a",
     "Design/Wiring/HOTSHOT Manual - Full Transcription.md.tmp.31588.09753bd18d79",
     "Design/Wiring/HOTSHOT Manual - Full Transcription.md.tmp.31588.3609ee89f71b",
-    "media/wiring/Ameritherm HOTSHOT 103927 Manual (Doc 801-9252k).pdf",
-    "media/wiring"
+    "media/wiring/Ameritherm HOTSHOT 103927 Manual (Doc 801-9252k).pdf"
   ]
 }

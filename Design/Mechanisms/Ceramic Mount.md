@@ -130,6 +130,15 @@ Replacing the boron nitride holder body (orange/gold/teal/purple zones) with **a
 - **Fabrication note**: sold "Unfired," rated to 2,010°F even unfired per this datasheet — may not require firing at all for this application (peak ~1,562°F/850°C), which would avoid the ~2% fire-expansion dimensioning issue and kiln dependency generally associated with this material class. Needs direct confirmation with McMaster/supplier before relying on the unfired rating.
 - **Mechanical properties are modest** — tensile strength only 2,500 psi (compressive 25,000 psi, flexural 10,000 psi) — weaker than BN; fine for this application's light clamp loads but avoid tension/bending-loaded features
 
+**Firing schedule** (if firing is done rather than relying on the as-machined unfired rating — published schedule for this material family, Foundry Service & Supplies Grade A aluminum silicate):
+- **Heating ramp**: 111-139°C/hour for standard sections (max 167°C/hour). For thick sections (≥13mm cross-section — applies to the teal main body at ⌀20mm) slow to **28-83°C/hour**, and consider stress-relief holes to reduce cracking risk during the firing itself.
+- **Maturing (soak) temperature**: **1,010-1,093°C** — do not exceed 1,093°C (causes crystallization, distortion, shrinkage, loss of properties).
+- **Soak time**: 30 min for sections up to ~6mm thick, 45 min for sections ≥13mm thick — the teal body needs the longer soak.
+- **Cooling**: no mandated rate published; pull parts once below 93°C. Given the thermal-shock discussion below, cool passively (furnace-closed) rather than open-air, even though the manufacturer doesn't require it.
+- **Atmosphere**: ordinary air, nothing special.
+- **Dimensional change**: expands ~2% during firing (not shrinkage) — build green-state machining dimensions around growth, not shrinkage.
+- **Open issue**: this part has widely varying cross-sections (thin orange/gold wedges vs. the thick teal body) — the whole firing schedule needs to be built around the thickest section's slower ramp rate, which may over-stress the thinner sections. Worth discussing with whoever does the firing.
+
 **Thermal shock risk — reassessed and narrowed (2026-09-17)**: initial concern was unverified thermal shock resistance under repeated rapid heat/quench cycling. Reassessed given the actual quench process — **the holder itself is never submerged; only the sample is quenched in water**:
 - Ceramic thermal-shock cracking is driven by rapid *cooling* putting the surface in tension (ceramics, including this one, are much weaker in tension — 2,500 psi — than compression — 25,000 psi). Full immersion in cold water is the severe version of this. Since the holder never contacts the quench bath directly, it never experiences that event — it only sees the gradual, conduction-limited transient already modeled (τ≈89 min for holder+joint), the same duty cycle McMaster's own use-case examples describe ("standoffs and welding jigs" — repeatedly heated by proximity, cooled between cycles, never submerged).
 - Even incidental water/steam contact (splash, condensation creeping up the shaft) would be **preheated by the sample's own heat dump into the bath**, not cold bulk-bath-temperature water — a much smaller ΔT than the worst case, and if it's condensing steam specifically, that's a *heating* event (safe compressive stress), not a cooling one.
@@ -145,6 +154,10 @@ Real-world thermocouple testing showed the shaft seal sitting right at its 210°
 - **Washer: Muscovite mica, cut from tube stock — McMaster 5067K56** (1/2" OD × 1/4" ID × 1/8" wall tube; saw thin cross-sectional rings off the end). Datasheet-confirmed k=0.3 W/(m·°C) — blocks the parallel direct-contact heat path between rod end and purple cap face (not just the screw itself). Target thickness ~0.01-0.025" (stack multiple thin slices if needed) adds a meaningful 25-100% to the joint's thermal resistance. Ream the as-cut 1/4" ID slightly for screw clearance (it's an exact nominal fit, not a clearance hole) — mica files/sands easily, just avoid forcing an undersized screw through it. OD (0.5") deliberately matches the rod's own OD so the washer fully covers the rod's end face with no gap or wasted overhang. Chosen over phlogopite mica (higher temp ceiling but slightly higher k, and both are well within margin of this joint's actual temps), Macor, Vespel, and PEEK. Light clamp torque at this joint suits mica's main weakness (delamination under shear/point load isn't triggered by pure axial compression).
 
 ## Visual Reference & CAD
+
+**Current (Version 3)**: see the section-view, isometric, and dimensioned-drawing renders under [[#Current Geometry (Version 3, from CAD)|Current Geometry]] above — those reflect the actual multi-zone (orange/gold/teal/purple + steel shaft, screw joint) geometry currently in use.
+
+**Superseded (Version 1/2, kept for history only)**: the image below (also duplicated as `ceramic-mount-assembly.png` and `ceramic-mount-detail.png`) shows the earlier single-piece BN cylinder with a plain T-slot groove and square shaft — it predates the Version 3 split-zone redesign and does not reflect the current geometry, material, or joint hardware. Do not use it as a build reference.
 
 ![[ceramic-mount-rendering.png]]
 
