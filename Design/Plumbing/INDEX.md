@@ -15,6 +15,7 @@ Gas delivery, vacuum evacuation, and quenching medium circulation systems for ch
 | **[[Design/Plumbing/Vacuum Lid Systems|Vacuum Lid Systems.md]]** | Plumbing in chamber lid | 🔵 Reference |
 | **[[Design/Plumbing/Air System Control Assembly|Air System Control Assembly.md]]** | Vacuum/argon manifold (3-way valve) | 🟢 Active |
 | **[[Design/Plumbing/Vertical Sliding Shaft Seal|Vertical Sliding Shaft Seal.md]]** | 1/2" shaft seal for sample port | 🟢 Active |
+| **[[Design/Plumbing/Seal Thermal Margin Analysis|Seal Thermal Margin Analysis.md]]** | Thermal RC model, real calibration data, mitigation plan for the shaft seal | 🟢 Active |
 | **[[Design/Plumbing/Thermal Couple Pass-through|Thermal Couple Pass-through.md]]** | Thermocouple quick-connect interface | 🟡 Planned |
 | **[[Design/Plumbing/Random Holes|Random Holes.md]]** | Existing chamber ports (evaluate/seal) | 🔵 Reference |
 

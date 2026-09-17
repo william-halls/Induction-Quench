@@ -1,4 +1,4 @@
-﻿---
+---
 subsystem: wiring
 tags: [wiring, control-system, NI-DAQ, automation, PID, stepper-motor]
 ---
@@ -29,10 +29,10 @@ Automated control system for PID-based induction coil power management and auxil
 
 ### Data Acquisition Modules
 
-| Module | Function | Channels | Resolution | Notes |
-|--------|----------|----------|------------|-------|
-| **NI-9219** | Analog Input (ADC) | 4 | ±20mV–60V ranges | Thermocouple, pressure, feedback signals |
-| **NI-9263** | Analog Output (DAC) | 4 | 0–10V or ±10V | Coil power control, valve commands, pump speed |
+| Module      | Function            | Channels | Resolution       | Notes              |
+| ----------- | ------------------- | -------- | ---------------- | ------------------ |
+| **NI-9219** | Analog Input (ADC)  | 4        | ±20mV–60V ranges | Thermocouple       |
+| **NI-9263** | Analog Output (DAC) | 4        | 0–10V or ±10V    | Coil power control |
 
 ### Connected Sensors & Actuators
 
