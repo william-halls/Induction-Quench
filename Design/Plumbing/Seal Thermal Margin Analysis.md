@@ -87,7 +87,7 @@ margin% = (210 - 237.2) / (210 - 68) × 100 = -19.1%
 | Modeled sweep (assumed k, pure series conduction, no ambient loss path) | 800°C sample, 2min hold, mock cycle | Peak seal temp 328-554°F (165-290°C) depending on k_BN/k_steel assumption — margin -83% to -358% |
 | **Calibrated estimate (this section)** — derived directly from the real measurement above | Same 800°C/2min-hold mock cycle | **Peak seal temp 237.2°F (114.0°C) — margin -19.1%** |
 
-The calibrated estimate lands close to the user's real measured value (95.2°C calculated vs. 100°C measured, for a comparable but not identical condition — the real measurement was a sustained 850°C hold, the calibrated estimate applies that same ratio to a shorter 800°C/2min mock hold) — which is the expected relationship, since the calibration is built directly from that measurement. The point of this comparison is to show how far off the pure series-conduction model was (328-554°F) versus anything anchored to the real data (~95-100°C) — a ~3-5x overestimate from the unanchored model.
+The calibrated estimate (114.0°C) lands close to the user's real measured value (120°C), for a comparable but not identical condition — the real measurement was a sustained 850°C hold, the calibrated estimate applies that same ratio to a shorter 800°C/2min mock hold — which is the expected relationship, since the calibration coefficient (`f = 0.1205`) is derived directly from that 120°C measurement. The point of this comparison is to show how far off the pure series-conduction model was (328-554°F) versus anything anchored to the real data (~114-120°C) — a ~3-5x overestimate from the unanchored model.
 
 ## 2-node model (seal + downstream rod mass)
 
@@ -135,6 +135,6 @@ Full comparison table (thermal conductivity, max temp, tensile strength) for eve
 ## Known open items
 - Confirm exact "6440 steel" shaft/screw grade (matters for k_steel — swings result significantly)
 - Confirm real seal-to-holder standoff distance precisely (was using 1.0in conservative assumption)
-- No transient (time-to-plateau) data recorded from the real thermocouple test — only the steady-state 100°C point is known; a time trace would allow fitting real τ and replacing the conservative steady-state-bound gauge formula with a proper dynamic one
+- No transient (time-to-plateau) data recorded from the real thermocouple test — only the steady-state 120°C point is known; a time trace would allow fitting real τ and replacing the conservative steady-state-bound gauge formula with a proper dynamic one
 - Validate Lava's thermal shock behavior specifically for the orange-wedge (direct sample contact) geometry before committing the full holder — see narrowed risk assessment in [[Design/Mechanisms/Ceramic Mount.md]]
 - Confirm whether the 8479K69 Lava rod's 2,010°F unfired rating is reliable as-is, or whether firing is still advisable for this application

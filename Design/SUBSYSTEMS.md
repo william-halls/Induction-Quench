@@ -50,10 +50,10 @@ Each folder contains an INDEX.md with detailed connections:
                🔧 SAMPLE   ❄️ QUENCH  ⚙️ CONTROL
                [[Design/Mechanisms/INDEX]] [[Design/Sample Quenching/INDEX]] [[Design/Mechanisms/INDEX]]
                 
-              (Ceramic      (Oil/Water/  (Manual
-               Mount)       Gas)         Trigger)
-              (2-part)      (TBD)        (Prototype)
-                            (Rapid Cool)
+              (Ceramic      (Water,      (Manual
+               Mount)       decided)     Trigger)
+              (4-zone v3)   (Ball-screw  (Prototype)
+                            immersion)
                             
                             ↓
                     ┌───────────────┐
@@ -168,7 +168,7 @@ Each folder contains an INDEX.md with detailed connections:
 
 ### [[Design/Sample Quenching/INDEX|Sample Quenching]]
 - ✅ **Reference**: Charpy geometries (standard + modified)
-- ⏳ **Pending**: Quench medium selection (oil/water/gas evaluation)
+- ✅ **Decided**: Water quench via ball-screw immersion (sample stays clamped in mount, no release mechanism); oil/gas remain candidate alternatives, not implemented
 - 🔗 **Connects To**: Cooling rate targets, thermal stress analysis
 
 ### [[Design/Wiring/INDEX|Wiring & Electrical]]

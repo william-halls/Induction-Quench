@@ -14,7 +14,7 @@ Collaborative project with **Dr. Buchely** to design and build an induction quen
 | **Sample Type** | Charpy-shaped geometry |
 | **Atmosphere** | Inert (vacuum/argon/nitrogen) |
 | **Data Recording** | Thermal profiles via spot-welded thermocouples |
-| **Quench Method** | TBD (See [[Design/Sample Quenching/Quenching Methods|Sample Quenching Routes]]) |
+| **Quench Method** | Water, via ball-screw immersion (decided — see [[Design/Sample Quenching/Quenching Methods|Sample Quenching Routes]]) |
 
 ## Design System
 

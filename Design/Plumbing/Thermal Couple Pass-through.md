@@ -19,7 +19,7 @@ tags: [design, plumbing, thermocouple, instrumentation, data-collection, automat
 **Thermocouple Measurement System:**
 - Sensor: Spot-welded thermocouple on sample surface
 - Feedthrough: This pass-through in chamber lid
-- Signal path: Thermocouple → NI-9219 ADC (analog input)
-- Cold-junction compensation: Required for accurate temperature measurement
+- Signal path: Thermocouple → external analog CJC amplifier (e.g. AD8495, mounted at the feedthrough) → NI-9229 (analog input, chosen for speed — 50kS/s/ch)
+- Cold-junction compensation: Handled by the external CJC amp ahead of the 9229 (the 9229 itself has no built-in CJC)
 - See [[Design/Wiring/Electrical System|Wiring & Electrical System]] for signal conditioning
-- See [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] for PID loop feedback
+- See [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] for full "Thermocouple Signal Chain" rationale and PID loop feedback

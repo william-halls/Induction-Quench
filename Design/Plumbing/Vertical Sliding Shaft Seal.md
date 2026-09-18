@@ -18,8 +18,8 @@ tags: [design, plumbing, sealing, linear-actuation]
 - Rated: 50 psi max pressure, 2,500 rpm max rotation
 - **Temperature range: -40°F to 210°F** — this is the T_max ceiling for the thermal margin gauge on this seal
 
-**Thermal Margin (2026-09-12)**:
-- Real thermocouple test: seal location stabilizes at **~100°C (212°F)** with sample held at 850°C — right at the rated limit, near-zero steady-state margin
+**Thermal Margin (2026-09-12, temperature corrected 2026-09-18)**:
+- Real thermocouple test: seal location stabilizes at **~120°C (248°F)** with sample held at 850°C — this already **exceeds** the 210°F/99°C rated limit at steady state (~-26.8% margin), even before accounting for shorter/faster mock cycles
 - Extensive search for a higher-temp drop-in replacement (McMaster, AVX, SKF/CR, Kurt J. Lesker) found no clean match combining correct dimensions + adequate pressure rating + confirmed linear-motion service — decision made to **keep this seal** and fix the thermal problem at the source instead (standoff distance + heat-break at the rod/ceramic-holder joint — titanium screw + mica washer, see [[Design/Mechanisms/Ceramic Mount.md]])
 - Full derivation, sensitivity analysis, and gauge formula: [[Design/Plumbing/Seal Thermal Margin Analysis.md]]
 

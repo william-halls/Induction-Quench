@@ -96,9 +96,10 @@ Induction Quench Vault/
 │   │   ├── Fluid Systems.md (overview)
 │   │   ├── Vacuum Lid Systems.md (overview & planning)
 │   │   ├── Air System Control Assembly.md
-│   │   ├── Coil Lead Pass-Throughs.md
 │   │   ├── Thermal Couple Pass-through.md
 │   │   ├── Vertical Sliding Shaft Seal.md
+│   │   ├── Seal Thermal Margin Analysis.md (RC thermal model, real calibration data, mitigation plan)
+│   │   ├── Material Properties Reference.md (k, max temp, tensile strength for evaluated materials)
 │   │   └── Random Holes.md
 │   │
 │   ├── Sample Quenching/ (+ INDEX.md)
@@ -112,6 +113,8 @@ Induction Quench Vault/
 │   │   ├── Ball Screw Motor Control.md (24V stepper motor control)
 │   │   ├── Control System.md (control logic & signal timing)
 │   │   ├── Coil Lead Pass-Throughs.md (high-frequency lead routing)
+│   │   ├── Heat Curve Profile Software.md (multi-segment ramp/hold GUI + execution engine)
+│   │   ├── Ambrell Contact - HOTSHOT 103927.md (vendor contact/support notes)
 │   │   ├── HOTSHOT Manual - Full Transcription.md (full manual transcription)
 │   │   └── TODO - HOTSHOT Docs & E-Stop-Wiring.md (open action list)
 │   │
@@ -183,7 +186,7 @@ Use tags to organize and filter your vault queries.
 | **Sample Geometry** | Charpy-shaped (10×10×55 mm) |
 | **Atmosphere** | Inert (vacuum/argon/nitrogen) |
 | **Heating Method** | Induction coil (~1 MHz) |
-| **Quench Method** | TBD (oil/water/gas options) |
+| **Quench Method** | Water, via ball-screw immersion (decided) — see [[Design/Sample Quenching/Quenching Methods\|Quenching Methods]] |
 | **Data Recording** | Thermocouple thermal profiles |
 
 ---
@@ -196,6 +199,14 @@ Use tags to organize and filter your vault queries.
 ---
 
 ## ✅ Vault Maintenance
+
+This vault was last **reorganized on 2026-09-18** with:
+
+✓ Fixed stale file-structure tree: removed a misplaced `Coil Lead Pass-Throughs.md` entry from the Plumbing section (that file actually lives under `Design/Wiring/`), and added `Seal Thermal Margin Analysis.md` + `Material Properties Reference.md` (Plumbing) and `Heat Curve Profile Software.md` + `Ambrell Contact - HOTSHOT 103927.md` (Wiring), which existed on disk but were missing from the tree
+✓ Updated file count to 54 markdown files total and refreshed the last-updated date
+✓ Removed an empty untracked stray file, `Untitled.md`, from the vault root
+
+**Previous maintenance (2026-08-30):**
 
 This vault was last **reorganized on 2026-08-30** with:
 
@@ -223,6 +234,6 @@ This vault was last **reorganized on 2026-08-30** with:
 
 ---
 
-**Last Updated:** 2026-08-30  
+**Last Updated:** 2026-09-18  
 **Status:** 🟢 Organized & Ready  
-**Files:** 50 markdown files total (4 root + 5 Claude/ + 40 Design/ + 1 media/INDEX)
+**Files:** 54 markdown files total

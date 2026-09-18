@@ -43,8 +43,8 @@ Gas delivery, vacuum evacuation, and quenching medium circulation systems for ch
 ### ⚡ Power & Instrumentation
 - **[[Design/Wiring/Electrical System\|Wiring & Electrical]]** — Pump power, water-fill valve control, sensor signals
   - *Connection*: Pump 24V supply; thermocouple amplifier signals; pressure gauge instrumentation
-- **[[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Control Architecture]]** — Automated pump/fill-valve control via NI-9263
-  - *Connection*: Water filling system automation (bath fill only, not quench trigger); solenoid actuation via 0-10V command signals
+- **[[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Control Architecture]]** — Automated pump/fill-valve control via USB-6009 digital SSR triggers (current cDAQ-9174 architecture; NI-9263 was an earlier hardware plan, since superseded)
+  - *Connection*: Water filling system automation (bath fill only, not quench trigger); solenoid/pump actuation via digital SSR, not analog 0-10V
 
 ---
 
@@ -64,12 +64,10 @@ Gas delivery, vacuum evacuation, and quenching medium circulation systems for ch
 - **Safety**: Pressure relief valve in air control assembly
 
 ### Quench System
-- **Medium**: TBD (oil/water/gas options under evaluation)
-- **Delivery**: 
-  - Option 1: Gravity feed (pre-fill chamber)
-  - Option 2: 24V diaphragm pump with possible spray nozzle
+- **Medium**: Water (decided) — see [[Design/Sample Quenching/Quenching Methods|Quenching Methods]] for full rationale. Oil/gas remain candidate alternatives, not implemented.
+- **Delivery (decided)**: Pre-filled static water bath; the [[Design/Mechanisms/Ball Screw|ball screw]] lowers the sample (still clamped in its [[Design/Mechanisms/Ceramic Mount|ceramic mount]]) directly into the bath — no valve, spray, or release mechanism involved.
 - **Purpose**: Rapid cooling after 1000°C heating
-- **Advantage**: Spray nozzle could overcome Leidenfrost effect for better uniformity
+- **Opportunistic alternative**: A custom nozzle on the 24V diaphragm pump inlet could enable spray quenching (overcomes Leidenfrost effect) if pursued later — this would require sample release, which the current always-clamped design doesn't do, so it's not on the current path.
 
 ### Thermal Monitoring
 - **Thermocouple**: Quick-connect via dedicated feedthrough (copper tube with threads)
@@ -103,8 +101,8 @@ Gas delivery, vacuum evacuation, and quenching medium circulation systems for ch
 ## Design Decisions Pending
 
 ⏳ **Water Boil-Off** — Evaluate impact on vacuum performance and backfill strategy  
-⏳ **Quench Medium** — Select oil/water/gas based on desired cooling rate  
-⏳ **Spray Nozzle** — If pursuing spray quench, design custom nozzle from diaphragm pump inlet  
+⏳ **Bath Fill Timing** — Whether the water bath stays in the chamber at all times, or is added after via the 24V diaphragm pump (quench medium itself — water via ball-screw immersion — is already decided; see [[Design/Sample Quenching/Quenching Methods|Quenching Methods]])  
+⏳ **Spray Nozzle (opportunistic)** — Not the current quench-delivery path (would require sample release); only relevant if pursued as a future alternative  
 ⏳ **Thermocouple Routing** — Finalize lead management through chamber  
 ⏳ **Vacuum Leak Check** — Isolate pump and watch gauge decay to confirm/locate leak limiting pull to 28" Hg (pump is rated for 15 microns / near-full vacuum)
 

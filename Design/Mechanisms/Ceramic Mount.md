@@ -7,6 +7,8 @@ tags: [mechanisms, sample-mounting, current-design, active]
 
 **Status**: Primary candidate for sample mounting and positioning.
 
+> **Superseded description, kept for history**: the two-part NPT-threaded design below (Part 1/Part 2) was the original concept. It was superseded by the **Version 3 split-zone design** (orange wedge / gold ring / teal main body / purple cap, connected to the shaft via a 1/4-20 screw joint rather than a 1/4" NPT thread) — see [[#Current Geometry (Version 3, from CAD)|Current Geometry]] and [[#Design Evolution|Design Evolution]] below for the current build. The two-part description is retained here only as background on how the design got started.
+
 Simple two-part sample holder using a threaded boron nitride cylinder and stainless steel seal shaft.
 
 ## Design Concept
@@ -81,13 +83,15 @@ Simple two-part sample holder using a threaded boron nitride cylinder and stainl
 
 ## Manufacturing Specifications
 
+**Note**: this table reflects the original v1/v2 two-part concept. The "Thread" row (1/4" NPT) is superseded by the Version 3 screw joint (1/4-20 × 0.4"L screw, see [[#Thermal Break at the Screw Joint (2026-09-12)|Thermal Break at the Screw Joint]] below) — kept here for history, not current build reference.
+
 | Feature | Spec | Purpose |
 |---------|------|---------|
 | Cylinder OD | 20mm | Fit in quartz tube clearance |
 | Groove Depth | TBD (deeper than v1, to fully seat square T-slot tab in round bore) | Hold charpy sample |
 | Groove Width | TBD | Friction fit sample |
 | Groove Profile | T-slot (square-shouldered) | Match modified charpy T-slot head |
-| Thread | 1/4" NPT | Attach seal shaft |
+| Thread | ~~1/4" NPT~~ superseded — see note above | Attach seal shaft (v1/v2 only) |
 | Shaft Polish | Mirror finish | Vacuum seal quality |
 
 ## Current Geometry (Version 3, from CAD)
