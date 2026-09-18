@@ -24,9 +24,9 @@ Gas delivery, vacuum evacuation, and quenching medium circulation systems for ch
 - **Integration**: Air System Control Assembly in lid (bronze 1/4" pipe networks)
 
 ### Quench System
-- **Medium**: TBD (oil/water/gas options under evaluation)
-- **Delivery**: 24V mini diaphragm pump available for potential spray nozzle
-- **Consideration**: Pump inlet can be modified for spray quenching to overcome Leidenfrost effect
+- **Medium**: Water (decided) — see [[Design/Sample Quenching/Quenching Methods|Quenching Methods]] for full rationale. Oil/gas remain candidate alternatives, not implemented.
+- **Delivery (decided)**: Pre-filled static water bath; the [[Design/Mechanisms/Ball Screw|ball screw]] lowers the sample (still clamped in its [[Design/Mechanisms/Ceramic Mount|ceramic mount]]) directly into the bath — no valve, spray, or release mechanism involved.
+- **Opportunistic alternative**: A custom nozzle on the 24V diaphragm pump inlet could enable spray quenching (overcomes Leidenfrost effect) if pursued later — this would require sample release, which the current always-clamped design doesn't do, so it's not on the current path.
 - **Temperature Control**: Pending coolant system design
 
 ## Key Design Factors

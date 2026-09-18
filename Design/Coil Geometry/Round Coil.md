@@ -12,8 +12,9 @@ Cylindrical coil geometry wound concentrically around the sample. This approach 
 ## Power Control Integration
 
 See [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] for automated power delivery:
-- Induction power supply receives 0-10V command signal from NI-9263 (DAC)
-- PID loop maintains target sample temperature (1000°C) via thermocouple feedback from NI-9219 (ADC)
+- Induction power supply receives 0-10V command signal from NI-9269 (DAC)
+- PID loop maintains target sample temperature (1000°C) via thermocouple feedback from NI-9229 + external CJC amp (ADC)
+- (Current cDAQ-9174 architecture; NI-9263/NI-9219 was an earlier hardware plan for these two roles, since superseded — see [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]])
 - Coil power is ramped and controlled automatically during heating phase
 
 ## Manufacturing Approach

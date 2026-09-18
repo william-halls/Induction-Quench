@@ -12,7 +12,7 @@ Power delivery, control circuits, and instrumentation for induction heating and 
 | File | Purpose | Status |
 |------|---------|--------|
 | **[[Design/Wiring/Electrical System|Electrical System.md]]** | Power delivery & instrumentation overview | 🔵 Hub |
-| **[[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture.md]]** | Automated control via NI-9219 + NI-9263 on legacy laptop | 🟢 Active |
+| **[[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture.md]]** | Automated control via cDAQ-9174 (NI-9269 power out, NI-9229+CJC amp thermocouple in, USB-6009 digital) on new laptop — NI-9219/NI-9263/legacy laptop was an earlier hardware plan, since superseded | 🟢 Active |
 | **[[Design/Wiring/Ball Screw Motor Control|Ball Screw Motor Control.md]]** | 24V stepper motor control system (power supply, controller, driver, motor) | 🟢 Complete |
 | **[[Design/Wiring/Control System|Control System.md]]** | Control logic, signal timing, automation sequences | 🟢 Active |
 | **[[Design/Wiring/Coil Lead Pass-Throughs|Coil Lead Pass-Throughs.md]]** | High-frequency power lead routing through chamber | 🟢 Active |

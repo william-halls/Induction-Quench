@@ -24,7 +24,7 @@ Design and optimization of the induction heating coil for uniform, efficient hea
 - **[[Design/Wiring/Electrical System\|Wiring & Electrical]]** — Power delivery, impedance matching, high-frequency leads
   - *Connection*: Coil load impedance must match supply; connections via pass-throughs
 - **[[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Control Architecture]]** — PID-based power control
-  - *Connection*: Thermocouple feedback → NI-9219 → PID loop → NI-9263 (0-10V power command)
+  - *Connection*: Thermocouple feedback → NI-9229 + external CJC amp → PID loop → NI-9269 (0-10V power command) — current cDAQ-9174 architecture; NI-9219/NI-9263 was an earlier hardware plan, since superseded
 
 ### 📦 Containment
 - **[[Design/Vacuum Chamber/Vacuum Enclosure\|Vacuum Chamber]]** — Must fit within chamber envelope

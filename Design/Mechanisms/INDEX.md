@@ -35,7 +35,7 @@ Mechanical systems, actuation, control logic, and safety interlocks for repeatab
 - **[[Design/Wiring/Electrical System\|Wiring & Electrical]]** — Ball screw actuation signals, emergency stop
   - *Connection*: E-stop wiring; thermocouple/pressure sensor inputs. No quench valve exists — quenching is triggered by ball screw immersion, not a valve
 - **[[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Control Architecture]]** — Automated ball screw control
-  - *Connection*: [[Design/Mechanisms/Ball Screw|Ball screw]] motor control via NI-9263 drives the quench-immersion trigger directly; safety monitoring via NI-9219. (If a quench valve is ever added, it would be triggered by a separate SSR controlled by the USB-6009 — not yet implemented)
+  - *Connection*: [[Design/Mechanisms/Ball Screw|Ball screw]] start is triggered via a USB-6009 digital SSR line (current cDAQ-9174 architecture; NI-9263 was an earlier hardware plan, since superseded) which drives the quench-immersion trigger directly; safety monitoring via NI-9219 (spare module, earmarked for pressure).
 
 ### 💧 Fluid Control
 - **[[Design/Plumbing/Fluid Systems\|Plumbing & Fluid Systems]]** — Water bath fill/drain, pressure relief (no quench valve; bath is pre-filled, sample is immersed by the ball screw)

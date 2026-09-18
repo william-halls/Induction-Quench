@@ -625,7 +625,7 @@ The ball screw motor control system enables:
 | Subsystem | Connection | Status |
 |-----------|-----------|--------|
 | **[[Design/Mechanisms/Ceramic Mount\|Ceramic Mount]]** | Ball screw shaft couples to mount base; controls vertical position | 🟢 Active |
-| **[[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Architecture]]** | ST-PMC1 receives start commands from NI-9263; no valve timing to coordinate — quench is the lowering motion itself | ⏳ Pending Integration |
+| **[[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Architecture]]** | ST-PMC1 receives start commands from a USB-6009 digital SSR line (current cDAQ-9174 architecture; NI-9263 was an earlier hardware plan, since superseded); no valve timing to coordinate — quench is the lowering motion itself | ⏳ Pending Integration |
 | **[[Design/Vacuum Chamber/Vacuum Enclosure\|Vacuum Chamber]]** | Shaft passes through chamber lid via seal; motor outside chamber | 🟢 Designed |
 | **[[Design/Plumbing/Fluid Systems\|Plumbing & Valves]]** | Water bath is filled/maintained independently of the ball screw; no quench valve exists | 🟢 Decided |
 | **[[Design/Sample Quenching/Quenching Methods\|Quenching Methods]]** | Motor lowers sample directly into the pre-filled water bath — immersion, not medium release | 🟢 Decided |

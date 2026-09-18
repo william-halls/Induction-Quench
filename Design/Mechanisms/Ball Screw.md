@@ -31,7 +31,7 @@ Similar to the FUYU FSK40E series but unbranded. The actual parts and stepper ar
 - ✅ Holding: Motor coils always energized → fail-safe position hold (sample cannot drift)
 
 **Automated Control** (in development):
-- See [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] for integration with NI-9263 signal output
+- See [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] for integration — ST-PMC1 start is triggered via a USB-6009 digital SSR line (current cDAQ-9174 architecture; NI-9263 was an earlier hardware plan, since superseded)
 - ST-PMC1 can receive start/stop commands from external triggers; the quench itself is the ball screw lowering the sample into the water bath — no quench valve or relay-triggered release involved
 - See [[Design/Mechanisms/Ball Screw Motor Control|Motor Control documentation]] for detailed commissioning guide
 

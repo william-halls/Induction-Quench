@@ -54,5 +54,5 @@ Quenching is performed by driving the [[Design/Mechanisms/Ball Screw|ball screw]
 - [[Design/Plumbing/Fluid Systems|Plumbing & Fluid Systems]] — Water bath fill/circulation (bath is pre-filled/static; not sprayed onto the sample)
 - [[Design/Mechanisms/Ball Screw|Ball Screw]] — Drives sample immersion into the quench bath; no separate release mechanism
 - [[Design/Wiring/Electrical System|Wiring & Electrical]] — Quench initiation signals
-- [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] — Automated quench triggering via NI-9263; pressure spike monitoring via NI-9219
+- [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] — Automated quench triggering via USB-6009 digital SSR (current cDAQ-9174 architecture; NI-9263 was an earlier hardware plan, since superseded); pressure spike monitoring via NI-9219 (spare module, earmarked for this use)
 - [[Design/Archive/Design History|Design Archive]] — Previous quench methods and results

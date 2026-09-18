@@ -34,8 +34,8 @@ Context: [[Design/Wiring/Ball Screw Motor Control.md]] currently documents **one
 
 - [x] Interlock connector pinout confirmed from manual (2026-09-05) — CTB1:15-16 for E-stop (N.C., 3Adc min), CTB1:1-2 for 0-10V analog input (Zin = 21kΩ). See [[Design/Wiring/Electrical System.md]] for the full pinout table.
 - [ ] Decide interlock strategy: e-stop wired into (a) HOTSHOT CTB1:15-16, (b) mains contactor in the 240V feed, or both (recommended, since CTB1:15-16 is confirmed control-rail-only, not a mains disconnect — see [[Design/Wiring/Electrical System.md]])
-- [x] NI-9263 → HOTSHOT wiring can now be finalized: CTB1:1 (+) / CTB1:2 (−), 0-10Vdc, Zin = 21kΩ — well above NI-9263 output impedance, so no loading concerns. Shielding requirements still per [[Design/Wiring/NI-DAQ Control Architecture.md]] cable notes.
-- [ ] Draw/document a single consolidated wiring diagram covering: 240V mains → contactor → HOTSHOT; e-stop loop (button → CTB1:15-16 and/or contactor coil); NI-9263 0-10V control line → CTB1:1-2; ball screw limit switch(es) → ST-PMC1 inputs
+- [x] NI-9269 → HOTSHOT wiring can now be finalized: CTB1:1 (+) / CTB1:2 (−), 0-10Vdc, Zin = 21kΩ — well above NI-9269 output impedance, so no loading concerns (corrected: the original plan referenced NI-9263, since superseded by the current cDAQ-9174/NI-9269 architecture). Shielding requirements still per [[Design/Wiring/NI-DAQ Control Architecture.md]] cable notes.
+- [ ] Draw/document a single consolidated wiring diagram covering: 240V mains → contactor → HOTSHOT; e-stop loop (button → CTB1:15-16 and/or contactor coil); NI-9269 0-10V control line → CTB1:1-2; ball screw limit switch(es) → ST-PMC1 inputs
 - [ ] Add the consolidated diagram to [[Design/Wiring/Electrical System.md]] or [[Design/Wiring/INDEX.md]] once drafted
 
 ## Status

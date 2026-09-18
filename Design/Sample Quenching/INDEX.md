@@ -37,7 +37,7 @@ Sample geometries, rapid cooling strategies, and quenching methods for achieving
 ### ⚡ Control Timing
 - **[[Design/Wiring/Electrical System\|Wiring & Electrical]]** — Quench trigger signals (ball screw actuation, not a valve)
   - *Connection*: Timer-based or manual trigger; feedback from sensors (temp, pressure) may inform quench decision
-- **[[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Control Architecture]]** — Automated quench triggering via NI-9263
+- **[[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Control Architecture]]** — Automated quench triggering via USB-6009 digital SSR (current cDAQ-9174 architecture; NI-9263 was an earlier hardware plan, since superseded)
   - *Connection*: Software triggers the ball screw to lower the sample into the bath; temperature/time-based logic; data logging of quench event and pressure spike
 
 ---
