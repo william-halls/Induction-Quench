@@ -49,18 +49,18 @@ Across the full plausible k_BN × k_steel grid, **margin was negative in every c
 
 ## Real calibration data (supersedes the modeled sweep)
 
-**Actual thermocouple measurement at the seal location**: with the sample held at 850°C, the seal location stabilized at **~100°C (212°F)** at steady state — i.e., right at the seal's 210°F rated limit, with near-zero margin.
+**Actual thermocouple measurement at the seal location**: with the sample held at 850°C, the seal location stabilized at **~120°C (248°F)** — this **already exceeds the seal's 210°F/99°C rating** at steady state, even with the original as-built hardware (no heat-break installed). (Corrected 2026-09-18 — an earlier version of this note used 100°C; 120°C is the confirmed real value.)
 
-This showed the modeled sweep (predicting 328-554°F for a much shorter 2-min hold) was too pessimistic — the real assembly has heat-loss paths (convection/radiation off the shaft, larger downstream thermal mass) that the simple closed conduction-path model didn't include.
+This is a smaller gap from the modeled sweep (predicting 328-554°F for a much shorter 2-min hold) than the earlier 100°C figure suggested, but the real assembly still clearly has heat-loss paths (convection/radiation off the shaft, larger downstream thermal mass) that the simple closed conduction-path model omits — the model is still too pessimistic, just not as dramatically as first calculated.
 
 **Calibrated steady-state gain** (usable without knowing k_BN/k_steel at all):
 ```
-f = (T_seal_ss - T_ambient) / (T_sample_ss - T_ambient) = (100-20)/(850-20) = 0.096
+f = (T_seal_ss - T_ambient) / (T_sample_ss - T_ambient) = (120-20)/(850-20) = 0.1205
 ```
 
 **Recommended gauge formula** (conservative upper bound, no time-constant/material data needed):
 ```
-T_seal_worst_case = T_ambient + 0.096 × (T_hold - T_ambient)
+T_seal_worst_case = T_ambient + 0.1205 × (T_hold - T_ambient)
 margin% = (210°F - T_seal_worst_case) / (210°F - T_ambient) × 100
 ```
 This works because T_seal can never exceed its steady-state asymptote during a finite hold (monotonic approach) — so this is a guaranteed upper bound per hold segment, and ramp segments are short enough not to matter much next to holds.
@@ -70,22 +70,22 @@ This works because T_seal can never exceed its steady-state asymptote during a f
 The modeled sweep above (BN, assumed k, no heat-break) gave -83% to -358% margin for the 800°C/2min-hold mock cycle — but that model has no path for heat to escape to ambient (pure series conduction only), so it structurally can't reproduce the real measured behavior. Applying the **calibrated steady-state gain** from the real thermocouple test to that same mock cycle instead:
 
 ```
-f = (T_seal_ss - T_ambient) / (T_sample_ss - T_ambient) = (212°F - 68°F) / (1562°F - 68°F) = 0.0964
-T_seal_worst_case = T_ambient + f × (T_hold - T_ambient) = 68 + 0.0964 × (1472 - 68) = 203.3°F (95.2°C)
-margin% = (210 - 203.3) / (210 - 68) × 100 = +4.7%
+f = (T_seal_ss - T_ambient) / (T_sample_ss - T_ambient) = (248°F - 68°F) / (1562°F - 68°F) = 0.1205
+T_seal_worst_case = T_ambient + f × (T_hold - T_ambient) = 68 + 0.1205 × (1472 - 68) = 237.2°F (114.0°C)
+margin% = (210 - 237.2) / (210 - 68) × 100 = -19.1%
 ```
 
-**This is a materially different (and more trustworthy) answer than the modeled sweep** — +4.7% margin instead of deeply negative — for the *exact same* 800°C/2min-hold cycle. The reason: this number is anchored to a real measurement instead of assumed material properties, and it correctly accounts for the ambient heat-loss path (convection/radiation off the shaft and surrounding hardware) that the pure series-conduction model omits entirely — which is also why the series model's τ-based simulations (elsewhere in this document) always trend toward the sample's own temperature at long hold times, while the real hardware visibly doesn't.
+**This is still a much smaller overshoot than the modeled sweep** (-19.1% vs. -83% to -358%) for the *exact same* 800°C/2min-hold cycle, but unlike the earlier 100°C-based calculation, **this is now a genuinely negative margin, not a positive one** — the calibrated, real-data-anchored estimate confirms the seal is over its rating for this cycle on the as-built hardware, just less severely than the unanchored model claimed. The reason for the remaining gap between calibrated and modeled numbers is the same as before: this estimate correctly accounts for the ambient heat-loss path (convection/radiation off the shaft and surrounding hardware) that the pure series-conduction model omits entirely.
 
-**Important scope caveat**: this calibration was measured on the **original, as-built hardware** — boron nitride holder, whatever standoff distance currently exists, no heat-break installed. It is **not** validated for the Titanium or Lava holder variants, or for a longer standoff, since those configurations haven't been physically tested. Use this calibrated number as the "realistic baseline for what's already built," and the modeled sweep's *relative* improvements (e.g. the ~80-160% resistance increase from the joint heat-break, the ~40x conductivity drop from switching to Lava) as directionally trustworthy multipliers on top of it — not the modeled sweep's absolute peak-temperature numbers, which are calibrated to nothing.
+**Important scope caveat**: this calibration was measured on the **original, as-built hardware** — boron nitride holder, whatever standoff distance currently exists, no heat-break installed. It is **not** validated for the Titanium or Lava holder variants, or for a longer standoff, since those configurations haven't been physically tested. Use this calibrated number as the "realistic baseline for what's already built," and the modeled sweep's *relative* improvements (e.g. the ~80-160% resistance increase from the joint heat-break, the ~40x conductivity drop from switching to Lava) as directionally trustworthy multipliers on top of it — not the modeled sweep's absolute peak-temperature numbers, which are calibrated to nothing. **Given the calibrated estimate is now negative even at the real-data anchor point, the heat-break/holder mitigation is not optional headroom — it's needed to bring the as-built system into positive margin at all.**
 
 ### Comparison: user-supplied real measurement vs. modeled approaches
 
 | Source | Condition | Result |
 |---|---|---|
-| **Real thermocouple measurement (user-supplied)** | Sample held at 850°C (sustained/steady state), original as-built BN holder, thermocouple placed at the seal location | **Seal stabilized at ~100°C (212°F)** |
+| **Real thermocouple measurement (user-supplied)** | Sample held at 850°C (sustained/steady state), original as-built BN holder, thermocouple placed at the seal location | **Seal stabilized at ~120°C (248°F) — already -26.8% margin at this measured condition alone** |
 | Modeled sweep (assumed k, pure series conduction, no ambient loss path) | 800°C sample, 2min hold, mock cycle | Peak seal temp 328-554°F (165-290°C) depending on k_BN/k_steel assumption — margin -83% to -358% |
-| **Calibrated estimate (this section)** — derived directly from the real measurement above | Same 800°C/2min-hold mock cycle | **Peak seal temp 203.3°F (95.2°C) — margin +4.7%** |
+| **Calibrated estimate (this section)** — derived directly from the real measurement above | Same 800°C/2min-hold mock cycle | **Peak seal temp 237.2°F (114.0°C) — margin -19.1%** |
 
 The calibrated estimate lands close to the user's real measured value (95.2°C calculated vs. 100°C measured, for a comparable but not identical condition — the real measurement was a sustained 850°C hold, the calibrated estimate applies that same ratio to a shorter 800°C/2min mock hold) — which is the expected relationship, since the calibration is built directly from that measurement. The point of this comparison is to show how far off the pure series-conduction model was (328-554°F) versus anything anchored to the real data (~95-100°C) — a ~3-5x overestimate from the unanchored model.
 

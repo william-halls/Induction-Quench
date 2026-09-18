@@ -1026,14 +1026,18 @@ The diaphragm pump is **24V DC** (consistent with [[Design/Plumbing/Fluid System
 
 | # | Function | Type | Status |
 |---|---|---|---|
-| 1 | ST-PMC1 RUN trigger | DC SSR (LCD4075DD3) | In progress, not yet bench-tested |
-| 2 | ST-PMC1 IN1 trigger | DC SSR (LCD4075DD3-type) | Planned |
-| 3 | ST-PMC1 IN2 trigger | DC SSR (LCD4075DD3-type) | Planned |
-| 4 | Diaphragm pump on/off | DC SSR (LCD4075DD3-type, current-rated for pump) | Planned |
+| 1 | ST-PMC1 RUN trigger | DC SSR (LCD4075DD3) | In progress, not yet bench-tested — already on hand, not part of the 2026-09-17 order below |
+| 2 | ST-PMC1 IN1 trigger ("home/Goes Up") | DC SSR (LCD4075DD3-type) | **Ordered 2026-09-17** — see order below |
+| 3 | ST-PMC1 IN2 trigger ("Goes down") | DC SSR (LCD4075DD3-type) | **Ordered 2026-09-17** — see order below |
+| 4 | Diaphragm pump on/off | DC SSR (LCD4075DD3-type, current-rated for pump) | **Ordered 2026-09-17** — see order below |
 | 5 | AC power release (stepper controller+driver) | AC SSR (LCDS4048ZD3) | Existing/documented below |
-| 6 | TB6600 driver MF+/− (motor-free/disable) | DC SSR (LCD4075DD3-type, spare unit) | Planned (2026-09-05) — see "MF+/− Motor-Free Control" below |
+| 6 | TB6600 driver MF+/− (motor-free/disable) | DC SSR (LCD4075DD3-type, spare unit) | **Ordered 2026-09-17** — see order below (the "1 extra" unit) |
+| 7 | HOTSHOT START | DC SSR (LCD4075DD3-type) | **Ordered 2026-09-17** — see order below; see [[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Control Architecture]] for wiring |
+| 8 | HOTSHOT STOP | DC SSR (LCD4075DD3-type, fail-safe ON-by-default) | **Ordered 2026-09-17** — see order below; see [[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Control Architecture]] for wiring |
 | — | ST-PMC1 STOP | — | **Not SSR-controlled, by design (2026-09-05)** — permanently jumpered closed, not treated as safety-critical for this mechanism; see below |
 | — | ST-PMC1 A, B | — | **Unused** — no SSR needed unless a real-time interrupt use case is defined |
+
+**Order placed 2026-09-17:** "SSR DC-OUT" — [Amazon listing](https://www.amazon.com/dp/B0FJ7BS3DG?ref=clp_cat_p_4), sold in packs of 2. Qty 3 packs (6 units) @ ~$27.90/pack, $83.70 total — covers items #2, #3, #4, #6, #7, #8 above (6 of the 6 remaining planned DC SSR slots, item #1 already on hand). Allocation per pack: IN1, IN2, Pump Power, HOTSHOT START ("HOTSHOT RUN" in the order notes), HOTSHOT STOP, and 1 extra unit assigned to TB6600 MF+/−.
 
 ---
 
@@ -1067,11 +1071,17 @@ The SSR's output acts as a switch between its two output terminals when the cont
 
 **Update (2026-09-05) — STOP is not being treated as a safety-critical E-stop.** Reassessed: the ball screw stage (light sample + mount, vertical lift, NEMA 23 holding torque) doesn't present the kind of hazard that motivated the hardwired-E-stop philosophy elsewhere in this system (e.g. HOTSHOT RF power, vacuum chamber). Decision: **STOP will simply be permanently jumpered closed** (always "run-allowed") rather than wired to a physical E-stop switch or routed through DAQ/SSR control. Actual "stop everything" duty is handled at the power level instead, via the existing AC power-release SSR + SOLA DC-OK interlock (see "AC Power Release Interlock" below) — cutting power to the stepper controller/driver achieves the same practical effect without needing a dedicated STOP circuit. No SSR is allocated to STOP.
 
-### MF+/− Motor-Free Control (added 2026-09-05)
+### MF+/− Motor-Free Control (added 2026-09-05; scope expanded 2026-09-17)
 
 **Decision:** Wire MF+/− on the TB6600 driver for DAQ-controlled "motor free" (coil de-energize) — using the spare LCD4075DD3-type SSR left over after covering RUN/IN1/IN2/pump (5 needed, bought in packs of 2 = 6, 1 spare from stock already on hand).
 
-**Why MF instead of using the spare SSR for STOP:** STOP was deliberately kept independent of DAQ/software (see above) — routing it through an SSR would make the "stop" path depend on the 6009, software, and 24V rail all being healthy, undermining the point of an independent stop. MF has no such safety role — it's a convenience feature (let the shaft spin freely by hand, e.g. during assembly/alignment) — so DAQ control is a clean, low-consequence use of the spare SSR. Note MF is **not** a safety disable: engaging it removes holding torque, so it should never be triggered with the sample loaded/suspended (see load-holding note above — coils energized is the failsafe assumption throughout this doc).
+**Original scope (2026-09-05):** convenience feature only — let the shaft spin freely by hand (e.g. during assembly/alignment), unloaded. Explicitly **not** a safety disable at the time: engaging it removes holding torque, and the original guidance was to never trigger it with the sample loaded/suspended (coils energized was the failsafe assumption throughout this doc).
+
+**Scope expanded (2026-09-17):** MF+/− will now *also* serve as a software-triggerable emergency stop — "if the motion is wrong, trigger this" — usable even with the sample loaded, not just during unloaded assembly/alignment. This is a deliberate reversal of the original loaded-sample caution, made because an immediate coil de-energize was judged preferable to letting a detected-bad motion continue.
+
+**Known open risk, accepted as-is:** the ball screw is documented as self-locking under *static* load when de-energized (5–10mm lead) — but that hasn't been verified under *dynamic* conditions (mid-move momentum, vibration, actual sample mass). Triggering MF while loaded and moving is untested; a controlled bench test (load present, water bath positioned underneath as a catch, no one standing under the mechanism) should happen before this is relied on operationally.
+
+**Wiring/control decision (2026-09-17):** kept as **DAQ-SSR only**, not a hardwired physical panic button. This means the emergency-stop path depends on the DAQ/software correctly detecting the problem and firing the SSR — the same dependency that STOP was deliberately built *without* (see STOP discussion above, "routing it through an SSR would make the 'stop' path depend on the 6009, software, and 24V rail all being healthy, undermining the point of an independent stop"). That trade-off is accepted here intentionally, unlike STOP; if a hardwired-independent panic button is wanted later, this section is where it'd need to be reopened.
 
 **Wiring plan (same opto-isolated pattern as PU/DR):**
 
