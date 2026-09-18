@@ -4,6 +4,14 @@ Record of what changed with each push to GitHub.
 
 <!-- Newest entries at the top -->
 
+## 2026-09-18 - Correct real seal temp to 120C, fix BN/mica k-value errors, flag 304SS sensitization risk
+**Commit**: `0ca63d5`
+- [[Design/Plumbing/Seal Thermal Margin Analysis.md]]: corrected the real measured seal temp from 100°C to 120°C (confirmed value) and recalculated everything downstream — the calibrated estimate for the mock cycle flips from +4.7% to -19.1% margin, and the real measured condition alone is already -26.8% margin on the as-built hardware. The heat-break/holder mitigation is now needed to reach positive margin at all, not optional extra headroom
+- [[Design/Plumbing/Material Properties Reference.md]]: double-checked every k value against real references — corrected boron nitride's range (real hot-pressed h-BN is 60-90 W/m·K cross-plane / 150-250 in-plane, higher than the 20-70 previously used), corrected the muscovite-vs-phlogopite comparison (muscovite is actually marginally higher k, not lower — doesn't change the part choice, just the stated reasoning), verified 304 stainless's k and tensile strength (both confirmed correct), fixed a continuous/intermittent oxidation-temperature label swap, and flagged a new risk: 304 SS sensitization in the 425-860°C range (which the shaft is repeatedly cycled through) degrades subsequent aqueous corrosion resistance — relevant given the shaft's water contact, not yet assessed further
+- [[Design/Mechanisms/Ceramic Mount.md]]: updated to match the 120°C correction and the muscovite/phlogopite reasoning fix
+- Commit also included pre-existing carryover from prior uncommitted sessions not part of this conversation: [[Design/Vacuum Chamber/Used Vacuum Chamber.md]], [[Design/Wiring/Ball Screw Motor Control.md]], .obsidian workspace state
+- 5 files changed (3 intentional, 2 modified carryover)
+
 ## 2026-09-17 - Seal thermal margin analysis, Ceramic Mount v3 geometry + Lava/titanium mitigation plan
 **Commit**: `09c06a9`
 - New [[Design/Plumbing/Seal Thermal Margin Analysis.md]]: full RC thermal derivation for the shaft seal — geometry chain, corrected compounding equations (caught and fixed a PowerShell case-insensitive-variable bug, plus an initial error treating the mica washer as the only heat path instead of properly modeling it in parallel with the titanium screw bypass), a material-property sensitivity sweep, a real thermocouple calibration point (~100°C at the seal with sample held at 850°C — right at the seal's 210°F rated limit), and a final comparison of BN/Titanium/Lava holder options
