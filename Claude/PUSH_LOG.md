@@ -5,7 +5,7 @@ Record of what changed with each push to GitHub.
 <!-- Newest entries at the top -->
 
 ## 2026-09-18 - Vault consistency sweep: propagate 120°C correction, fix stale "decided" items, README/index maintenance
-**Commit**: (pending)
+**Commit**: `c0c2bf3`
 - [[Design/Plumbing/Vertical Sliding Shaft Seal.md]]: the 120°C seal-temp correction (made in Seal Thermal Margin Analysis.md and Ceramic Mount.md in the prior commit) hadn't propagated here — this note still said "~100°C (212°F), near-zero margin." Corrected to 120°C/248°F and "-26.8% margin, already exceeds rating."
 - [[Design/Plumbing/Seal Thermal Margin Analysis.md]]: fixed a leftover paragraph that still read "95.2°C calculated vs. 100°C measured" (stale numbers from before the 120°C correction) — now consistent with the 114.0°C calibrated estimate vs. 120°C real measurement used everywhere else in the note. Also fixed a stray "100°C" in the Known Open Items list.
 - [[Design/Plumbing/Thermal Couple Pass-through.md]]: signal path said "Thermocouple → NI-9219 ADC" — superseded hardware. Corrected to the current chain (external CJC amp → NI-9229) per NI-DAQ Control Architecture.md.
