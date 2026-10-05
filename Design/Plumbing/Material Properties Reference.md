@@ -31,6 +31,7 @@ Thermal conductivity, max temperature, and tensile strength for every material e
 | **Muscovite Mica** — used (washer) | **0.3 (datasheet)**; ~0.46 perpendicular-to-cleavage per general literature | **499°C cont. / 799°C intermittent** | **21,000 psi** | **Datasheet (5067K56)** |
 | Phlogopite Mica (extra-high-temp option, not used) | ~0.44 perpendicular-to-cleavage per general literature — essentially identical to muscovite, actually *very slightly lower*, not higher as previously stated here | 699°C cont. / 999°C intermittent | ~similar to muscovite | Corrected 2026-09-18 — see note below |
 | **Alumina Silicate "Lava"** — recommended holder | **1.265** | **1,099°C (unfired)** | **2,500 psi** | **Datasheet (8479K69)** |
+| ↳ Additional datasheet values for the same part (8479K69), not yet used elsewhere: density **0.09 lb/in³ (2.49 g/cm³)**, hardness **Rockwell H59**, CTE **1.6×10⁻⁶/°F**, compressive strength **25,000 psi**, flexural strength **10,000 psi**, dielectric strength **100 V/mil**, porosity **2%**, composition ~59% SiO₂ / ~29% Al₂O₃ / balance Fe₂O₃, K₂O, TiO₂ | | | Confirmed 2026-09-25 from full McMaster product-page text (not just the summary spec pulled earlier) |
 | Macor | ~1.46 | ~799-982°C | ~5,000 psi | Literature |
 | Cordierite | ~1.5-3 | ~982-1,149°C | ~3,000-5,000 psi | Literature |
 | Fused Silica (dense) | ~1.3-1.5 | ~982°C+ | ~7,000-8,000 psi | Literature |

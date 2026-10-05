@@ -83,7 +83,7 @@ Simple two-part sample holder using a threaded boron nitride cylinder and stainl
 
 ## Manufacturing Specifications
 
-**Note**: this table reflects the original v1/v2 two-part concept. The "Thread" row (1/4" NPT) is superseded by the Version 3 screw joint (1/4-20 × 0.4"L screw, see [[#Thermal Break at the Screw Joint (2026-09-12)|Thermal Break at the Screw Joint]] below) — kept here for history, not current build reference.
+**Note**: this table reflects the original v1/v2 two-part concept. The "Thread" row (1/4" NPT) is superseded by the Version 3 screw joint (1/4-20 × 0.4"L screw; the deferred titanium-screw thermal break is documented in [[Design/Mechanisms/Hybrid Ceramic Holder|Hybrid Ceramic Holder]]) — kept here for history, not current build reference.
 
 | Feature | Spec | Purpose |
 |---------|------|---------|
@@ -125,37 +125,18 @@ BN density backs out to ~2.0 g/cm³ (consistent, hot-pressed BN — same stock p
 
 </details>
 
-## Holder Material Change: Alumina Silicate ("Lava") — recommended (2026-09-12, updated 2026-09-17)
+## Holder Material Change: Hybrid BN + Alumina Silicate ("Lava") — concept
 
-Replacing the boron nitride holder body (orange/gold/teal/purple zones) with **alumina silicate ceramic ("Lava"), McMaster 8479K69** (3/4" dia rod, $79.36) was evaluated as a much bigger thermal lever than the joint heat-break alone:
+> **Moved to its own note (2026-09-21):** [[Design/Mechanisms/Hybrid Ceramic Holder|Hybrid Ceramic Holder]]
 
-- **k = 1.265 W/(m·°C) at 20°C** (datasheet-confirmed) vs. BN's ~50 W/m·K — roughly **40x lower conductivity**, dropping the holder's own resistance contribution from ~3.4 K/W to ~130 K/W using the existing zone geometry
-- Combined with the titanium-screw + 1/4" mica-washer joint below, full-assembly modeled margin improves from +2% (BN holder) to **~+75%** for the 800°C/2min-hold mock cycle
-- **Fabrication note**: sold "Unfired," rated to 2,010°F even unfired per this datasheet — may not require firing at all for this application (peak ~1,562°F/850°C), which would avoid the ~2% fire-expansion dimensioning issue and kiln dependency generally associated with this material class. Needs direct confirmation with McMaster/supplier before relying on the unfired rating.
-- **Mechanical properties are modest** — tensile strength only 2,500 psi (compressive 25,000 psi, flexural 10,000 psi) — weaker than BN; fine for this application's light clamp loads but avoid tension/bending-loaded features
+**Concept only — not committed, not quoted, machined, or tested.** Summary:
 
-**Firing schedule** (if firing is done rather than relying on the as-machined unfired rating — published schedule for this material family, Foundry Service & Supplies Grade A aluminum silicate):
-- **Heating ramp**: 111-139°C/hour for standard sections (max 167°C/hour). For thick sections (≥13mm cross-section — applies to the teal main body at ⌀20mm) slow to **28-83°C/hour**, and consider stress-relief holes to reduce cracking risk during the firing itself.
-- **Maturing (soak) temperature**: **1,010-1,093°C** — do not exceed 1,093°C (causes crystallization, distortion, shrinkage, loss of properties).
-- **Soak time**: 30 min for sections up to ~6mm thick, 45 min for sections ≥13mm thick — the teal body needs the longer soak.
-- **Cooling**: no mandated rate published; pull parts once below 93°C. Given the thermal-shock discussion below, cool passively (furnace-closed) rather than open-air, even though the manufacturer doesn't require it.
-- **Atmosphere**: ordinary air, nothing special.
-- **Dimensional change**: expands ~2% during firing (not shrinkage) — build green-state machining dimensions around growth, not shrinkage.
-- **Open issue**: this part has widely varying cross-sections (thin orange/gold wedges vs. the thick teal body) — the whole firing schedule needs to be built around the thickest section's slower ramp rate, which may over-stress the thinner sections. Worth discussing with whoever does the firing.
+- Keep the **orange wedge + gold ring in BN** (thermal-shock tolerance at the sample-contact interface); switch the upper holder to **alumina silicate ("Lava", McMaster 8479K69)**, k = 1.265 W/(m·°C) vs. BN's ~60-250 W/m·K.
+- **Why**: the shaft seal already measures ~120°C / 248°F against a 210°F rating — the swap projects the seal back into positive margin (+51.0% to +80.6%, configuration pending confirmation).
+- **Joint**: pinned clevis — Lava fork/cap + BN tongue + AS ceramic cross-pin in double shear. Metal never contacts BN.
+- The **titanium screw + mica washer thermal break** is documented there too, as a deferred fallback option.
 
-**Thermal shock risk — reassessed and narrowed (2026-09-17)**: initial concern was unverified thermal shock resistance under repeated rapid heat/quench cycling. Reassessed given the actual quench process — **the holder itself is never submerged; only the sample is quenched in water**:
-- Ceramic thermal-shock cracking is driven by rapid *cooling* putting the surface in tension (ceramics, including this one, are much weaker in tension — 2,500 psi — than compression — 25,000 psi). Full immersion in cold water is the severe version of this. Since the holder never contacts the quench bath directly, it never experiences that event — it only sees the gradual, conduction-limited transient already modeled (τ≈89 min for holder+joint), the same duty cycle McMaster's own use-case examples describe ("standoffs and welding jigs" — repeatedly heated by proximity, cooled between cycles, never submerged).
-- Even incidental water/steam contact (splash, condensation creeping up the shaft) would be **preheated by the sample's own heat dump into the bath**, not cold bulk-bath-temperature water — a much smaller ΔT than the worst case, and if it's condensing steam specifically, that's a *heating* event (safe compressive stress), not a cooling one.
-- **Remaining open item, narrowed**: the **orange wedge** (direct clamped sample contact) still sees the fastest/steepest gradient in the assembly — conducted, not immersion-driven, but worth a validation test specifically on that geometry/contact condition before committing the full holder, rather than testing the whole assembly against full immersion.
-- **Fallback if that test doesn't hold up**: machine the holder from **Grade 5 Titanium** instead (same alloy as the screw below) — no ceramic brittle-fracture risk at all, still gives **+49% margin** (vs. Lava's +75%), fully ductile/well-characterized, ordinary shop-machinable. Comfortable margin either way; Lava is the higher-upside option worth trying first given the risk is now well-bounded.
-- Full derivation: [[Design/Plumbing/Seal Thermal Margin Analysis.md]]
-
-## Thermal Break at the Screw Joint (2026-09-12)
-
-Real-world thermocouple testing showed the shaft seal **already exceeding** its 210°F rated limit (~120°C / 248°F measured with sample held at 850°C, confirmed value as of 2026-09-18) — see [[Design/Plumbing/Seal Thermal Margin Analysis.md]] for the full derivation. Rather than redesigning the seal, decided to add a heat break at the rod-to-ceramic-holder screw joint:
-
-- **Screw: Grade 5 Titanium (Ti-6Al-4V), 1/4-20 × 3/4"L — McMaster 94081A112.** k≈6.7 W/m·K vs. steel's 16-45 W/m·K (confirmed this needs to be Grade 5 specifically — Grade 2/CP titanium runs k≈17-22 W/m·K, essentially no better than steel; a ceramic-alumina screw option considered along the way was ruled out for the same reason, alumina's k≈20-30 W/m·K isn't actually low). Nonmagnetic, corrosion-resistant, 130,000 psi tensile. Original screw was 0.4"L; confirm the assembly has clearance for the longer 3/4"L part (or trim to length).
-- **Washer: Muscovite mica, cut from tube stock — McMaster 5067K56** (1/2" OD × 1/4" ID × 1/8" wall tube; saw thin cross-sectional rings off the end). Datasheet-confirmed k=0.3 W/(m·°C) — blocks the parallel direct-contact heat path between rod end and purple cap face (not just the screw itself). Target thickness ~0.01-0.025" (stack multiple thin slices if needed) adds a meaningful 25-100% to the joint's thermal resistance. Ream the as-cut 1/4" ID slightly for screw clearance (it's an exact nominal fit, not a clearance hole) — mica files/sands easily, just avoid forcing an undersized screw through it. OD (0.5") deliberately matches the rod's own OD so the washer fully covers the rod's end face with no gap or wasted overhang. Chosen over phlogopite mica (marginally higher temp ceiling; k is essentially the same between the two — a 2026-09-18 double-check found the real difference is negligible and, if anything, points the other way from what was first assumed — muscovite was picked for cost and because 499°C already has huge margin over anything this joint sees, not a real k advantage), Macor, Vespel, and PEEK. Light clamp torque at this joint suits mica's main weakness (delamination under shear/point load isn't triggered by pure axial compression).
+See the [[Design/Mechanisms/Hybrid Ceramic Holder|Hybrid Ceramic Holder]] note for geometry, load check, machinability, firing schedule, margin projections, and open items.
 
 ## Visual Reference & CAD
 
@@ -169,6 +150,7 @@ Real-world thermocouple testing showed the shaft seal **already exceeding** its 
 
 ## Related Mechanisms
 
+- [[Design/Mechanisms/Hybrid Ceramic Holder|Hybrid Ceramic Holder]] — BN + Lava material-change concept (seal thermal margin)
 - Control System — Part of overall automation architecture
 - [[Design/Mechanisms/Ball Screw|Ball Screw]] — Potential future linear actuation
 - [[Design/Mechanisms/Bottom Lift|Bottom Lift]] — Alternative lifting mechanism (rejected)

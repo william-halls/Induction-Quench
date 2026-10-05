@@ -12,6 +12,7 @@ Mechanical systems, actuation, control logic, and safety interlocks for repeatab
 | File | Purpose | Status |
 |------|---------|--------|
 | **[[Design/Mechanisms/Ceramic Mount|Ceramic Mount.md]]** | Active sample holder (2-part design) | 🟢 Active |
+| **[[Design/Mechanisms/Hybrid Ceramic Holder|Hybrid Ceramic Holder.md]]** | BN + Lava material change for seal thermal margin | 🔵 Concept |
 | **[[Design/Mechanisms/Ball Screw|Ball Screw.md]]** | Stepper-driven vertical shaft actuation | 🟢 Active |
 | **[[Design/Mechanisms/Bottom Lift|Bottom Lift.md]]** | Linear actuator approach (deferred) | 🟡 Deferred |
 | **[[Design/Mechanisms/Titanium Claw|Titanium Claw.md]]** | Gripper mechanism (abandoned - heat sink) | 🔴 Abandoned |

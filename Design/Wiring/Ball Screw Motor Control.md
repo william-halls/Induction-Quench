@@ -989,7 +989,95 @@ Program Flow Diagram:
 
 **Digital line budget (updated 2026-09-05):** 12 digital lines total on the 6009; 3 committed (P0.0, P0.1, P0.2) + 3 more planned (IN1, IN2, pump) + 1 more planned (MF) = 7 of 12. STOP no longer needs a line (permanently jumpered, not DAQ-controlled — see below), freeing up budget versus the earlier plan that held a slot for it. Room remains for the HOTSHOT START trigger plus future expansion.
 
-### On-Demand Position Control: GOTO Instruction + Finalized I/O Mapping (2026-09-01)
+### ⚠️ CORRECTION (2026-10-05): FINAL DESIGN section below was never actually built this way
+
+**Confirmed with user 2026-10-05: the program/wiring actually running on the physical unit does NOT match the "FINAL DESIGN (2026-09-19)" section below.** That section documents the *planned* A/B split (top switch→A, bottom switch→B, IN1/IN2 as pure Top/Quench commands) — treat it as historical/superseded-by-reality, not as a description of the current hardware. See "ACTUAL CURRENT PROGRAM (confirmed 2026-10-05)" immediately below for what's really wired and running. The exact line-by-line program listing is still TBD (user to provide) — until then, don't assume the 00–18 listing further down is what's on the controller.
+
+This also means the **"Physical Limit Switch Terminal Wiring"** subsection further down (which said top switch→A, bottom switch→B) was wrong for the actual hardware — corrected in the new section below.
+
+### ACTUAL CURRENT PROGRAM (confirmed 2026-10-05): both switches OR-wired to A, B/IN2 as toggle commands
+
+**Confirmed physical wiring:** both the upper (top) and lower (bottom/quench) limit switches have their **NO contacts tied together in parallel**, both feeding the single **A** input. A can't distinguish which switch tripped — closing *either* one pulls A low and fires the hardware interrupt, stopping the carriage (deceleration to stop), same mechanism as documented in "A/B vs. IN1/IN2" below.
+
+**Confirmed I/O roles (actual, not planned):**
+
+| Input | Wired to | Role |
+|---|---|---|
+| **A** | Both physical limit switches, NO leads commoned together | Hardware interrupt — stops the carriage when either switch closes (direction-agnostic) |
+| **B** | No physical switch — command input | Commands the carriage to move **up** |
+| **IN2** | No physical switch — command input | **Toggles direction** — each time IN2 is powered, the carriage reverses from whatever it was doing (this is what actually drives the up/down cycling day-to-day) |
+| **IN1** | — | **Not used** in the currently-running program (confirmed 2026-10-05) |
+
+**Also confirmed changed from the documented driver/motor settings (2026-10-05):**
+- **Microstepping:** now **400** steps/rev (was full-step 200 steps/rev per the 2026-08-27 decision below — that decision is superseded)
+- **Driver current:** now **3.5A** (was 4A, confirmed working in the 2026-08-25 commissioning log — that figure is superseded)
+- **Max safe SPEED:** now **1500** — lower than the earlier 8000-unloaded figure documented below. Reason given: at higher speeds the carriage's momentum carries it into the limit switch before the controller can decelerate/stop in time (physical crash), not just a motor-jam issue like the earlier 8200 figure. **1500 is the fastest confirmed safe before this happens** — treat the old 8000/8200 figures as stale, no longer applicable now that microstepping/current have also changed.
+
+**Still open:**
+- Exact line-by-line program listing (user to provide)
+- Whether/how the program tells top-stop from bottom-stop apart, given both switches share input A (likely inferred from current direction-of-travel state rather than sensed directly)
+- Whether IN1 is wired to anything at all or fully spare
+
+---
+
+### FINAL DESIGN (2026-09-19): 2-position Top/Quench, A/B hardware interrupts, no GOTO/CLR needed — ⚠️ NOT what's actually built, see correction above
+
+**Supersedes both sections below this one (GOTO-based on-demand mapping, and the "A/B left unused" decision) — kept as historical record further down, but do not build from them.**
+
+**Physical layout, confirmed 2026-09-19:** only **two** real positions exist, not the earlier three/four-position plans:
+- **Top** — Home and Heat are the **same physical switch/position** (raising into the coil *is* the reference position; there's no separate "home somewhere else, then climb to heat" step).
+- **Bottom** — Quench. This is also the **sample-loading position** — the ceramic holder is loaded here, at rest, before a run starts, not just where the drop lands afterward.
+
+Because there are only two positions and no switch sits *between* them, every move is a single uninterrupted `G-LEN` run at full safe speed, caught by a real hardware interrupt exactly at the target — no stepped/polled searching, no stutter, no absolute coordinates (`GOTO`/`CLR`) needed anywhere. This replaces the earlier `GOTO`-based "5 actions, 2 interrupts + 4 polled combinations" plan entirely — that plan assumed Home/Center/Top/Bottom were 4 distinct calculated positions; they aren't.
+
+**Final I/O mapping:**
+
+| Input | Wired to | Behavior |
+|---|---|---|
+| **A** | Top limit switch (Home/Heat combined) — **direct wire, no SSR** | Hardware interrupt — decelerates smoothly and jumps to A-operation entry (`nA`) the instant the switch closes, regardless of program state |
+| **B** | Quench (bottom) limit switch — **direct wire, no SSR** | Hardware interrupt — same, jumps to B-operation entry (`nB`) |
+| **IN1** | DAQ/manual "go to Top" command — pure command line, no physical switch on it | Polled — checked only while holding at Quench |
+| **IN2** | DAQ/manual "go to Quench" command — pure command line, no physical switch on it | Polled — checked only while holding at Top |
+
+This is a meaningful revision from the earlier IN1/IN2 SSR order's labels ("IN1 home/Goes Up", "IN2 Goes down") — IN1 and IN2 no longer have any physical limit switch OR-wired onto them at all; both physical switches moved to A/B. The SSRs already ordered for IN1/IN2 (2026-09-17) are still needed — they're what the DAQ uses to assert these command lines — just their role is now purely "command," not "sense."
+
+**Parameters (Parameter Setting mode):**
+```
+nA = 04     ; A-operation entry line — arrived at Top (Home/Heat)
+nB = 11     ; B-operation entry line — arrived at Quench (also the loading position)
+```
+
+**Final program (00–18, no gaps — ST-PMC1 auto-numbers sequentially, every instruction needs its own line):**
+```
+00  SPEED   0005000
+01  G-LEN  +7999999        ; continuous move UP — A interrupt catches it at Top
+02  OUT     O,O,O,1        ; fallback alarm (shouldn't be reached — bounded travel)
+03  JUMP    03              ; halt
+04  DELAY   0002000        ; ← A-operation entry (nA=04): settled at Top (Home/Heat)
+05  J-BIT   07, IN2, 0     ; "go to Quench" command
+06  JUMP    05
+07  SPEED   0008000        ; bench-confirmed safe max (see driver speed note above — retest under load before trusting this)
+08  G-LEN  -7999999        ; continuous move DOWN — B interrupt catches it at Quench
+09  OUT     O,O,O,1        ; fallback alarm
+10  JUMP    04
+11  DELAY   0002000        ; ← B-operation entry (nB=11): settled at Quench — LOAD SAMPLE HERE
+12  J-BIT   14, IN1, 0     ; "go to Top/Heat" command
+13  JUMP    12
+14  SPEED   0008000
+15  G-LEN  +7999999        ; continuous move UP — A interrupt catches it at Top
+16  OUT     O,O,O,1        ; fallback alarm
+17  JUMP    11
+18  END
+```
+
+**`OUT` field note:** `O`/`I`/`N` are letters (Output-off / Output-on / No-change), easily confused with digits `0`/`1` — the 4th (buzzer) field genuinely is a digit (`0`=short beep, `1`=long beep, `N`=silent). `END` can only appear once, as the true final line of the whole program — never mid-sequence to bail out of a branch; use a self-loop (`JUMP` to its own line number) to halt safely instead.
+
+**Still open / not yet bench-verified:**
+- `SPEED 0008000` for both the Top and Quench moves is the earlier-documented **unloaded** safe-speed figure (8200 jammed) — needs retesting with the actual sample mass before trusting it operationally.
+- No mid-transit abort exists for either move — once a `G-LEN ±7999999` run starts, abort/quench commands are only honored once it's arrived and holding, not while actively moving. (Separately, MF+/− is available as a software-triggered full stop at any time — see below — but that's an uncontrolled power-cut, not a graceful abort-to-position.)
+- This whole design assumes the carriage's start-of-day position is always physically between the two switches (confirmed 2026-09-17) — true given the two hard mechanical stops.
+
+### Historical: GOTO-based on-demand mapping (2026-09-01, superseded 2026-09-19)
 
 **Confirmed: the ST-PMC1 supports absolute positioning**, not just the relative/incremental `MOVE` used in the homing routine above. A separate **`GOTO ±xxxxxxx`** instruction moves directly to an absolute position (in pulses, referenced to the zero point established during homing) regardless of current location — range **-7,999,999 to +7,999,999 pulses**, far more than needed for the ~100mm travel range. This means Home/Center/Top/Bottom can each be a single `GOTO <fixed pulse count>` instruction, callable on-demand from wherever the sample currently sits — no need to track/calculate relative deltas.
 
@@ -1016,6 +1104,8 @@ Pulled directly from the ST-PMC1 manufacturer manual (not just the port-referenc
 
 **Decision (2026-09-01):** Since there's no current use case requiring real-time interrupt/abort behavior, **A and B are left unused for now** — no SSRs purchased for them. **IN1 and IN2 will get DC SSRs** (same LCD4075DD3-type part as RUN) so the DAQ can drive general-purpose polled conditions into the ST-PMC1 program. Exact IN1/IN2 use case still TBD.
 
+**Superseded 2026-09-19:** A and B are no longer unused — both now carry the two physical limit switches directly (no SSR needed for either, since a mechanical switch doesn't need one). See the FINAL DESIGN section above.
+
 **Source:** [ST-PMC1 manual, ManualsLib](https://www.manualslib.com/manual/1269811/St-St-Pmc1.html); [ST-PMC1 manual PDF, cnccat.com](https://cnccat.com/cnccat_photos/files/ST-PMC1%20Single%20Axis%20Programmable%20Controller.pdf)
 
 ### Diaphragm Pump — confirmed DC, needs its own DC-rated SSR (2026-09-01)
@@ -1027,17 +1117,38 @@ The diaphragm pump is **24V DC** (consistent with [[Design/Plumbing/Fluid System
 | # | Function | Type | Status |
 |---|---|---|---|
 | 1 | ST-PMC1 RUN trigger | DC SSR (LCD4075DD3) | In progress, not yet bench-tested — already on hand, not part of the 2026-09-17 order below |
-| 2 | ST-PMC1 IN1 trigger ("home/Goes Up") | DC SSR (LCD4075DD3-type) | **Ordered 2026-09-17** — see order below |
-| 3 | ST-PMC1 IN2 trigger ("Goes down") | DC SSR (LCD4075DD3-type) | **Ordered 2026-09-17** — see order below |
+| 2 | ST-PMC1 IN1 trigger — "go to Top/Heat" command (2026-09-19: pure command line, no physical switch) | DC SSR (LCD4075DD3-type) | **Ordered 2026-09-17** — see order below |
+| 3 | ST-PMC1 IN2 trigger — "go to Quench" command (2026-09-19: pure command line, no physical switch) | DC SSR (LCD4075DD3-type) | **Ordered 2026-09-17** — see order below |
 | 4 | Diaphragm pump on/off | DC SSR (LCD4075DD3-type, current-rated for pump) | **Ordered 2026-09-17** — see order below |
 | 5 | AC power release (stepper controller+driver) | AC SSR (LCDS4048ZD3) | Existing/documented below |
 | 6 | TB6600 driver MF+/− (motor-free/disable) | DC SSR (LCD4075DD3-type, spare unit) | **Ordered 2026-09-17** — see order below (the "1 extra" unit) |
 | 7 | HOTSHOT START | DC SSR (LCD4075DD3-type) | **Ordered 2026-09-17** — see order below; see [[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Control Architecture]] for wiring |
 | 8 | HOTSHOT STOP | DC SSR (LCD4075DD3-type, fail-safe ON-by-default) | **Ordered 2026-09-17** — see order below; see [[Design/Wiring/NI-DAQ Control Architecture\|NI-DAQ Control Architecture]] for wiring |
 | — | ST-PMC1 STOP | — | **Not SSR-controlled, by design (2026-09-05)** — permanently jumpered closed, not treated as safety-critical for this mechanism; see below |
-| — | ST-PMC1 A, B | — | **Unused** — no SSR needed unless a real-time interrupt use case is defined |
+| — | ST-PMC1 A | Direct wire, physical Top (Home/Heat) limit switch | **In use (2026-09-19)** — no SSR needed, mechanical switch wired straight to the input |
+| — | ST-PMC1 B | Direct wire, physical Quench (bottom) limit switch | **In use (2026-09-19)** — no SSR needed, mechanical switch wired straight to the input |
 
 **Order placed 2026-09-17:** "SSR DC-OUT" — [Amazon listing](https://www.amazon.com/dp/B0FJ7BS3DG?ref=clp_cat_p_4), sold in packs of 2. Qty 3 packs (6 units) @ ~$27.90/pack, $83.70 total — covers items #2, #3, #4, #6, #7, #8 above (6 of the 6 remaining planned DC SSR slots, item #1 already on hand). Allocation per pack: IN1, IN2, Pump Power, HOTSHOT START ("HOTSHOT RUN" in the order notes), HOTSHOT STOP, and 1 extra unit assigned to TB6600 MF+/−.
+
+#### Physical Limit Switch Terminal Wiring — CORRECTED 2026-10-05: both switches OR-wired to A
+
+**Original version of this section (below, struck through) assumed the planned A=top/B=bottom split, which is not what was actually built — see "ACTUAL CURRENT PROGRAM (confirmed 2026-10-05)" above.** Confirmed actual wiring: both switches' NO contacts are tied together in parallel and both feed **A**. Neither switch is wired to B — B has no physical switch on it at all (it's a command input, see above).
+
+Both switches are standard 3-terminal subminiature lever microswitches (e.g. Omron V-155-1C25 or equivalent), with terminals silkscreened on the case as **NC**, **COM**, **NO** — check the printed labels directly rather than relying on pin position/number, since numbering convention isn't universal across manufacturers.
+
+| Switch terminal | Wire to |
+|---|---|
+| **COM** (both switches) | ST-PMC1 **Com−** |
+| **NO** (both switches) | Tied together, both landing on ST-PMC1 **A** |
+| **NC** (both switches) | Leave unconnected — not used |
+
+**Why N.O., not N.C.:** The design needs the input to read high (open) during normal travel and pull low only at the instant the carriage reaches either end of travel, which is exactly the N.O. contact's behavior — this is what the ST-PMC1's active-low hardware-interrupt input expects. Wiring NC instead would invert the logic and break the interrupt trigger condition.
+
+**If labels are worn/unreadable:** identify COM vs. NO/NC with a multimeter continuity check — COM shows continuity to NC at rest (lever unpressed), and to NO only when the lever is pressed.
+
+So: **both upper and lower switches** → COM→Com−, NO→**A** (commoned together). **B** has no physical switch — it's a command input that drives the carriage up.
+
+~~So: **upper switch** COM→Com−, NO→**A**; **lower switch** COM→Com−, NO→**B**.~~ *(superseded 2026-10-05 — not the actual wiring)*
 
 ---
 
@@ -1299,6 +1410,8 @@ Chronological record of hardware setup/troubleshooting actions taken on the phys
 | 2026-08-29 | **Confirmed AC mains-side wiring convention for LCDS4048ZD3: Line only, never Neutral or Ground** | Documented under the AC Power Release Interlock section: SSR switches L only; N and GRD/PE run straight through unswitched at all times. Applies generally to any single-pole switching device in this design, not just this SSR. |
 | 2026-08-30 | **Confirmed DC-OK working as a bench-tested digital input on the USB-6009 (switch-to-ground, no pull resistor on the closed side)** | Bench setup wired DC-OK contact directly between GND and a digital input pin with no additional GND-side resistor — user confirmed this works correctly on the physical unit. Documented alongside it, for completeness, the general floating-pin rationale for why a pull resistor (10kΩ) is still needed on whichever side isn't actively driven, so the open-contact state is defined rather than floating. |
 | 2026-08-30 | **Documented plan to extend the RUN-trigger SSR pattern to other ST-PMC1 inputs (IN1, A, B)** | Same active-low COM− switching approach as RUN, one SSR per additional input needed; explicitly reuses the SSR-over-mechanical-relay lesson learned from the TS0011 troubleshooting above rather than repeating the mechanical relay attempt. |
+| 2026-10-05 | **Confirmed actual built wiring diverges from the documented "FINAL DESIGN (2026-09-19)" plan** | Both physical limit switches (top and bottom) have their NO contacts tied together and wired to **A** (not split A=top/B=bottom as planned) — A fires the hardware interrupt/stop regardless of which switch closed. **B** has no physical switch at all; it's a command input that drives the carriage **up**. **IN2** is a command input that **toggles direction** each time it's powered — this is what actually drives the up/down cycle day to day. **IN1** is confirmed not used in the currently-running program. Exact line-by-line program listing still TBD (user to provide) — do not assume the 00–18 listing documented under "FINAL DESIGN" reflects the controller's actual contents until confirmed. |
+| 2026-10-05 | **Driver/motor settings changed from earlier-logged values** | **Microstepping** changed to **400** steps/rev (was full-step 200, per 2026-08-27 decision — now superseded). **Driver current** changed to **3.5A** (was 4A, confirmed working in the 2026-08-25 log — now superseded). **Max safe SPEED at 400 microstepping is 1500 specifically for the homing move** (down from the earlier 8000-unloaded/8200-jam figures, which were logged at full-step/200) — reason given: at higher speed the carriage's momentum carries it into the limit switch faster than the controller can decelerate/stop during homing, a physical overshoot/crash risk, not just a motor-stall/jam risk like the earlier figures described. **Not yet confirmed whether 1500 is also the ceiling for non-homing moves** (e.g. the Top↔Quench travel) — treat 1500 as homing-specific until the general-move max is separately tested. Old 8000/8200 numbers are stale regardless, since microstepping and current have both also changed. |
 
 **Open items / not yet verified:**
 - Confirm DIP switch 4 (PUL/DIR vs CW/CCW mode) is set to the position that restores both-direction motion, and log the final SW4 position alongside SW1–3/SW5–8

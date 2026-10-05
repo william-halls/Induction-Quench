@@ -304,7 +304,52 @@ Two guardrails were raised and deliberately **not** added, rather than left as o
 - [ ] Wire STOP (CTB1:4-5) through the fail-safe SSR per [[Design/Wiring/NI-DAQ Control Architecture]] — this is now required (not optional) since the Stop control depends on it
 - [ ] Decide whether to cross-check a negative-`rate` row's `Temp` is actually below the running temp (catch a contradictory sign/temp combination) — not yet built
 
+## Chamber Side-View Infographic: Tank + Slide Overlay (confirmed 2026-09-19)
+
+A composite front-panel visualization showing a side-view cutaway of the vacuum chamber — water level, atmosphere type, and Charpy sample position all at a glance — built by layering two LabVIEW indicators rather than using separate gauges. This is distinct from the Segment Table/preview-graph GUI above; it's a standalone status display, likely living on the same front panel or a dedicated monitoring tab.
+
+**Shared scale (both controls): 0–11in**, matching the vacuum chamber's actual internal height (`~11" diameter × 11" height`, confirmed in [[Design/Vacuum Chamber/Vacuum Enclosure|Vacuum Enclosure]]) — chosen deliberately so the infographic is geometrically accurate to the real hardware, not an arbitrary gauge range. Both controls must also be set to the same pixel height on the front panel — matching the numeric `Minimum`/`Maximum` alone isn't sufficient, since a height mismatch would make the two controls' markers drift apart visually even when their underlying values agree.
+
+**Layer 1 — Tank (background: vessel + water body + atmosphere)**
+- Fill value = estimated/current water level.
+- Fill color driven by a Property Node off **`IsInert`** — a **boolean**, not an enum (revised 2026-09-19: atmosphere state simplified to "inert or not," since the only two states that matter are air vs. an inert gas — matches the vault's own atmosphere spec, "vacuum/argon/nitrogen," where any inert gas reads the same on this display). `False` (air) → light gray/white; `True` (inert) → blue/purple. Implemented as a Select or two-case Case Structure keyed on the boolean rather than an enum-keyed Case Structure.
+- **Target water level (confirmed 2026-09-19): a horizontal line** overlaid on the Tank — a thin Decoration (flat rectangle) spanning the Tank's width, in a color that contrasts with the fill (e.g. a bright/high-contrast line color, not matching either the air or argon fill colors, so it stays visible against both). Its vertical position is recomputed each tick from `target_level` using the same 0–11in scale — the Tank control itself only natively fills to one value, so target-vs-actual requires this second element layered on top.
+- **Numbers/scale labels live here** — the Tank is the only one of the two controls showing a visible scale.
+
+**Layer 2 — Slide (foreground overlay: water-level line + Charpy position)**
+- **A single Slide control with two sliders** (right-click the Slide → **Add Slider**), not two separate overlapping Slide controls — since both sliders live on the same control, they automatically share one scale and one exact pixel geometry, with no separate alignment step needed between them. (The whole control is still positioned in front of the Tank and aligned to it, per the z-order/scale-matching notes above — that alignment is between the Slide control and the Tank, not between two Slides.)
+- Positioned **in front of** the Tank (front panel z-order), same 0–11in scale, same pixel height/position as the Tank.
+- Track and background set fully transparent so the Tank's fill/color shows through underneath — **no visible numbers or scale on the Slide itself** (confirmed 2026-09-19); only the two slider thumbs are opaque.
+- Two sliders sharing the one scale: Slider 0 marks current water level (redundant with the Tank's fill line by design — this is what makes the two controls read as one picture instead of two separate gauges, this slider acting as the visible "water surface line" drawn over the Tank's water body), Slider 1 marks Charpy sample position.
+- On the block diagram, the control's terminal is a **cluster of the slider values** (not a single double) — Bundle/Unbundle by name to read or write each slider independently.
+- Thumb color for the water-level and Rod/Charpy sliders also driven off the same `IsInert` boolean, from the same source variable as the Tank's fill color (not a separately-maintained copy) so nothing can visually disagree.
+- Distinct thumb/fill shapes recommended so markers stay legible if they visually converge — notably **at the moment of quench**, when the Charpy segment and water-level marker meet.
+
+**Rod + Charpy sliders — drawing the sample with real length (confirmed 2026-09-19)**
+
+Rather than a single-point marker for the Charpy sample, **two additional sliders on the same Slide control** draw the sample as an actual filled segment with physical length, using LabVIEW's per-slider Fill styles:
+
+- **Rod slider (Slide 3)**: Fill = *Fill to Max* — its filled bar spans from **its own value up to the top of the scale (11in)**. This represents the mechanical shaft/rod hanging down from the mechanism above the chamber. **Rod's value = the sample's top edge** — i.e. this slider is driven by the same Heat/Quench-state value previously defined as HeatPos/QuenchPos (9in fixed when heating, `TargetWaterLevel ÷ 2` when quenching — see below for the resulting adjustment to Quench's meaning).
+- **Charpy slider**: Fill = *fill to the Rod slider's value* — its filled bar spans from **its own value up to wherever the Rod slider currently is**, drawing the physical body of the sample as a distinctly-colored segment directly below the rod's endpoint. **Charpy's value = the sample's bottom edge**, computed as:
+  ```
+  CharpySliderValue = RodSliderValue − SampleLength
+  ```
+  where `SampleLength` = the Charpy specimen's actual physical length, **55mm ≈ 2.17in** (`10mm × 10mm × 55mm`, per [[Design/Sample Quenching/Charpy|Charpy]]), assuming the specimen is held vertically along its long axis — consistent with the vertical raise/lower motion.
+- Together, the two sliders draw one continuous column from the top of the scale down through the rod, then a visually distinct block for the sample itself — so both Heat Position (top-referenced, `RodValue = 9in`) and Quench Position (previously center-referenced, now reinterpreted as `RodValue = TargetWaterLevel ÷ 2 + SampleLength/2` so the sample's actual center still lands at the mid-water-column point) are represented as real, correctly-sized geometry rather than a single point.
+
+**Connecting the Charpy marker to Heat Curve execution state (confirmed 2026-09-19, revised 2026-09-19):**
+
+The ball screw runs standalone on the ST-PMC1 (Option A, per [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]]) and is open-loop — there's no encoder or live position feedback into the DAQ/Heat Curve software to drive a continuously-tracked real height. Instead, the Charpy marker is driven by **two named states, tied to the Heat Curve execution engine's own state (Section 3), not to real position sensing**. The two states use **different reference points on the sample and different bases** — this asymmetry is intentional, not an inconsistency, so it's spelled out explicitly below:
+
+- **Quench Position = TargetWaterLevel ÷ 2**, referencing the **center** of the Charpy sample. Uses the **target/set** water level (the configured fill setpoint shown by the Tank's target-level marker), not the Tank's estimated/actual-current water level — the sample is centered against where the water is *supposed to* end up, not wherever the current reading happens to be mid-fill. Example: at TargetWaterLevel = 4in, Quench Position (sample center) = 2in. Set the instant Quench fires (`curve_complete = True` / the Quench Action sequence in Section 3).
+- **Heat Position = ChamberTop − 2in**, referencing the **top edge** of the Charpy sample — a **fixed constant anchored to the chamber's top**, independent of water level entirely (does not move if WaterLevel changes). On the 0–11in scale, this is `11 − 2 = 9in` for the sample's top edge. Active whenever a Rate/Hold segment is running (sample is up in the coil).
+- The marker **toggles** between these two states in sync with execution state (heating/holding vs. Quench-fired) — it does not interpolate smoothly between them, since there's no real position data to animate against; the ~20ms actual raise/lower motion (per [[Design/Mechanisms/Ball Screw Motor Control|Ball Screw Motor Control]]'s "Control Sequence Example: Sample Lift & Quench") is fast enough that a snap-transition is an accurate representation, not a simplification.
+
+**Open / worth watching once built:**
+- Because Heat Position references the sample's **top** and Quench Position references its **center**, the Charpy marker needs to be drawn with its actual physical length on screen (not a single point) so both reference points place it correctly — a single-point thumb can't honor both conventions at once.
+
 ## See also
 - [[Design/Wiring/NI-DAQ Control Architecture]] — PID loop, calibration curve, Amps→Volts conversion this feeds into
 - [[Design/Wiring/Electrical System]] — HOTSHOT CTB1 pinout and hardware context
 - [[Design/Wiring/Ball Screw Motor Control]] — ST-PMC1 RUN trigger (USB-6009 P0.0 → LCD4075DD3 SSR) and the onboard lower/submerge quench sequence the Quench action hands off to
+- [[Design/Vacuum Chamber/Vacuum Enclosure]] — chamber envelope dimensions (11" × 11") used as the shared scale for the Tank+Slide infographic above

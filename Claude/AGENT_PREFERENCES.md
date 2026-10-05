@@ -4,6 +4,18 @@ Standing preferences for Claudian when working in this vault. Check this file wh
 
 <!-- Newest entries at the top -->
 
+## Summarize before implementing when the user says "implement" (or a synonym) (2026-10-05)
+
+When the user says **"implement"** or a synonym (e.g. "do it", "go ahead", "apply that", "make the change", "build it", "save that") referring to something just discussed/decided in chat:
+
+- **Do NOT immediately write/edit files.** First, post a plain summary of exactly what you're about to change — which file(s), what's being added/edited/removed, and the key facts/values involved (e.g. wiring pin mappings, numbers, settings).
+- Let the user **double-check the summary is correct** before you touch any files.
+- Only proceed with the actual edit after the user confirms (or responds with corrections, in which case update the summary and re-confirm if the correction is nontrivial).
+- This applies especially to technical/hardware content (wiring, settings, part numbers) where a wrong detail written into the vault is costly to leave uncaught — the whole point is catching mistakes before they're saved, not after.
+- Exception: if the user has already reviewed the exact content earlier in the same conversation (e.g. they dictated the exact text) and "implement" is clearly just "go write down what we already agreed," a quick confirm-summary is still good practice but can be brief.
+
+---
+
 ## Route vault edits to GRUNT when appropriate (2026-08-17)
 
 When a vault edit task is identified:
