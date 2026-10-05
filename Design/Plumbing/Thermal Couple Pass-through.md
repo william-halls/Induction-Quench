@@ -21,5 +21,6 @@ tags: [design, plumbing, thermocouple, instrumentation, data-collection, automat
 - Feedthrough: This pass-through in chamber lid
 - Signal path: Thermocouple → external analog CJC amplifier (e.g. AD8495, mounted at the feedthrough) → NI-9229 (analog input, chosen for speed — 50kS/s/ch)
 - Cold-junction compensation: Handled by the external CJC amp ahead of the 9229 (the 9229 itself has no built-in CJC)
+- Voltage-to-temperature scaling (if AD8495 is used): 5 mV/°C, 0°C offset at V_REF = 0V — see [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] "Thermocouple Signal Chain" section for the full conversion formula
 - See [[Design/Wiring/Electrical System|Wiring & Electrical System]] for signal conditioning
 - See [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] for full "Thermocouple Signal Chain" rationale and PID loop feedback

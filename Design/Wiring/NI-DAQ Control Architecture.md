@@ -274,7 +274,11 @@ Thermocouple → AD8495 (or similar analog CJC amp, mounted at the chamber feedt
 - **9229 alone**: fast (50kS/s/ch) but no CJC and built for wide-range signals (up to ±60V) — feeding it a raw ~40mV TC signal directly was tested and found to have ~1mV of noise, i.e. ~24°C of error, unacceptable for control. Also highly exposed to EMI picking up off the ~1MHz induction coil over any cable run.
 - **9229 + analog CJC amp**: the amp does CJC and boosts the signal to volts-scale *before* the long cable run to the DAQ, fixing both the noise/SNR problem and the CJC problem, while keeping the 9229's speed (amplifier bandwidth ~2kHz class, not a slow digital transmitter).
 
-**Still open:** exact amplifier part not yet finalized (AD8495 was the example discussed — confirm TC type match, e.g. K-type variant, before ordering) and 9229 channel scaling/calibration against the amp's mV/°C output.
+**AD8495 output scaling (2026-10-05):** the AD8495 outputs 5 mV per °C with a 0°C offset when V_REF = 0V. Convert the measured voltage back to temperature in software with:
+
+$$\text{Temperature } (^\circ\text{C}) = \frac{V_{\text{OUT}} - V_{\text{REF}}}{0.005\text{V/}^\circ\text{C}}$$
+
+**Still open:** exact amplifier part not yet finalized (AD8495 was the example discussed — confirm TC type match, e.g. K-type variant, before ordering); the formula above resolves the general scaling/calibration approach but the 9229 channel's actual measured calibration against this formula is still TBD.
 
 ### START / STOP (CTB1:3-5) — still applies regardless of AO source
 
