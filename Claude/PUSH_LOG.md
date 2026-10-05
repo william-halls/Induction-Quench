@@ -4,6 +4,12 @@ Record of what changed with each push to GitHub.
 
 <!-- Newest entries at the top -->
 
+## 2026-10-05 - Document AD8495 thermocouple voltage-to-temperature conversion formula
+**Commit**: `631a564`
+- [[Design/Wiring/NI-DAQ Control Architecture.md]]: added the AD8495 output scaling to the Thermocouple Signal Chain section — 5 mV/°C with a 0°C offset when V_REF = 0V, giving `Temperature (°C) = (V_OUT - V_REF) / 0.005V/°C`. This resolves the scaling/calibration half of the previously-open item; the exact amp part/TC-type match and the real measured NI-9229 channel calibration against this formula remain open.
+- [[Design/Plumbing/Thermal Couple Pass-through.md]]: added a one-line pointer to the scaling formula (not duplicated in full) alongside the existing link to the full signal-chain rationale.
+- 2 files changed, both intentional (plus routine .obsidian/plugins/claudian/data.json carryover)
+
 ## 2026-10-05 - Correct ball screw limit-switch wiring/program to match actual hardware; add implement-confirmation preference
 **Commit**: `5006ca1`
 - [[Design/Wiring/Ball Screw Motor Control.md]]: the previously-documented "FINAL DESIGN (2026-09-19)" plan (top switch→A, bottom switch→B, IN1/IN2 as discrete Top/Quench commands) turned out to not be what was actually built — caught when the user described the real running behavior. Added a new "ACTUAL CURRENT PROGRAM (confirmed 2026-10-05)" section and corrected the physical switch terminal wiring subsection to match reality: **both** physical limit switches have their NO contacts commoned together and wired to **A** (hardware interrupt, stops the carriage regardless of which switch tripped — A can't tell them apart); **B** has no physical switch at all, it's a command input that drives the carriage **up**; **IN2** is a command input that **toggles direction** each time it's powered (this is what actually drives the up/down cycle); **IN1** confirmed unused. The old A=top/B=bottom section was marked superseded-by-reality rather than deleted, to preserve the troubleshooting/design history.
