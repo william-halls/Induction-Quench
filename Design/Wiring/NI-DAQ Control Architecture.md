@@ -280,6 +280,45 @@ $$\text{Temperature } (^\circ\text{C}) = \frac{V_{\text{OUT}} - V_{\text{REF}}}{
 
 **Still open:** exact amplifier part not yet finalized (AD8495 was the example discussed — confirm TC type match, e.g. K-type variant, before ordering); the formula above resolves the general scaling/calibration approach but the 9229 channel's actual measured calibration against this formula is still TBD.
 
+#### Bench calibration (2026-10-07) — V_REF is not 0V in the actual build
+
+Room-temp bench testing found the raw formula above reading ~250°C high (e.g. 271°C at actual room temp), which back-calculates to a ~1.25V offset on V_REF — consistent with the AD8495's REF pin being tied to the common **1.25V reference** (standard practice so the amp can represent sub-zero temperatures on a single supply) rather than 0V. Corrected formula, pending confirmation against the actual schematic:
+
+$$T\,(^\circ\text{C}) = 200\,V_{\text{OUT}} - 250$$
+
+(slope 200°C/V unchanged, intercept −250°C). A small additional empirical correction (~+3°C) was also needed after the signal-path RC filter was added (see below) — attributed at the time to resistor-loading on the 9229's input impedance, though a subsequent ice-water test (properly stirred) suggested the ice-bath reference itself, not the circuit, was the larger source of that discrepancy. **Net: treat the −250 intercept as the working baseline; re-validate against a proper 0°C ice-slush and a second high-temp reference point (e.g. boiling water) before trusting this for real runs.**
+
+#### Noise fix — signal-path RC filter (2026-10-07)
+
+Initial bench testing (before any signal-path filter) showed ~±30°C of noise riding on the signal even with the CJC amp in place, attributed to ~1MHz EMI from the induction coil (though later isolated further — see below) coupling onto the AD8495→9229 cable run. Power-supply decoupling on the AD8495 (caps on V+/GND) did not address this, since it's a signal-path issue, not a supply-path one.
+
+**Fix — RC low-pass filter at the NI-9229 differential input:**
+
+```
+AD8495 V_OUT ──[3.3kΩ]──► NI-9229 AI+
+AD8495 GND   ─────────────► NI-9229 AI−
+                                │
+                    10µF ─┬─ 10µF ─┬─ 10µF   (three 10µF ceramic, in PARALLEL ≈ 30µF)
+                                │
+                     (across AI+ and AI−)
+```
+
+- **R = 3.3kΩ, C = 30µF (three 10µF ceramic caps in parallel)** → τ = RC ≈ 99ms, corner frequency ≈ 1.6Hz.
+- This intentionally sits well below the ~40Hz-ish fixed-frequency noise wave that was observed independent of temperature and independent of stirring (see below) — a low-pass filter only rejects frequencies *above* its corner, so the corner must sit below a noise frequency to attenuate it; earlier nF-range filter attempts (corner ~1.6kHz) passed the ~40Hz wave through untouched for this reason.
+- First attempt at this filter (1kΩ/10nF-range values, then an accidental 10kΩ build) introduced ~3°C of signal loading error from the finite 9229 input impedance; resistor was brought down toward 3.3-4.7kΩ (with capacitance scaled up correspondingly) to shrink that loading error while preserving the same corner frequency.
+- **Trade-off accepted:** ~100ms settling time on real temperature changes, in exchange for strong rejection of both high-frequency EMI and the persistent low-frequency noise wave. This lines up with the control loop timing below, so the lag is not actually costing responsiveness in practice.
+- **Confirmed on bench (2026-10-07):** with this filter + 100ms/2500-sample block averaging, noise is down to **~±1°C** (from the original ~±30°C pre-filter) — validated as the working configuration.
+
+**Noise source note:** the persistent low-frequency wave was confirmed present with the induction coil powered OFF, ruling out coil EMI as its cause. Leading suspect was noise on the AD8495's power rail — the amp was originally powered from the **NI-6009's onboard +5V output**, which is not a clean analog reference supply (shared with the 6009's digital/USB circuitry). A power-line RC filter (1kΩ + the existing 47µF/0.1µF decoupling stack already on the amp) was proposed to clean this further if the signal-path filter alone proves insufficient once the coil is live. Not yet bench-verified with the coil running.
+
+**Power supply update (2026-10-09):** AD8495 is now powered from a **separate dedicated 12V power supply**, not the 6009's +5V output. This removes the chip from the 6009's shared digital/USB rail entirely, which should help (not hurt) the noise-source hypothesis above — worth re-checking whether the low-frequency wave is reduced now that the amp has its own clean supply, next time the signal-path filter's effectiveness is re-evaluated. (Separately, a question earlier explored powering the chip from the NI-9269's AO channel instead — that idea was **not** used; it would have risked driving the HOTSHOT's CTB1:1-2 command input to whatever voltage was being used to power the chip if wired to the same channel. Confirmed not the path taken.) AD8495 supply range is 2.7–36V, so 12V is well within spec.
+
+#### DAQ sampling & PID loop rate (2026-10-07)
+
+- **NI-9229 sample rate: 25kS/s**, read in blocks sized to the control loop rate (not the raw sample rate) — currently targeting **~2500 samples/block ≈ 100ms**, averaged (Mean.vi) down to one voltage per block before scaling to °C.
+- **PID loop/action rate: 100ms** — matches the existing Loop 2 Timeout in [[Design/Wiring/Heat Curve Profile Software|Heat Curve Profile Software]] and the RC filter's ~100ms settling time, so the filtered signal is fully settled by the time each PID update consumes it. Faster loop rates were tested (down to 10ms sampling / 250-sample blocks) but reduced averaging (√250 ≈ 16× vs √2500 ≈ 50× noise reduction) and produced a visible ~5°C bounce — not worth it given induction heating's thermal time constants are much slower than 100ms anyway.
+- **PID strategy recommendation:** PI first, derivative optional and only on the filtered process variable (not on error, to avoid derivative kick at Heat Curve segment transitions) with its own low-pass filtering if used; anti-windup enabled with output clamped to the NI-9269's real 0-10V range; setpoint should track the live point along the ramping Heat Curve profile, not step directly to the segment's final target.
+
 ### START / STOP (CTB1:3-5) — still applies regardless of AO source
 
 - **START (CTB1:3-4)** — N.O., momentary closure initiates heating. If automated start is wanted, needs its own DC SSR (same LCD4075DD3-type as the ST-PMC1 RUN trigger), driven as a brief pulse from a spare 6009 digital line — same pattern as ST-PMC1 RUN.
@@ -396,7 +435,7 @@ Ready / HeatOn / Fault are solid-state contact **outputs from** the HOTSHOT (no 
 | NI-DAQ chassis connection | ⏳ TBD | USB or Ethernet from laptop? |
 | Control software platform | ⏳ TBD | LabVIEW, Python, or C#? |
 | Loop update rate | ⏳ TBD | Determine from coil thermal response testing |
-| PID tuning parameters | ⏳ TBD | Empirical tuning during commissioning |
+| PID tuning parameters | ✅ Confirmed (test coil, 2026-10-12) | `PID Advanced.vi` gains: P (Kc) = 8, I (Ti) = 0.2s, D (Td) = 0 — empirically tuned, holds well on test coil |
 
 ---
 
