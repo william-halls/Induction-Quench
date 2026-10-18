@@ -8,49 +8,35 @@
         "type": "tabs",
         "children": [
           {
-            "id": "acbd31a4801774e4",
+            "id": "cf82b5d2af0f2645",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Design/Mechanisms/Hybrid Ceramic Holder.md",
+                "file": "Design/Plumbing/Material Properties Reference.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Hybrid Ceramic Holder"
+              "title": "Material Properties Reference"
             }
           },
           {
-            "id": "7346af2795b81c3d",
+            "id": "7984cdeceae13a32",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Design/Wiring/NI-DAQ Control Architecture.md",
+                "file": "Design/Plumbing/Seal Thermal Margin Analysis.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "NI-DAQ Control Architecture"
-            }
-          },
-          {
-            "id": "1cecef35d15c1fda",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Design/Wiring/Ball Screw Motor Control.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Ball Screw Motor Control"
+              "title": "Seal Thermal Margin Analysis"
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -214,7 +200,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 564.7000122070312
+    "width": 543.0999755859375
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -228,53 +214,52 @@
       "realclaudian:Open Claudian": false
     }
   },
-  "active": "1cecef35d15c1fda",
+  "active": "7984cdeceae13a32",
   "lastOpenFiles": [
-    "Design/Wiring/Electrical System.md",
-    "Design/Wiring/Coil Lead Pass-Throughs.md",
-    "Design/Plumbing/Thermal Couple Pass-through.md",
-    "Design/Wiring/NI-DAQ Control Architecture.md",
-    "Design/Mechanisms/Hybrid Ceramic Holder.md",
-    "Design/Coil Geometry/Induction Coil.md",
-    "Design/Coil Geometry/Coil Feature Script.md",
     "Design/Plumbing/Material Properties Reference.md",
+    "Design/Plumbing/Random Holes.md",
+    "Design/Plumbing/Seal Thermal Margin Analysis.md",
+    "Design/Plumbing/Thermal Couple Pass-through.md",
+    "Design/Mechanisms/Hybrid Ceramic Holder.md",
+    "Design/Wiring/Electrical System.md",
+    "Design/Plumbing/Seal Thermal Margin Analysis.md.tmp.37120.3ba2ac15ad9a",
+    "Design/Coil Geometry/Coil Materials.md",
+    "media/mechanisms/lava-firing-schedule-curve.svg",
+    "Design/Wiring/Heat Curve Profile Software.md",
+    "Design/Sample Quenching/INDEX.md",
+    "Design/Sample Quenching/Charpy.md",
+    "Design/Sample Quenching/Quenching Methods.md",
+    "Design/Sample Quenching/Modified Charpy.md",
+    "media/mechanisms/ceramic-mount-orange-wedge-mass-props.png",
+    "media/mechanisms/ceramic-mount-purple-cap-mass-props.png",
+    "media/mechanisms/shaft-clamp-mount.png",
+    "Design/Wiring/HOTSHOT Manual - Full Transcription.md",
+    "media/vacuum-chamber/main-assembly.png",
+    "media/vacuum-chamber/chamber-assembly.png",
+    "media/wiring/Ameritherm HOTSHOT 103927 Manual (Doc 801-9252k).pdf",
+    "media/wiring/hotshot-manual-p46-electrical-table.jpg",
+    "media/vacuum-chamber/chamber-cad-overview.png",
+    "media/samples/charpy-standard-sample.png",
+    "media/samples/charpy-standard-reference.png",
+    "Design/Mechanisms/Trapdoor.md",
+    "Design/Coil Geometry/Coil Feature Script.md",
+    "Design/Coil Geometry/Induction Coil.md",
+    "Design/Coil Geometry/Square Coil.md",
+    "Design/Coil Geometry/Round Coil.md",
+    "Design/Mechanisms/Titanium Claw.md",
+    "Design/Wiring/Coil Lead Pass-Throughs.md",
+    "Design/Wiring/Ball Screw Motor Control.md",
+    "Design/Mechanisms/Ball Screw.md",
+    "Design/Wiring/Control System.md",
+    "Design/Wiring/NI-DAQ Control Architecture.md",
+    "Design/Wiring/Ball Screw Motor Control.md.tmp.28620.4ed7cba3329c",
     "Design/Mechanisms/Ceramic Mount.md",
     "Design/Mechanisms/Hybrid Ceramic Holder.md.tmp.7468.63deaa2f290d",
     "Design/Wiring/Heat Curve Profile Software.md.tmp.43164.5c844e5a7570",
-    "README.md",
-    "Design/Mechanisms/Bottom Lift.md",
-    "Design/Coil Geometry/Square Coil.md",
-    "media/mechanisms/ball-screw-stepper-assembly.png",
     "Induction Quench Research Instrument.md.tmp.17816.0f913088135f",
     "README.md.tmp.17816.4140263050c0",
     "README.md.tmp.17816.fa993c7c7eb0",
     "README.md.tmp.17816.bf558a5710b8",
-    "README.md.tmp.17816.e73c3d8b2e15",
-    "README.md.tmp.17816.0a996d8193b5",
-    "Design/Plumbing/INDEX.md",
-    "Design/Plumbing/Fluid Systems.md",
-    "Design/Plumbing/Air System Control Assembly.md",
-    "Design/Mechanisms/Trapdoor.md",
-    "Design/Mechanisms/Titanium Claw.md",
-    "Design/Mechanisms/INDEX.md",
-    "Design/Mechanisms/Ball Screw.md",
-    "Design/Coil Geometry/Round Coil.md",
-    "Design/Plumbing/Vacuum Lid Systems.md",
-    "Design/Sample Quenching/Modified Charpy.md",
-    "Design/Sample Quenching/INDEX.md",
-    "Design/Plumbing/Vertical Sliding Shaft Seal.md",
-    "Design/Vacuum Chamber/Used Vacuum Chamber.md",
-    "Design/Wiring/Control System.md",
-    "media/mechanisms/ceramic-mount-shaft-mass-props.png",
-    "media/wiring/hotshot-manual-p46-electrical-table.jpg",
-    "media/wiring/Ameritherm HOTSHOT 103927 Manual (Doc 801-9252k).pdf",
-    "media/vacuum-chamber/main-assembly.png",
-    "media/vacuum-chamber/chamber-cad-overview.png",
-    "media/vacuum-chamber/chamber-assembly.png",
-    "media/samples/charpy-standard-sample.png",
-    "media/samples/charpy-standard-reference.png",
-    "media/samples/charpy-modified-sample.png",
-    "media/plumbing/air-control-assembly.png",
-    "Design/Wiring/Ball Screw Motor Control.md.tmp.10660.b7bc78ea63ae"
+    "README.md.tmp.17816.e73c3d8b2e15"
   ]
 }

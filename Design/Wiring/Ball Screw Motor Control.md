@@ -1020,6 +1020,78 @@ This also means the **"Physical Limit Switch Terminal Wiring"** subsection furth
 
 ---
 
+### NEW PROGRAM DESIGN (2026-10-05): split A=top/B=bottom, IN1 = direction toggle, backoff at top only — ⚠️ not yet loaded/bench-tested
+
+**Proposed, not the program currently running on the controller.** Requested behavior: carriage cycles between top and bottom; every time it goes up and reaches the top end stop, it backs down a little; IN1 toggles direction, reversing whatever the carriage was last doing.
+
+**⚠️ Requires a wiring change from the current actual hardware:** the "ACTUAL CURRENT PROGRAM" section above documents both end-stop switches' NO leads **commoned together onto A**. This design needs them **split back apart** — top switch's NO lead on **A**, bottom switch's NO lead on **B** — so each end stop gets its own unambiguous hardware interrupt entry (`nA`/`nB`). That's the one change that makes this program simple: no software flag, no loopback wiring, no polling tricks needed, because the controller's own A/B hardware interrupts tell top and bottom apart natively.
+
+**I/O mapping:**
+
+| Input | Wired to | Role |
+|---|---|---|
+| **A** | Top end stop switch (separated from bottom) | Hardware interrupt — arrived at top → `nA` |
+| **B** | Bottom end stop switch (separated from top) | Hardware interrupt — arrived at bottom → `nB` |
+| **IN1** | Toggle button | Reverses direction immediately — polled with `J-BIT` (confirmed valid; `J-BIT` only tests IN1 or IN2, nothing else) |
+| **IN2** | — | Unused/spare |
+| **RUN** | Starts the program | Program begins by going up |
+
+**Key values:** backoff = **200 steps**; cruise speed = **1500** (reusing the one figure confirmed safe at the current 400-microstep/3.5A setting, logged 2026-10-05 below — only confirmed for the homing move specifically, so treat it the same way here: best available number, not yet proven as a general-move ceiling).
+
+**Added 2026-10-05 — speed ramp to fix vibration/stutter:** reported symptom was "the faster I go, the more vibration — stopping and going while moving," worse at higher speed. That matches a stepper being commanded straight to full pulse rate from a standstill with no ramp (the ST-PMC1's confirmed instruction set — `SPEED`, `G-LEN`, `DELAY`, `JUMP`, `J-BIT`, `GOTO`, `LOOP`, `OUT`, `PAUSE` — has no built-in acceleration directive), which can cause partial loss-of-sync each step. Fix: a manual 3-stage ramp (`SPEED`+short `G-LEN` repeated at increasing speed) before the long continuous run at cruise speed, on both the UP and DOWN moves. Ramp values below (400 → 800 → 1500, 50 steps per stage) are a first guess to try on the bench, not yet tuned.
+
+**Parameters (Parameter Setting mode):**
+```
+nA = 08     ; A-operation entry line — arrived at TOP
+nB = 21     ; B-operation entry line — arrived at BOTTOM
+```
+
+**Program (00–24, no gaps):**
+```
+00  SPEED   0000400         ; ramp step 1 (UP) — low starting speed, easy sync from standstill
+01  G-LEN   +0000050        ; short move while ramping
+02  SPEED   0000800         ; ramp step 2 (UP)
+03  G-LEN   +0000050
+04  SPEED   0001500         ; cruise speed (UP)
+05  G-LEN   +7999999        ; continuous UP — A interrupt (top switch) catches it
+06  OUT     0,0,0,1         ; fallback alarm (shouldn't be reached — travel bounded by the end stop)
+07  JUMP    07              ; halt (fallback only)
+
+08  DELAY   0002000         ; ← A-operation entry (nA=08): settled at TOP
+09  SPEED   0001500
+10  G-LEN   -0000200        ; back off 200 steps DOWN off the top switch ("back down a little")
+11  J-BIT   13, IN1, 0      ; IN1 pressed → go down
+12  JUMP    11              ; hold at top, keep polling
+
+13  SPEED   0000400         ; ramp step 1 (DOWN)
+14  G-LEN   -0000050        ; short move while ramping
+15  SPEED   0000800         ; ramp step 2 (DOWN)
+16  G-LEN   -0000050
+17  SPEED   0001500         ; cruise speed (DOWN)
+18  G-LEN   -7999999        ; continuous DOWN — B interrupt (bottom switch) catches it
+19  OUT     0,0,0,1         ; fallback alarm
+20  JUMP    20              ; halt (fallback only)
+
+21  DELAY   0002000         ; ← B-operation entry (nB=21): settled at BOTTOM
+22  J-BIT   00, IN1, 0      ; IN1 pressed → go back up (jump to line 00, same as program start)
+23  JUMP    22              ; hold at bottom, keep polling
+
+24  END
+```
+
+**How it behaves:**
+- **RUN / program start:** lines 00–05 ramp up through 400→800→1500 then drive continuously up, A catches it at the top, settles (line 08), backs off 200 steps (lines 09–10), holds and polls IN1 (lines 11–12).
+- **IN1 pressed while holding at top:** line 11 sends it to line 13 — ramps down through 400→800→1500, B catches it at the bottom, settles (line 21), holds and polls IN1 (lines 22–23). No backoff at the bottom.
+- **IN1 pressed while holding at bottom:** line 22 jumps back to line 00 — ramps up, A catches it at the top, backs off 200 steps, holds again.
+
+**Still open / not yet bench-verified:**
+- The physical rewiring (splitting the two commoned switch leads back onto separate A/B terminals) hasn't been done yet — needs doing before this program means anything on the bench
+- Ramp values (400→800→1500 in 50-step stages) are a first guess — needs bench tuning: more/smaller stages if still rough, fewer/larger if unnecessary
+- `SPEED 0001500` cruise target for these moves is carried over from the homing-specific figure logged 2026-10-05 below — not yet confirmed as a safe ceiling for top/bottom travel specifically
+- Not yet loaded onto the physical controller or run on the bench
+
+---
+
 ### FINAL DESIGN (2026-09-19): 2-position Top/Quench, A/B hardware interrupts, no GOTO/CLR needed — ⚠️ NOT what's actually built, see correction above
 
 **Supersedes both sections below this one (GOTO-based on-demand mapping, and the "A/B left unused" decision) — kept as historical record further down, but do not build from them.**

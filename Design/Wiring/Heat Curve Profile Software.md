@@ -2,7 +2,7 @@
 subsystem: wiring
 tags: [wiring, control-system, NI-DAQ, software, PID, heat-curve, annealing, safety]
 related: [[Design/Wiring/NI-DAQ Control Architecture.md]]
-status: in progress — LabVIEW GUI build underway (2026-09-09)
+status: in progress — execution engine v2 (time-based lookup) built and bench-debugged in LabVIEW, full end-to-end test with real TC/HOTSHOT still pending (2026-10-10)
 ---
 
 # Heat Curve Profile Software
@@ -162,7 +162,52 @@ elif segment.Type == Quench:
 PID_setpoint = setpoint
 ```
 
-## Decision: Hold-band excursion behavior — RESET (confirmed 2026-09-06)
+## Execution Engine v2 — Time-Based Lookup Architecture (built & bench-debugged 2026-10-09/10, supersedes the tick-accumulator approach and the pseudocode above)
+
+**Built in LabVIEW, not just designed.** The Section 3 pseudocode above was the original plan; what actually got built went through two full iterations before landing here — first a tick-counted accumulator (`setpoint += rate × 0.1` per tick), which turned out to be loop-speed-dependent (wrong if Loop 2 doesn't actually tick at a true 100ms), then this time-based lookup redesign, which is immune to loop speed entirely. **Tolerance-based Hold is gone** — see the superseded decision below.
+
+### Core idea: both `setpoint` and `current_segment_index` are now direct lookups against precomputed curve data, keyed on real elapsed time — not incremented/accumulated tick by tick.
+
+**Precomputed once per `Update` button press** (in Loop 1, alongside the existing `Generate Preview Curve.vi` call), three parallel arrays, each read into Loop 2 via Local Variable:
+- `PlannedTimes` / `PlannedTemps` — the existing XY preview-graph data (1 point per Rate segment, 2 points per Hold segment — doesn't map 1:1 to table rows).
+- `SegmentEndTimes` — **new**, one value per Segment Table row, the cumulative planned completion time for that row (same per-row duration math as the preview curve, just accumulated differently). Used purely for the segment-index lookup, since `PlannedTimes` can't be indexed by row.
+
+**Loop 2 shift registers (9 total):** `last_tick_ms`, `elapsed_run_time`, `prev_start`, `RunActive`, `current_setpoint`, `current_segment_index`, `TC_time`, `TC_temp`, `quench_fired`.
+
+**Each tick:**
+1. Measure **real** per-tick delta (`dt_real = (Tick Count(ms) − last_tick_ms) / 1000`), not an assumed `0.1` — this is what makes everything downstream loop-speed-independent.
+2. `start_pressed` (Run button, edge-detected: `start_now AND Not(prev_start)`) resets all 9 state values to zero/empty and sets `RunActive = True`.
+3. `elapsed_run_time` accumulates `dt_real` only when `RunActive` and not `Paused` (Pause is a **toggle**, Mechanical Action = Switch When Pressed, read directly — no edge detection needed). This single freeze point is what makes Pause hold the setpoint, freeze the wide-view graph, *and* stop `TC_time`/`TC_temp` logging all at once.
+4. `current_segment_index` ← `Ceiling(Threshold 1D Array(SegmentEndTimes, elapsed_run_time))` — a direct time lookup, not an increment. No more `advance` boolean, no more per-segment Rate/Hold state machine.
+5. `setpoint`, per `Type` of the active segment:
+   - **Rate** (heating *or* cooling — no direction branch needed, see below): `Interpolate 1D Array(PlannedTemps, Threshold 1D Array(PlannedTimes, elapsed_run_time))`.
+   - **Hold**: `setpoint = Temp` directly, no ramp.
+   - **Placeholder (Type=0)**: `setpoint = 0` (defensive fallback, shouldn't occur post-`Clean`).
+6. `TC_time`/`TC_temp` — append `(elapsed_run_time, actual TC reading)` each tick, same Pause-freeze gating as step 3.
+7. PID Advanced.vi: SP = `current_setpoint`, PV = live TC reading, **dt = `dt_real`** (not a hardcoded constant — same loop-speed-independence reasoning), Output Range [8, 550] (not [0,550] — matches the conversion subVI's real floor), `reinitialize? = start_pressed`.
+
+### Heating/cooling unification (2026-10-10) — no direction branch needed
+
+Originally planned to branch Case 1 (Rate) on `Sign(rate)` — heating via lookup, cooling hardcoded to `setpoint = 0`. **Dropped**: since the coil is heating-only (no active cooling actuator), a persistently-low setpoint during a cooling segment makes the PID naturally saturate near the Output Range floor anyway (8A does negligible real heating per the bench calibration curve) — same practical result as hardcoding 0, with no special case needed. `Generate Preview Curve.vi`'s planned-curve data already slopes downward for a cooling segment (negative rate), so the *same* lookup produces correct behavior for both directions. **Known tradeoff accepted**: cooling is physics-limited/not enforceable, so if real cooldown outpaces the planned curve, the looked-up setpoint could briefly sit above actual temp and cause the coil to kick back on mid-cooldown — judged acceptable since it's the same category of approximation already accepted for Hold (see below).
+
+### Hold — tolerance dropped entirely (2026-10-10, supersedes the Hold-band-excursion decision below)
+
+No more tolerance check, no in-band flag, no reset-on-excursion. `Hold`'s `advance` (now subsumed into the time-based index lookup above, not a separate boolean) is purely `elapsed_run_time ≥` that row's `SegmentEndTimes` entry — a fixed duration, full stop. This removed a whole class of bug (the original `in_band_elapsed`/tolerance machinery) and the `Tolerance` global control is no longer used by the execution engine.
+
+### Quench/End — index-overflow check doesn't work; must compare against final planned time
+
+**Bug found and fixed 2026-10-10**: originally planned `past_end = current_segment_index ≥ Array Size(Segment Table)`. This never fires — `Threshold 1D Array` clamps to the array's last valid index once the threshold exceeds every entry, so the index can never actually reach `Array Size`. **Fix**: compare `elapsed_run_time` directly against the **last value in `SegmentEndTimes`** instead (`Index Array` at `Array Size(SegmentEndTimes) − 1`), latched through a `quench_fired` shift register so the actual Quench action (0V direct write, bypassing the Amps→Volts conversion subVI, plus a `quench_trigger`-driven write into the `Quench` button's Local Variable to fire the same sequence Loop 3/motion already handles) only fires once.
+
+### Bugs found during bring-up (2026-10-10) — worth remembering the patterns, not just the fixes
+
+Several real bugs this session, all variations on **"a Case structure branch passes the stale/old value through instead of the freshly computed one"**:
+- `current_setpoint`'s advance-logic False branch was wired from the old shift-register value instead of the Type-case-structure's fresh `setpoint` output — stuck at 0 until found.
+- `past_end`'s True/False branches were inverted (the real segment-lookup logic was effectively being skipped).
+- `TC_time`/`TC_temp` indicator terminals were placed **outside** the While Loop border — a classic LabVIEW trap: an indicator outside a loop only updates once, after the loop exits, so it looked permanently stuck empty even though Highlight Execution showed the underlying computation working correctly the whole time. Fix: move indicator terminals inside the loop.
+
+**Takeaway for future debugging on this VI**: when a value looks "stuck," check (in order) — is the Case structure branch wired to the fresh computation or a stale pass-through; is the shift register's right terminal actually reached (not dead-ending at just an indicator); is the indicator terminal itself inside the loop border.
+
+## Decision: Hold-band excursion behavior — RESET (confirmed 2026-09-06, superseded 2026-10-10 — tolerance-based Hold dropped entirely, see "Execution Engine v2" above)
 
 Three options were considered for what happens to the Hold segment's dwell timer when the thermocouple drifts outside the tolerance band mid-hold:
 
@@ -193,17 +238,18 @@ The heat-curve software's job stops at firing the trigger — submerge duration,
 
 Distinct from **Stop**: Stop opens the STOP SSR and zeroes output but does *not* trigger quench — `Quench Now` is the one control that both stops heating *and* fires the physical quench sequence on demand.
 
-## Pause & Stop Behavior (confirmed 2026-09-07)
+## Pause & Stop Behavior (confirmed 2026-09-07, Pause semantics revised 2026-10-10, Stop software half built 2026-10-12)
 
 Two distinct controls, not to be confused:
 
 **Pause** — holds the run in place without aborting it.
 - Freezes segment progression (`current_segment_index`, all elapsed/dwell timers stop advancing).
-- Setpoint is held at **whatever the actual thermocouple temperature was at the moment of pause** — not the segment's original target/hold value. This effectively turns the paused state into an implicit hold at the current temperature, regardless of what the active segment was doing.
-- Resume continues the segment from where it left off (timers pick back up, Rate segments resume ramping from the current point).
+- **Revised 2026-10-10, as actually built in Execution Engine v2**: setpoint is held at **whatever `current_setpoint` already was at the moment of pause** (frozen in place, since `elapsed_run_time` itself stops advancing while paused — see "Execution Engine v2" above) — **not** re-snapped to the live actual thermocouple reading as originally specified below. The distinction matters if the sample is drifting away from the setpoint right as Pause is pressed: the original spec would have the PID immediately accept wherever the TC happens to be as the new target (zero error at the instant of pause); what's actually built keeps chasing the pre-pause target instead. Functionally similar in most cases (pause is usually pressed near steady-state), but worth knowing this is the real behavior if a pause is ever triggered mid-transient.
+- Resume continues from where it left off (`elapsed_run_time` resumes accumulating, curve lookup picks back up naturally).
 
 **Stop** — a real abort, not a pause.
-- Commands the HOTSHOT to genuinely stop: opens the **STOP SSR (CTB1:4-5)** per [[Design/Wiring/NI-DAQ Control Architecture#START / STOP (CTB1:3-5) — still applies regardless of AO source|NI-DAQ Control Architecture]] (de-energizes the fail-safe SSR, which was confirmed to route through the DAQ specifically to support this) **and** writes 0A/0V to the NI-9269 at the same time — both mechanisms fire together rather than relying on just one.
+- **Software half confirmed built (2026-10-12)**: forces the PID's output (Amps, pre-conversion) to literal `0`. The existing Amps→Volts conversion subVI has its own dedicated branch for an input of exactly `0` that outputs genuine 0V directly (distinct from its general 8-550A clamping behavior for nonzero inputs, which floors anything below 8A up to the 8A-equivalent voltage — confirmed this does *not* apply to a literal 0 input). Not yet bench-verified with a multimeter on the actual 9269 output terminal — recommended before trusting this live.
+- **Hardware half still open**: per the original design, Stop should *also* open the **STOP SSR (CTB1:4-5)** per [[Design/Wiring/NI-DAQ Control Architecture#START / STOP (CTB1:3-5) — still applies regardless of AO source|NI-DAQ Control Architecture]] at the same time as the software zeroing — deliberate belt-and-suspenders redundancy, so either mechanism alone halts heating if the other fails. **This SSR wiring is not yet connected to the new Stop button** — see Open Items.
 - Does **not** trigger the Quench action — Stop is a plain heating abort, not a request to lower the sample into the bath. If the sample needs to come out of the coil after a Stop, that's a separate/manual action.
 - Ends curve execution; there is no "resume" from Stop the way there is from Pause.
 
@@ -285,24 +331,29 @@ Two guardrails were raised and deliberately **not** added, rather than left as o
 - [x] Decided against live table-editing during a run — full stop/restart instead
 - [x] Decided against E-stop-gate Stop behavior — Stop is a full, non-resumable program exit
 
+**Done (2026-10-09/10):**
+- [x] Loop architecture revised to 4 loops: Loop 1 (GUI/table + `Update` button), Loop 2 (PID/execution engine, plain polling While Loop — no Event Structure, uses edge-detection instead), Loop 3 (motion, separate due to DAQmx-task-recreation slowness discovered when sharing a loop with PID), Loop 4 (reads `PlannedTimes`/`PlannedTemps`/`TC_time`/`TC_temp` via Local Variable, feeds the wide-view graph)
+- [x] Execution engine v2 built — time-based lookup architecture, see "Execution Engine v2" section above (supersedes the Section 3 pseudocode and the original Timeout/Event-Structure plan)
+- [x] `current_segment_index` and `setpoint` both now pure functions of `elapsed_run_time` (via `Threshold 1D Array` + `Interpolate 1D Array`/`Ceiling`), immune to loop-speed variation
+- [x] Tolerance-based Hold dropped entirely — pure duration-based now
+- [x] Heating/cooling direction unified — no Sign/branch needed, same curve lookup for both
+- [x] Run (edge-detected, full state reset) and Pause (toggle, Switch When Pressed, freezes setpoint/elapsed-time/TC-logging/wide-view-graph while leaving the live TC chart and PID's own tick-to-tick math running) built and bench-tested
+- [x] Quench/End trigger fixed — compares `elapsed_run_time` against `SegmentEndTimes`' last entry, not an index-vs-Array-Size check (which can't fire, `Threshold 1D Array` clamps at the array's last index)
+- [x] AD8495 CJC amp moved off the 6009's shared +5V onto a dedicated 12V supply (see [[Design/Wiring/NI-DAQ Control Architecture]])
+- [x] Cubic correction polynomial for AD8495/9229 thermocouple reading, loaded directly into the 9229 channel's DAQmx Custom Scale (composite cubic in terms of raw volts) — see [[Design/Wiring/NI-DAQ Control Architecture]]
+
 **Still open:**
 - [ ] Re-verify `Move Up`/`Move Down` against the Local-Variable read/write pattern (built before the shift-register-staleness bug was found and fixed in Add/Clean — may have the same bug)
-- [ ] Wire `Generate Preview Curve.vi` output (`Times`/`Temps`) into an actual `Heat Curve Preview` XY Graph on the front panel (subVI itself is done, graph wiring is not)
-- [ ] Build the Loop 2 execution-engine `Timeout` case itself (state machine pseudocode in Section 3 exists; not yet implemented in LabVIEW — currently just the empty loop/Event Structure shell)
-- [ ] Implement actual-vs-planned overlay graph during a run, with auto-focus/scroll on the live point (needs Loop 2's execution engine to exist first, to have real data to plot)
-- [ ] Build `Start`/`Pause`/`Quench Now`/`Home` event cases in Loop 2 (currently just Timeout is planned in detail)
-- [ ] Wire the Quench action's P0.0 pulse into the same digital-output mechanism already used elsewhere for ST-PMC1 RUN triggering
+- [ ] Wire the Quench action's P0.0 pulse / `Quench` control Local-Variable write into whatever Loop 3 already does for ST-PMC1 RUN triggering — mechanism decided (write `quench_trigger` into the `Quench` button's Local Variable, simulating a manual press) but not yet confirmed Loop 3 handles it correctly end-to-end
 - [ ] Wire `Home`'s IN1+IN2 output per the finalized Ball Screw I/O mapping — exact bit-combination for "Home" vs. Center/Top/Bottom not yet pulled from that doc into this implementation
-- [ ] Decide/tune `tolerance` values empirically once the PID loop's real-world hold stability is characterized
 - [ ] Decide save/load format for named profiles (suggest flattened XML or JSON)
 - [ ] Implement PID output slew-rate limiter; determine max Amps/sec empirically (fast enough for intended Rate segments, slow enough to smooth startup transients)
 - [ ] Implement run-out trip on thermocouple dT/dt; calibrate threshold from observed peak dT/dt during slew-limited test runs
 - [ ] Watch for detached-TC failure modes that present as noise/erratic readings rather than fast sustained rate changes — may need a plausibility check in addition to the dT/dt trip if this turns out to matter in practice
-- [ ] Implement open-loop cooling behavior for cooling-direction Rate segments in the actual execution engine (coil off, gate advancement on actual temp reaching target, not on a ramped setpoint) — `Generate Preview Curve.vi` handles this for the *preview* math only, the real-time execution engine still needs it
-- [ ] Implement Pause (freeze timers, hold setpoint at actual temp at time of pause) per the confirmed semantics above — deferred until Loop 2's execution engine exists to pause against
-- [ ] Implement data logging (timestamp + TC temp, one row per loop tick, per-run file)
+- [ ] Implement data logging (timestamp + TC temp, one row per loop tick, per-run file) — note `TC_time`/`TC_temp` arrays already capture this live in-memory; still need to actually write them to a per-run file on disk
 - [ ] Wire STOP (CTB1:4-5) through the fail-safe SSR per [[Design/Wiring/NI-DAQ Control Architecture]] — this is now required (not optional) since the Stop control depends on it
 - [ ] Decide whether to cross-check a negative-`rate` row's `Temp` is actually below the running temp (catch a contradictory sign/temp combination) — not yet built
+- [ ] Full end-to-end bench test with real TC + HOTSHOT now that the setpoint/index/Quench bugs are fixed — only partially smoke-tested so far
 
 ## Chamber Side-View Infographic: Tank + Slide Overlay (confirmed 2026-09-19)
 
