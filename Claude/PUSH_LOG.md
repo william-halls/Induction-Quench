@@ -4,6 +4,15 @@ Record of what changed with each push to GitHub.
 
 <!-- Newest entries at the top -->
 
+## 2026-10-23 - Seal analysis: tap-water cooling, coil height range and stroke, 110 Cu notes; thermal model code saved to the vault
+**Commit**: `5692527`
+- [[Design/Plumbing/Seal Thermal Margin Analysis.md]]: new subsections. **Open-loop tap-water cooling** (block on the sink faucet set to cold, draining to the sink): seal vs. tap temperature (5–30°C → 35–72°C across block resistance 0.3–2 K/W at 800–1000°C, ≈0.8°C per °C of tap), flow vs. block coolant-side resistance (≥1 L/min ≈0.2 K/W or better; 0.5 L/min is laminar ≈1 K/W), and the risks (condensation, mains-pressure leak, loss of flow, water use, drain air gap). **Coil height range**: recommended coil center 4.08–6.0in above the floor (4.0–5.9in below the lid), R_bottom 3.10 → 1.19in, seal 41–50°C across the range but gas under the lid rises 87 → 286°C, so stop near 6.0in. The ceramic holder bottom only has to touch or enter the water (ends between 2.165 and 3.0in above the floor; lowest holder top 3.90in), so the minimum stroke is Margin + 2.165in (3.665in at Margin 1.5in) and RodTop can be 3.86in instead of 4.70in (seal 3–4°C cooler). Geometry formulas and open items updated.
+- [[Design/Plumbing/Material Properties Reference.md]]: 110 Cu oxidation thresholds, 101-vs-110 note, vacuum-grease temperature limits, thermal-paste guidance (bore 0.001–0.002" over the rod OD); extra datasheet fields (±0.002" diameter, plain cold-rolled finish, 1 ft) and a seal-fit/wear caution for the non-ground rod.
+- New [[Design/Plumbing/Thermal Model/README.md]] folder (`plume_model.cs`, `run_examples.ps1`): the runnable model behind the seal tables, with a new `coolantC` parameter. Still unvalidated: it fails an independent check against the 2026-09-18 BN measurement, so use it to compare designs, not for absolute temperatures.
+- [[Design/Plumbing/INDEX.md]]: link to the Thermal Model folder.
+- Carryover: `.obsidian/workspace.json`.
+- 7 files changed + this log (all intentional except the .obsidian state)
+
 ## 2026-10-23 - Power supply matching findings (HOTSHOT 5 vs 8-loop coil, 3 kW supply); HOTSHOT rating corrected to 5 kW
 **Commit**: `92317f8`
 - [[Design/Coil Geometry/Power Supply Matching - Findings.md]] (new): facts-only record. HOTSHOT 5 with the 8-loop coil ran at 142–170 kHz (below its 150–400 kHz spec) and delivered ~20 A against a 550–600 A setpoint; tap 26 was the highest without Cap Over-Voltage; the unit asked for "Increase Tap" and "lower cap value". Records the decision to switch to the 3 kW supply for now. Also holds the 8-loop CAD parameters (7 turns = 7.5 revolutions, 25.4 mm ID, 65 mm top-to-bottom length, 4.76 mm tube, 1.5 mm fibreglass sleeve), the real lead geometry (3/8" OD, 1.013 m both leads + ~5 in, bowed top run, 2 bends on the 3 kW setup), and the 3 kW Model 3-135/400-3 specs, tuning procedure and Appendix B table (two 660 nF caps seen on the unit, CHG6066E, High Energy Corp). Inductance/frequency/temperature predictions from chat were deliberately left out as unverified; open items are listed in the note.
