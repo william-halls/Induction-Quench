@@ -12,7 +12,7 @@ Power delivery, control circuits, and instrumentation for induction heating and 
 **Status**: In progress — Equipment and topology under evaluation.
 
 ### Power System
-- **Induction Supply**: Ameritherm HOTSHOT, model/SN 103927 (Ameritherm was later acquired by Ambrell — check Ambrell for legacy support docs). Ameritherm's HOTSHOT line is a ~1 kW solid-state RF induction heating power supply; confirm actual output frequency/power against the nameplate rather than assuming the general product-line spec.
+- **Induction Supply**: Ameritherm HOTSHOT, model/SN 103927 (Ameritherm was later acquired by Ambrell — check Ambrell for legacy support docs). This unit is the **5 kW** model (startup screen: "HOTSHOT 5, 5 kW RF power", confirmed 2026-10-23); RF output 150–400 kHz per manual §4.2. See [[Design/Coil Geometry/Power Supply Matching - Findings|Power Supply Matching - Findings]] for how it behaved with the 8-loop coil.
 - **Remote Control**: Hand-held control module, part no. 301-0243D — connects to the HOTSHOT to allow remote start/adjustment away from the unit. No manual located yet for this specific part number; treat button/dial functions as unverified until confirmed against the unit or manufacturer.
 - **Chiller**: Unidentified — no documentation on hand. **Action needed**: record nameplate data (make, model, serial, flow rate, cooling capacity, voltage/phase, hose fitting sizes) directly off the unit so it can be matched to a manual or datasheet.
 - **Max Power**: Limited by supply capability and coil losses
@@ -44,7 +44,7 @@ Still no manuals for the 301-0243D handheld control or the chiller — if physic
 | 17–20 | Aux Input/Output | 24V ±2% @ 1A — **not supported at this time** per manual |
 | 21–24 | Serial (RS485) | Rx+/Rx-/Tx+/Tx-; requires optional 305-0174 Ameritherm RS485 kit |
 
-**Equipment power ratings (§4.2, this HOTSHOT is the 7.5kW model per nameplate SN 103927):**
+**Equipment power ratings (§4.2, this HOTSHOT is the 5kW model — its startup screen reads "HOTSHOT 5, 5 kW RF power", confirmed 2026-10-23; use the 5kW column):**
 
 | | 3.5kW | 5kW | 7.5kW | Units |
 |---|---|---|---|---|

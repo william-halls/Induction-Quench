@@ -15,6 +15,7 @@ Design and optimization of the induction heating coil for uniform, efficient hea
 | **[[Design/Coil Geometry/Round Coil|Round Coil.md]]** | Active cylindrical coil design | 🟢 Active |
 | **[[Design/Coil Geometry/Square Coil|Square Coil.md]]** | Rectangular coil (deferred) | 🟡 Deferred |
 | **[[Design/Coil Geometry/Coil Feature Script|Coil Feature Script.md]]** | Parametric CAD automation | 🔵 Tool |
+| **[[Design/Coil Geometry/Power Supply Matching - Findings|Power Supply Matching - Findings.md]]** | Facts on HOTSHOT 5 vs 8-loop coil, and the 3 kW supply | 🟢 Active |
 
 ---
 

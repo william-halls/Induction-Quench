@@ -24,6 +24,10 @@ media/
 | Image | File | Reference |
 |-------|------|-----------|
 | **Round Coil Geometry** | `round-coil-geometry.png` | [[Design/Coil Geometry/Round Coil\|Round Coil.md]] |
+| **8-Loop Coil CAD Parameters** | `coil-8loop-cad-parameters.png` | [[Design/Coil Geometry/Power Supply Matching - Findings\|Power Supply Matching - Findings.md]] |
+| **8-Loop Coil CAD Side View** | `coil-8loop-cad-side-view.png` | [[Design/Coil Geometry/Power Supply Matching - Findings\|Power Supply Matching - Findings.md]] |
+| **8-Loop Coil + Lead Run (CAD)** | `coil-8loop-lead-run-cad.png` | [[Design/Coil Geometry/Power Supply Matching - Findings\|Power Supply Matching - Findings.md]] |
+| **Lead Top-Run Bow Sketch** | `coil-lead-top-run-bow-sketch.png` | [[Design/Coil Geometry/Power Supply Matching - Findings\|Power Supply Matching - Findings.md]] |
 
 ---
 
