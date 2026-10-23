@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Design/Plumbing/Material Properties Reference.md",
+                "file": "Design/Wiring/Ball Screw Motor Control.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Material Properties Reference"
+              "title": "Ball Screw Motor Control"
             }
           },
           {
@@ -35,8 +35,7 @@
               "title": "Seal Thermal Margin Analysis"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -200,7 +199,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 543.0999755859375
+    "width": 612.7000122070312
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -214,11 +213,23 @@
       "realclaudian:Open Claudian": false
     }
   },
-  "active": "7984cdeceae13a32",
+  "active": "2b62d346bdd6857e",
   "lastOpenFiles": [
+    "Design/Coil Geometry/Power Supply Matching - Findings.md",
+    "media/coil/coil-lead-top-run-bow-sketch.png",
+    "media/coil/coil-8loop-lead-run-cad.png",
+    "media/coil/coil-8loop-cad-side-view.png",
+    "media/coil/coil-8loop-cad-parameters.png",
+    "media/wiring/3kW Induction Supply 3-135-400-3 Manual (Rev E).pdf",
+    "MAN_Induction_furnace.pdf",
+    "Design/Wiring/NI-DAQ Control Architecture.md",
     "Design/Plumbing/Material Properties Reference.md",
     "Design/Plumbing/Random Holes.md",
     "Design/Plumbing/Seal Thermal Margin Analysis.md",
+    "Design/Plumbing/Thermal Model/README.md",
+    "Design/Plumbing/Thermal Model/run_examples.ps1",
+    "Design/Plumbing/Thermal Model/plume_model.cs",
+    "Design/Plumbing/Thermal Model",
     "Design/Plumbing/Thermal Couple Pass-through.md",
     "Design/Mechanisms/Hybrid Ceramic Holder.md",
     "Design/Wiring/Electrical System.md",
@@ -237,10 +248,6 @@
     "media/vacuum-chamber/main-assembly.png",
     "media/vacuum-chamber/chamber-assembly.png",
     "media/wiring/Ameritherm HOTSHOT 103927 Manual (Doc 801-9252k).pdf",
-    "media/wiring/hotshot-manual-p46-electrical-table.jpg",
-    "media/vacuum-chamber/chamber-cad-overview.png",
-    "media/samples/charpy-standard-sample.png",
-    "media/samples/charpy-standard-reference.png",
     "Design/Mechanisms/Trapdoor.md",
     "Design/Coil Geometry/Coil Feature Script.md",
     "Design/Coil Geometry/Induction Coil.md",
@@ -251,15 +258,8 @@
     "Design/Wiring/Ball Screw Motor Control.md",
     "Design/Mechanisms/Ball Screw.md",
     "Design/Wiring/Control System.md",
-    "Design/Wiring/NI-DAQ Control Architecture.md",
     "Design/Wiring/Ball Screw Motor Control.md.tmp.28620.4ed7cba3329c",
-    "Design/Mechanisms/Ceramic Mount.md",
     "Design/Mechanisms/Hybrid Ceramic Holder.md.tmp.7468.63deaa2f290d",
-    "Design/Wiring/Heat Curve Profile Software.md.tmp.43164.5c844e5a7570",
-    "Induction Quench Research Instrument.md.tmp.17816.0f913088135f",
-    "README.md.tmp.17816.4140263050c0",
-    "README.md.tmp.17816.fa993c7c7eb0",
-    "README.md.tmp.17816.bf558a5710b8",
-    "README.md.tmp.17816.e73c3d8b2e15"
+    "Design/Wiring/Heat Curve Profile Software.md.tmp.43164.5c844e5a7570"
   ]
 }

@@ -17,6 +17,7 @@ Gas delivery, vacuum evacuation, and quenching medium circulation systems for ch
 | **[[Design/Plumbing/Vertical Sliding Shaft Seal|Vertical Sliding Shaft Seal.md]]** | 1/2" shaft seal for sample port | 🟢 Active |
 | **[[Design/Plumbing/Seal Thermal Margin Analysis|Seal Thermal Margin Analysis.md]]** | Thermal RC model, real calibration data, mitigation plan for the shaft seal | 🟢 Active |
 | **[[Design/Plumbing/Material Properties Reference|Material Properties Reference.md]]** | k and max temp for every material evaluated in the seal/holder thermal work | 🟢 Active |
+| **[[Design/Plumbing/Thermal Model/README|Thermal Model (code).md]]** | Runnable seal/ceramic/rod thermal model (C# + PowerShell driver) behind the Seal Thermal Margin Analysis numbers | 🟢 Active |
 | **[[Design/Plumbing/Thermal Couple Pass-through|Thermal Couple Pass-through.md]]** | Thermocouple quick-connect interface | 🟡 Planned |
 | **[[Design/Plumbing/Random Holes|Random Holes.md]]** | Existing chamber ports (evaluate/seal) | 🔵 Reference |
 

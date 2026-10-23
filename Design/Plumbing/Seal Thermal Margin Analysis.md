@@ -136,35 +136,40 @@ A second, independent mitigation explored on top of the joint heat-break above: 
 
 > **GEOMETRY CORRECTED 2026-10-15 (user-confirmed).** An earlier version of this section (a) bundled the 5mm clamp clearance into Margin (1.197in), (b) double-counted Margin in RodTop (5.394in), (c) put the 4.197in rod on the *sample* side of the seal instead of the clamp side, and (d) used a 2in clamp 3in from the seal. All formulas below are the corrected ones. **Numbers computed from the old geometry elsewhere in this note (the 3.638in CeramicL, 4.197in "Movement" standoff, 3in clamp-side rod) are superseded — see "Corrected-geometry results" below.**
 
-**Stack at the home (heating) position, top to bottom** (chamber interior = **10in**):
+> **DESIGN DECISION (2026-10-18): Margin = 1.5in** (was 1in). Values below are for Margin = 1.5in. Tables elsewhere in this note that quote RodBottom 2.103in, RodTop 4.197in, a 3.835in budget or a 4in stroke were computed at Margin = 1in; at 1.5in the final-design seal temperature is only ≈1°C higher (see "Final design configuration").
+
+**Stack at the home (heating) position, top to bottom** (chamber interior = **10in**), Margin = 1.5in, Lava holder 1.732in:
 
 | # | Section | Length |
 |---|---|---|
-| 1 | Clamp (rod-wrapping, 16°C water cooling, connected to the same rod; rides down with it) | **2.5in** |
-| 2 | **RodTop** — rod from clamp to seal | **5mm + Margin + WaterHeight = 4.197in** |
+| 1 | Clamp / cooling block (rod-wrapping, 16°C water cooling, connected to the same rod; rides down with it) | **2.5in** |
+| 2 | **RodTop** — rod from clamp to lid top | **5mm + Margin + WaterHeight = 4.697in** |
 | 3 | Seal (thickness of the lid) | 0.313in (seal width, 5154T48) — above the 10in interior |
-| 4 | **RodBottom** — rod from seal down to top of ceramic | **= RodBudget − CeramicL** (see below) |
-| 5 | Ceramic holder | **CeramicL** |
+| 4 | **RodBottom** — rod from seal down to top of ceramic | **= RodBudget − CeramicL = 1.603in** (with the 1.732in holder) |
+| 5 | Ceramic holder | **CeramicL = 1.732in** |
 | 6 | Sample (exposed Charpy body) | 2.165in (55mm) |
-| 7 | **Margin** — air gap, bottom of sample to water surface | **1in** |
+| 7 | **Margin** — air gap, bottom of sample to water surface | **1.5in** |
 | 8 | Water | **3in** |
 
 ```
 10in         = RodBottom + CeramicL + Sample + Margin + WaterHeight
-RodBottom + CeramicL = 10 − 2.165 − 1 − 3 = 3.835in          (RodBudget)
-Stroke       = Margin + WaterHeight = 4.0in                   (travel to fully submerge the sample)
-RodTop       = 5mm + Margin + WaterHeight = 4.197in           (the 5mm is clamp-to-lid clearance at bottom of stroke; it sits above the lid, NOT inside the 10in)
+RodBottom + CeramicL = 10 − 2.165 − 1.5 − 3 = 3.335in         (RodBudget; was 3.835in at Margin 1in)
+Stroke (max)  = Margin + WaterHeight = 4.5in                   (sample resting on the floor)
+Stroke (min)  = Margin + Sample = 1.5 + 2.165 = 3.665in        (UPDATED 2026-10-23: only the ceramic holder bottom = sample top must touch/enter the water)
+RodTop       = 5mm + stroke = 4.697in (max stroke) to 3.862in (min stroke)   (the 5mm is clamp-to-lid clearance at bottom of stroke; it sits above the lid, NOT inside the 10in)
 ```
 
+Check: 1.603 + 1.732 + 2.165 + 1.5 + 3 = 10.0in. Rod length needed ≈ 1.603 + 0.313 + 4.697 + 2.5 = **9.11in** (unchanged; a 12in rod covers it).
+
 **Thermal-path assignment (this is what the corrected geometry changes):**
-- **Sample-side rod** (ceramic top → seal) = **RodBottom** = 3.835in − CeramicL.
-- **Clamp-side rod** (seal → clamp near edge) = **RodTop = 4.197in** (not 3in).
+- **Sample-side rod** (ceramic top → seal) = **RodBottom** = 3.335in − CeramicL.
+- **Clamp-side rod** (seal → clamp near edge) = **RodTop = 4.697in** (not 3in).
 - RodBottom therefore **is** part of the sample-to-seal thermal network. (An earlier statement that it wasn't was wrong; see correction in the "Largest-margin" section.)
 
 - **Sample = 55mm (2.165in)** — the exposed Modified Charpy body (not the 6mm head feature, which is retained inside the ceramic and doesn't count against this budget — see [[Design/Sample Quenching/Modified Charpy.md]])
 - **WaterHeight = 3in** (quench bath depth)
-- **Maximum buildable CeramicL = 3.835in** (RodBottom = 0). The old 3.638in figure came from putting the 5mm inside the budget — it was 0.197in short.
-- **Clamp**: 2.5in long, above RodTop, same rod (the old "2in clamp, near edge 3in from seal" is superseded — the clamp's near edge is 4.197in from the seal).
+- **Maximum buildable CeramicL = 3.335in** (RodBottom = 0) at Margin 1.5in. (3.835in at Margin 1in; the old 3.638in figure came from putting the 5mm inside the budget.)
+- **Clamp**: 2.5in long, above RodTop, same rod (the old "2in clamp, near edge 3in from seal" is superseded — the clamp's near edge is 4.697in from the lid top).
 
 The current Lava holder design is 1.73in; extending it adds length to the main/teal body zone (the lowest-resistance-per-inch zone, so this is a conservative, not optimal, allocation; see open items below).
 
@@ -651,7 +656,8 @@ The rod and seal region is heated mainly by **hot air rising from the sample**, 
 - The 85°C reading is a lower bound (closer to 90°C); the 197°C is trusted at any time, and the model's value at 750 s is ≈180°C.
 - Holder length assumed 1.732in; the screw joint (45 K/W) and h in the plume are estimates.
 - The **sandwiched thermocouple reads between** the ceramic top face and the rod end, so it reads lower than the ceramic face itself: in the calibrated 304SS case the model has the ceramic top face ≈225°C, the rod end above the gap ≈172°C, and the thermocouple (average) ≈198°C.
-- Model script is not stored in the vault (kept as a temporary file outside it).
+- **Margin was changed from 1in to 1.5in on 2026-10-18** (RodBottom 2.103 → 1.603in, RodTop 4.197 → 4.697in, stroke 4 → 5in, max holder 3.835 → 3.335in); only the "Final design configuration" tables below are recomputed at 1.5in — the other 1in-geometry tables differ by only a few °C for the copper + block design.
+- **Model code is in the vault:** [[Design/Plumbing/Thermal Model/README.md]] (model source `plume_model.cs` and the runnable `run_examples.ps1`, which reproduces the tables in this section).
 
 ### Argon chamber model (2026-10-18)
 
@@ -673,19 +679,75 @@ The same validated model (it reproduces the open-air baseline exactly) with two 
 
 ### Final design configuration (2026-10-18): 110 copper rod + copper cooling block, argon
 
-- Rod: **McMaster 8966K13 110 Copper**, k = 391 W/m·K (see [[Design/Plumbing/Material Properties Reference.md]]); holder: Lava 1.732in; RodBottom 2.103in; cooling block near edge 4.197in above the lid, 16°C coolant.
+- **Decided geometry (Margin = 1.5in):** holder Lava 1.732in; **RodBottom 1.603in; RodTop (cooling block near edge above the lid top) 4.697in**; stroke 5in (the earlier Margin = 1in numbers are in the second column below for comparison).
+- Rod: **McMaster 8966K13 110 Copper**, k = 391 W/m·K (see [[Design/Plumbing/Material Properties Reference.md]]); 16°C coolant.
 - Cooling block: coolant-side surface area **4.02789 in² (2.5986×10⁻³ m²)**, so the coolant-side resistance is 1/(h·A): **0.77 K/W at h = 500, 0.38 at h = 1000, 0.13 at 3000, 0.08 at 5000 W/m²K** (h not measured; 500–1000 expected for the likely flow).
 
-| Block total R (contact + coolant) | Seal, steady, 800°C | Seal, steady, 1000°C |
-|---|---|---|
-| 0.3 K/W (very good) | 43°C | 48°C |
-| **0.8 K/W (typical estimate)** | **47°C** | **53°C** |
-| 2.0 K/W | 55°C | 61°C |
-| 5.0 K/W (poor) | 68°C | 77°C |
+| Block total R (contact + coolant) | 800°C, Margin 1in | **800°C, Margin 1.5in (decided)** | 1000°C, Margin 1in | **1000°C, Margin 1.5in (decided)** |
+|---|---|---|---|---|
+| 0.3 K/W (very good) | 43°C | **44°C** | 48°C | **49°C** |
+| **0.8 K/W (typical estimate)** | 47°C | **48°C** | 53°C | **53°C** |
+| 2.0 K/W | 55°C | **55°C** | 61°C | **62°C** |
+| 5.0 K/W (poor) | 68°C | **69°C** | 77°C | **78°C** |
+
+At Margin 1.5in the seal at 750 s is 45°C (800°C) and 51°C (1000°C) with the typical block; the ceramic top face is 168–198°C and a sandwiched thermocouple would read ≈108–141°C. Without the block (argon, Margin 1.5in): 304SS ≈141°C (800°C) / 161°C (1000°C) steady; 110 Cu ≈121°C / 138°C.
 
 - Seal limit: rated 98.9°C (210°F); 80% = 79.1°C, 90% = 89°C. **All cases pass the 80% limit**, even a poor 5 K/W block (77°C at 1000°C, just under). Seal at 750 s is within a few °C of the steady value.
 - **Top of ceramic in this design:** the **ceramic top face ≈170°C (800°C) and ≈189°C (1000°C)**, steady; the rod end just above the gap ≈53–60°C; a sandwiched thermocouple would read only ≈112°C (800°C) / ≈125°C (1000°C). The ceramic face stays hot because little heat leaves it; the gap and screw show a large temperature step to the cooled rod.
 - Keep the rod-to-block contact snug with thermal paste (aim for the block's total resistance below ≈1 K/W).
+
+### Cooling water: open-loop tap (2026-10-23)
+
+The cooling block connects to the **sink faucet set to cold and drains to the sink** (no chiller), so the coolant is tap water at roughly **5–30°C** (seasonal and line-dependent). The earlier 16°C coolant was a chiller assumption.
+
+**Seal vs. tap-water temperature** (steady state, argon, 110 Cu, Lava 1.732in, Margin 1.5in, RodTop 4.697in):
+
+| Tap water | 800°C, block 0.3 K/W | 800°C, 0.8 K/W | 1000°C, 0.3 K/W | 1000°C, 0.8 K/W | 1000°C, 2.0 K/W |
+|---|---|---|---|---|---|
+| 5°C | 35°C | 39°C | 40°C | 45°C | 54°C |
+| 10°C | 39°C | 43°C | 44°C | 48°C | 58°C |
+| **16°C** | 44°C | 48°C | 49°C | 53°C | 62°C |
+| 20°C | 47°C | 51°C | 52°C | 56°C | 65°C |
+| 25°C | 51°C | 55°C | 56°C | 60°C | 68°C |
+| 30°C | 55°C | 59°C | 60°C | 64°C | 72°C |
+
+The seal moves ≈0.8°C per 1°C of tap temperature; the worst case here (30°C tap, 1000°C, 2 K/W block) is 72°C, under the 79.1°C (80%) limit.
+
+**Flow vs. block coolant-side resistance** (assumed 6.35mm channel; wetted area 4.02789 in² = 2.5986×10⁻³ m²; ≈15 W load):
+
+| Flow | Regime | h (W/m²K) | Coolant-side R | Water temperature rise |
+|---|---|---|---|---|
+| 0.5 L/min | laminar | ≈400 | ≈0.97 K/W | 0.43°C |
+| 1 L/min | transitional | ≈1,950 | ≈0.20 K/W | 0.22°C |
+| 2 L/min | turbulent | ≈4,330 | ≈0.09 K/W | 0.11°C |
+| 4 L/min | turbulent | ≈8,430 | ≈0.05 K/W | 0.05°C |
+
+Keep flow ≥1 L/min (don't throttle into the laminar regime). At 1 L/min or more the block's total resistance is realistically 0.2–0.5 K/W.
+
+**Risks to manage with tap water:**
+1. **Condensation:** water at 5–15°C is below the dew point in a humid lab, so the block, hoses and rod will sweat and drip toward the lid and seal — insulate the block and cold hoses and keep drips off the lid.
+2. **Leak:** mains pressure is 40–80 psi — rate the block fittings and hose for it, clamp the faucet end, consider a pressure regulator; a leak near the coil and electronics is the main hazard.
+3. **Loss of flow:** if the faucet is bumped off, the seal goes from ≈50°C to ≈120–160°C (the no-block results) — consider a flow switch or a rod thermocouple near the block that can stop heating.
+4. **Water use:** an open faucet runs ≈450 L/hour — set 1–2 L/min with a needle valve.
+5. **Drain:** keep the drain hose above the water level with an air gap so it cannot siphon back into the supply.
+
+### Coil height range, R_bottom and stroke (2026-10-23)
+
+c = coil center height above the chamber floor (10in interior), sample (2.165in) centered in the coil, Lava holder 1.732in, lid underside at 10in. R_bottom = 7.1855 − c in; rod length stays 9.11in.
+
+| c | R_bottom | Coil center to lid | Sample top (holder bottom) above floor | Holder top above floor | Seal @800°C (0.8 K/W block) | Gas at lid bottom, 800°C |
+|---|---|---|---|---|---|---|
+| 3.0in (water level; hard limit — half the sample is in the water) | 4.19in | 7.0in | 4.08in | 5.81in | 41°C | 87°C |
+| **4.08in (lowest usable: sample bottom at the water surface)** | **3.10in** | **5.92in** | 5.17in | 6.90in | 45°C | 103°C |
+| 5.0in | 2.19in | 5.0in | 6.08in | 7.81in | 47°C | 126°C |
+| **5.58in (current design, Margin 1.5in)** | 1.60in | 4.42in | 6.67in | 8.40in | 48°C | 148°C |
+| **6.0in (highest recommended)** | **1.19in** | **4.00in** | 7.08in | 8.81in | 48°C | 171°C |
+| 7.19in (hard limit — ceramic top touches the lid) | 0 | 2.81in | 8.27in | 10.0in | 50°C | 286°C |
+
+- **Recommended coil center range: 4.08in to 6.0in above the floor (4.0–5.9in below the lid; R_bottom 3.10 down to 1.19in).** The seal stays 41–50°C over the whole range; the limit is the hot gas under the lid, which rises ≈60–70°C per inch of height.
+- **Ceramic holder bottom must touch or be in the water at the end of the stroke:** it ends between **2.165in** (sample resting on the floor — the lowest possible; holder top then 3.90in) and **3.0in** (just touching the surface; holder top 4.73in) above the floor.
+- **Minimum stroke = Margin + 2.165in** (3.665in at Margin 1.5in), not Margin + 3in. RodTop (clamp-side rod) then = stroke + 5mm = **3.862in** instead of 4.697in, making the seal 3–4°C cooler (e.g. 800°C, 0.8 K/W block: 45°C vs. 48°C; 1000°C: 49°C vs. 53°C).
+- Model assumption for this table: RodTop = c − 0.885in (clamp rides with the rod, sample to the floor). The numbers are model results — unvalidated in argon.
 
 ## Material properties reference
 
@@ -702,11 +764,14 @@ Full comparison table (thermal conductivity, max temp) for every material evalua
 - **(From the active-cooled clamp mitigation)** Structural check needed for a 3.638in Lava holder length (substantial extension from the current 1.73in design) against actuation loads — *max buildable length is now 3.835in (corrected 2026-10-15); the minimum thermally-allowed length is 0.683in, which shrinks this concern if the short holder is adopted*
 - **(2026-10-15)** Confirm fired-Lava k and the unfired temperature rating with the supplier (McMaster 1,099°C vs. MakeItFrom ~650°C conflict) — see [[Design/Plumbing/Material Properties Reference.md]]
 - **(2026-10-15)** If a 1300°C sample regime is ever needed, redesign the sample-contact zone (Lava ceiling ~1,100°C) — e.g. BN orange wedge + Lava remainder; not analyzed yet
-- **(2026-10-15)** Clamp mechanics: the clamp rides down with the rod (5mm lid clearance at bottom of stroke) — confirm water-line routing and that clamp contact stays tight/cold over the 4in stroke
+- **(2026-10-15)** Clamp mechanics: the clamp rides down with the rod (5mm lid clearance at bottom of stroke) — confirm water-line routing and that clamp contact stays tight/cold over the stroke (now 5in at Margin 1.5in; was 4in at Margin 1in)
 - **(From the active-cooled clamp mitigation)** Bench test recommended before committing to this mitigation — same pattern as every other thermal claim in this file that ultimately needed real measurement to confirm
 - **(2026-10-18, open-air calibration)** The recalibrated hot-air model fails against the 2026-09-18 BN measurement (predicts 194–323°C vs. ≈120°C). Test conditions confirmed 2026-10-18: open air with the lid, no chamber. Still to record for that test: rod attached to the carriage or not, actual standoff and joint. Adding the carriage as a heat sink to the model is the first thing to try.
 - **(2026-10-18)** Confirm the Lava holder length used in the open-air tests (model assumes 1.732in).
 - **(2026-10-18)** Log a full temperature-vs-time run (ceramic/rod interface, rod at lid bottom, seal, rod 1in above lid) to separate plume strength from lid heat — the current fit has two partly interchangeable terms.
 - **(2026-10-18)** All tests so far were in **open air with the lid but no chamber**. Behavior inside the closed argon chamber is untested; the argon model (see "Argon chamber model") predicts a seal temperature within ≈±5–10°C of the open-air value, but a hotter gas layer under the lid (≈129°C vs. ≈109°C). Verify with a thermocouple at the seal in the real chamber.
 - **(2026-10-18)** Measure the cooling block's real flow rate, water-side h, and rod-to-block contact; the final-design seal temperature is 43–68°C (800°C) as the block's total resistance varies from 0.3 to 5 K/W.
+- **(2026-10-23)** Cooling is now **open-loop tap water** (sink faucet, drains to the sink): measure the actual tap temperature across seasons and the faucet/needle-valve flow (aim ≥1 L/min), plan for condensation, leak and loss-of-flow protection (see "Cooling water: open-loop tap").
+- **(2026-10-23)** Block internal channel diameter/geometry is assumed (6.35mm) — confirm it, since the flow-to-resistance table depends on it.
+- **(2026-10-19)** The 110 copper rod (8966K13) is **not precision-ground** like the 304 shaft it replaces: diameter tolerance ±0.002" (vs. ±0.0005"), cold-rolled plain finish, hardness Rockwell F65 (soft), and copper oxidizes when hot. Check that the 5154T48 seal still seals and doesn't wear quickly on this finish/tolerance (consider polishing the sliding length or keeping the seal on a ground sleeve). Also check rod stiffness: modulus 17,000 ksi (≈60% of steel) over the ≈9.11in unsupported length under actuator loads. The 1 ft stock length covers the needed 9.11in.
 - **(2026-10-18) Compressed-air jet test — RESULT: INEFFECTIVE.** Compressed air (hose + 6ft of **1/4" OD tube with 0.023" wall, i.e. 0.204" (5.2mm) ID**) aimed at the rod 0.25in above the lid did **not** cool the seal: the rod above the lid stayed at ≈30°C or less, while the rod below the lid (the hot part, inside the lid/chamber side) was much hotter (≈100°C). The jet only cools rod that is already cool and cannot reach the hot section or the seal. **Not a mitigation; do not credit it in any model.**
