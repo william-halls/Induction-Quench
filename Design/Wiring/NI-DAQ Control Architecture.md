@@ -407,6 +407,23 @@ Bench-measured with `Control From` set to **Rear Panel** and `Start From` left o
 
 **To raise the 550A ceiling** (if more current is ever needed): would require changing the transformer tap per manual §3.4 ("start high, work down" rule) — only with no part in the coil, and only if actually needed for the process.
 
+### 3 kW supply setpoint calibration (2026-10-26)
+
+The calibration above is **HOTSHOT-specific** (current setpoint in amps). The 3 kW Model 3-135/400-3 supply ([[Design/Coil Geometry/Power Supply Matching - Findings|findings and manual details]]) takes a 0–10 V remote power reference, and its setpoint is **power %**. User-measured points:
+
+| Command (V) | Power (%) |
+|---|---|
+| 0.5 | 4 |
+| 1.0 | 10 |
+| 1.5 | 15 |
+| 2.0 | 20 |
+
+**Rule (per user): power % ≈ 10 × V** (0–10 V = 0–100 %). The 0.5 V → 4 % point is about 1 % below that line and is treated as display rounding. Not individually measured: below 0.5 V (turn-on point) and above 2 V.
+
+**Control software implication:** run the PID output in **power %** with `PID Advanced.vi` Output Range **[0, 100]**; the conversion is just **V = % ÷ 10, clamped to 0–10 V**; a literal `0` still writes true 0 V. The old Amps→Volts formula, the 8 A floor and the ≤50 A "off" cutoff are HOTSHOT-only and no longer used. Starting gains: Kc ≈ 1.45 %/°C (the old P = 8 A/°C scaled by 100/550), Ti 0.2 s, D = 0 — **not tuned for this supply/coil**. The slew-rate limit becomes %/s.
+
+**Supply-side settings (3 kW manual, Appendix A):** the INT/EXT switch SW301 must be set to **EXT**; the reference goes on **Terminal Block 1 terminal 2** with the reference ground on **terminal 3** (0 V = minimum, 10 V = maximum). Feedback defaults to input power. Heat on/off is the front-panel HEAT switch unless TB2 start/stop (terminals 1 and 5, with E-H set to EN) is wired.
+
 ### Status outputs (CTB1:8-13) — read-only, no SSR needed
 
 Ready / HeatOn / Fault are solid-state contact **outputs from** the HOTSHOT (no polarity, 1A limit) — read these into free 6009 digital inputs with pull-up resistors, same pattern already used for the SOLA DC-OK status read. Not yet wired; optional future addition.

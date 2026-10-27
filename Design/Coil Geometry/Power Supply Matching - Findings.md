@@ -86,6 +86,10 @@ Manual: [[media/wiring/3kW Induction Supply 3-135-400-3 Manual (Rev E).pdf]]
 
 **Series inductor (§6.2.1):** turn selector bar — near position = 0 turns, far position = 11 turns, tightened with mounting screws; a variable shorting bar (high = 1, low = 3) gives finer steps. (Figure 4 of the manual is a vector drawing that could not be extracted.)
 
+**First run on the 3 kW supply (2026-10-26):** the CURRENT limit light came on; after adjustment, the inverter current at **max power read 66 A** (the limit is 70 A peak; the manual recommends tuning for about 50% of the scale at full power). Capacitor configuration and series-inductor position for that run were not recorded.
+
+**Remote power reference (user-measured):** 0.5 V → 4 %, 1.0 V → 10 %, 1.5 V → 15 %, 2.0 V → 20 % — power % ≈ 10 × V. Details and the PID/LabVIEW implication are in [[Design/Wiring/NI-DAQ Control Architecture|NI-DAQ Control Architecture]] ("3 kW supply setpoint calibration").
+
 **Appendix B tuning examples (as printed):**
 
 | Load | Caps (µF) | Taps | Coil (turns × ID) | Freq (kHz) | Power (kW) | Voltage (Vrms) | Inverter current (A) | Notes |

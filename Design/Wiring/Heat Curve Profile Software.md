@@ -117,7 +117,7 @@ Loop 1 (GUI/table loop)              Loop 2 (control/heat-curve loop)
 
 ## 3. Execution Engine
 
-Runs inside the control loop tick, alongside the [[Design/Wiring/NI-DAQ Control Architecture#HOTSHOT Setpoint Calibration Curve (confirmed 2026-09-06)|PID loop]] (PID output in Amps, converted to Volts via the confirmed calibration formula before writing to the NI-9269).
+Runs inside the control loop tick, alongside the [[Design/Wiring/NI-DAQ Control Architecture#HOTSHOT Setpoint Calibration Curve (confirmed 2026-09-06)|PID loop]] (**changed 2026-10-26 for the 3 kW supply:** PID output is now **power %**, converted to Volts with V = % ÷ 10 before writing to the NI-9269 — see [[Design/Wiring/NI-DAQ Control Architecture#3 kW supply setpoint calibration (2026-10-26)|3 kW setpoint calibration]]. The original design, still described below, had the PID output in Amps converted via the HOTSHOT calibration formula).
 
 State kept: `current_segment_index`, `segment_start_time`, `segment_start_temp` (captured when a segment becomes active), `in_band_elapsed` (Hold segments only).
 
@@ -184,7 +184,7 @@ PID_setpoint = setpoint
    - **Hold**: `setpoint = Temp` directly, no ramp.
    - **Placeholder (Type=0)**: `setpoint = 0` (defensive fallback, shouldn't occur post-`Clean`).
 6. `TC_time`/`TC_temp` — append `(elapsed_run_time, actual TC reading)` each tick, same Pause-freeze gating as step 3.
-7. PID Advanced.vi: SP = `current_setpoint`, PV = live TC reading, **dt = `dt_real`** (not a hardcoded constant — same loop-speed-independence reasoning), Output Range [8, 550] (not [0,550] — matches the conversion subVI's real floor), `reinitialize? = start_pressed`.
+7. PID Advanced.vi: SP = `current_setpoint`, PV = live TC reading, **dt = `dt_real`** (not a hardcoded constant — same loop-speed-independence reasoning), Output Range [8, 550] (not [0,550] — matches the conversion subVI's real floor) **for the HOTSHOT; changed 2026-10-26 for the 3 kW supply to Output Range [0, 100] (% power)**, `reinitialize? = start_pressed`.
 
 ### Heating/cooling unification (2026-10-10) — no direction branch needed
 
@@ -248,7 +248,7 @@ Two distinct controls, not to be confused:
 - Resume continues from where it left off (`elapsed_run_time` resumes accumulating, curve lookup picks back up naturally).
 
 **Stop** — a real abort, not a pause.
-- **Software half confirmed built (2026-10-12)**: forces the PID's output (Amps, pre-conversion) to literal `0`. The existing Amps→Volts conversion subVI has its own dedicated branch for an input of exactly `0` that outputs genuine 0V directly (distinct from its general 8-550A clamping behavior for nonzero inputs, which floors anything below 8A up to the 8A-equivalent voltage — confirmed this does *not* apply to a literal 0 input). Not yet bench-verified with a multimeter on the actual 9269 output terminal — recommended before trusting this live.
+- **Software half confirmed built (2026-10-12)**: forces the PID's output (Amps, pre-conversion) to literal `0`. The existing Amps→Volts conversion subVI has its own dedicated branch for an input of exactly `0` that outputs genuine 0V directly (distinct from its general 8-550A clamping behavior for nonzero inputs, which floors anything below 8A up to the 8A-equivalent voltage — confirmed this does *not* apply to a literal 0 input). Not yet bench-verified with a multimeter on the actual 9269 output terminal — recommended before trusting this live. *(Revised 2026-10-26 for the 3 kW supply: the PID output is in % and the conversion is simply V = % ÷ 10 clamped to 0–10 V; a literal `0` input still writes true 0 V, and the old 8 A floor and ≤50 A "off" cutoff no longer apply. The multimeter check still applies.)*
 - **Hardware half still open**: per the original design, Stop should *also* open the **STOP SSR (CTB1:4-5)** per [[Design/Wiring/NI-DAQ Control Architecture#START / STOP (CTB1:3-5) — still applies regardless of AO source|NI-DAQ Control Architecture]] at the same time as the software zeroing — deliberate belt-and-suspenders redundancy, so either mechanism alone halts heating if the other fails. **This SSR wiring is not yet connected to the new Stop button** — see Open Items.
 - Does **not** trigger the Quench action — Stop is a plain heating abort, not a request to lower the sample into the bath. If the sample needs to come out of the coil after a Stop, that's a separate/manual action.
 - Ends curve execution; there is no "resume" from Stop the way there is from Pause.
@@ -347,7 +347,8 @@ Two guardrails were raised and deliberately **not** added, rather than left as o
 - [ ] Wire the Quench action's P0.0 pulse / `Quench` control Local-Variable write into whatever Loop 3 already does for ST-PMC1 RUN triggering — mechanism decided (write `quench_trigger` into the `Quench` button's Local Variable, simulating a manual press) but not yet confirmed Loop 3 handles it correctly end-to-end
 - [ ] Wire `Home`'s IN1+IN2 output per the finalized Ball Screw I/O mapping — exact bit-combination for "Home" vs. Center/Top/Bottom not yet pulled from that doc into this implementation
 - [ ] Decide save/load format for named profiles (suggest flattened XML or JSON)
-- [ ] Implement PID output slew-rate limiter; determine max Amps/sec empirically (fast enough for intended Rate segments, slow enough to smooth startup transients)
+- [ ] Implement PID output slew-rate limiter; determine max Amps/sec empirically (fast enough for intended Rate segments, slow enough to smooth startup transients) — **on the 3 kW supply this is %/s** (PID output is now % power, 2026-10-26)
+- [ ] Retune the PID for the 3 kW supply and 8-loop coil (starting point Kc ≈ 1.45 %/°C, Ti 0.2 s, D = 0 — the old HOTSHOT gain of 8 A/°C rescaled by 100/550; not yet tuned)
 - [ ] Implement run-out trip on thermocouple dT/dt; calibrate threshold from observed peak dT/dt during slew-limited test runs
 - [ ] Watch for detached-TC failure modes that present as noise/erratic readings rather than fast sustained rate changes — may need a plausibility check in addition to the dT/dt trip if this turns out to matter in practice
 - [ ] Implement data logging (timestamp + TC temp, one row per loop tick, per-run file) — note `TC_time`/`TC_temp` arrays already capture this live in-memory; still need to actually write them to a per-run file on disk
