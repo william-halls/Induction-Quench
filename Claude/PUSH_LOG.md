@@ -4,6 +4,12 @@ Record of what changed with each push to GitHub.
 
 <!-- Newest entries at the top -->
 
+## 2026-10-28 - Pump fill timing calibration (SPI ≈ 49.9 sec/in)
+**Commit**: `4c7e8f2`
+- [[Design/Plumbing/Fluid Systems.md]]: the bath fill trigger is now timing-based (SPI × depth, coded). New "Pump Fill Timing Calibration" subsection with the three tuning runs (SPI 20 / 42.8571 / 46.5839 → ratio 0.4667 / 0.92 / 0.966). The quadratic fit through all three runs, solved for zero error, gives **49.86 sec/in**; a linear fit through the last two runs gives 49.34 for comparison. Explains why "SPI ÷ ratio" scaling undershoots: a fixed delay at the start of each fill (pump spin-up and line fill). Includes when to recalibrate.
+- Not included: the other uncommitted carryover (Seal analysis, Material Properties, Vacuum Chamber INDEX, media INDEX, two new plumbing images, .obsidian state). It belongs to other sessions and was left as is.
+- 1 file changed + this log
+
 ## 2026-10-23 - Seal analysis: tap-water cooling, coil height range and stroke, 110 Cu notes; thermal model code saved to the vault
 **Commit**: `5692527`
 - [[Design/Plumbing/Seal Thermal Margin Analysis.md]]: new subsections. **Open-loop tap-water cooling** (block on the sink faucet set to cold, draining to the sink): seal vs. tap temperature (5–30°C → 35–72°C across block resistance 0.3–2 K/W at 800–1000°C, ≈0.8°C per °C of tap), flow vs. block coolant-side resistance (≥1 L/min ≈0.2 K/W or better; 0.5 L/min is laminar ≈1 K/W), and the risks (condensation, mains-pressure leak, loss of flow, water use, drain air gap). **Coil height range**: recommended coil center 4.08–6.0in above the floor (4.0–5.9in below the lid), R_bottom 3.10 → 1.19in, seal 41–50°C across the range but gas under the lid rises 87 → 286°C, so stop near 6.0in. The ceramic holder bottom only has to touch or enter the water (ends between 2.165 and 3.0in above the floor; lowest holder top 3.90in), so the minimum stroke is Margin + 2.165in (3.665in at Margin 1.5in) and RodTop can be 3.86in instead of 4.70in (seal 3–4°C cooler). Geometry formulas and open items updated.
