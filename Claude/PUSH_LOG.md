@@ -4,6 +4,15 @@ Record of what changed with each push to GitHub.
 
 <!-- Newest entries at the top -->
 
+## 2026-10-31 - Coil FeatureScript: estimates + uniformity rework, OnShape build confirmed
+**Commit**: `88a669a`
+- [[Design/Coil Geometry/Coil Feature Script.md]]: commits the 2026-10-30 FeatureScript rework that had been sitting uncommitted: merged Gap/Length scripts, inductance / tank frequency / efficiency / cooling estimates, dummy sample and crucible, heating uniformity estimate, FeatureScript 3044. Full source and docs.
+- Status box: the build is **confirmed in OnShape** (5-turn, 53.34 mm ID, 5/16" tube test: "Efficiency 93.8% @ 293.7 kHz, Q 1.8"). The screenshot is embedded. The Uniformity message output itself hasn't been checked in OnShape yet.
+- Clarified that the uniformity numbers are along the rod's **outer (side) surface**, not the top face. The script never evaluates the end faces (confirmed in the code: field sampled at the sample radius, `heatR`).
+- New image `media/coil/coil-featurescript-onshape-build.png`, added to [[media/INDEX.md]] (coil line only).
+- Not included (uncommitted carryover from other sessions): Plumbing notes (Seal Thermal Margin Analysis, Material Properties Reference), Vacuum Chamber INDEX, the two cooling-block images and their media INDEX lines, `.obsidian` state.
+- 3 files changed + this log
+
 ## 2026-10-28 - Pump fill timing calibration (SPI ≈ 49.9 sec/in)
 **Commit**: `4c7e8f2`
 - [[Design/Plumbing/Fluid Systems.md]]: the bath fill trigger is now timing-based (SPI × depth, coded). New "Pump Fill Timing Calibration" subsection with the three tuning runs (SPI 20 / 42.8571 / 46.5839 → ratio 0.4667 / 0.92 / 0.966). The quadratic fit through all three runs, solved for zero error, gives **49.86 sec/in**; a linear fit through the last two runs gives 49.34 for comparison. Explains why "SPI ÷ ratio" scaling undershoots: a fixed delay at the start of each fill (pump spin-up and line fill). Includes when to recalibrate.
