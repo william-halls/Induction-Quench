@@ -28,6 +28,7 @@ media/
 | **8-Loop Coil CAD Side View** | `coil-8loop-cad-side-view.png` | [[Design/Coil Geometry/Power Supply Matching - Findings\|Power Supply Matching - Findings.md]] |
 | **8-Loop Coil + Lead Run (CAD)** | `coil-8loop-lead-run-cad.png` | [[Design/Coil Geometry/Power Supply Matching - Findings\|Power Supply Matching - Findings.md]] |
 | **Lead Top-Run Bow Sketch** | `coil-lead-top-run-bow-sketch.png` | [[Design/Coil Geometry/Power Supply Matching - Findings\|Power Supply Matching - Findings.md]] |
+| **Coil FeatureScript in OnShape (build check)** | `coil-featurescript-onshape-build.png` | [[Design/Coil Geometry/Coil Feature Script\|Coil Feature Script.md]] |
 
 ---
 
