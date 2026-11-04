@@ -4,6 +4,11 @@ Record of what changed with each push to GitHub.
 
 <!-- Newest entries at the top -->
 
+## 2026-11-03 - Coil Feature Script updated from O'Malley Flux Setup
+**Commit**: `3be7989`
+- [[Design/Coil Geometry/Coil Feature Script]]: replaced with the newer script (thermal estimate, leads-together routing) from the O'Malley Flux Setup vault
+- 1 file changed + this log
+
 ## 2026-10-31 - Coil FeatureScript: estimates + uniformity rework, OnShape build confirmed
 **Commit**: `88a669a`
 - [[Design/Coil Geometry/Coil Feature Script.md]]: commits the 2026-10-30 FeatureScript rework that had been sitting uncommitted: merged Gap/Length scripts, inductance / tank frequency / efficiency / cooling estimates, dummy sample and crucible, heating uniformity estimate, FeatureScript 3044. Full source and docs.
